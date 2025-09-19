@@ -1,0 +1,144 @@
+/**
+ * src/styles/settings.scss
+ *
+ * Configures SASS variables and Vuetify overwrites
+ */
+
+// https://vuetifyjs.com/features/sass-variables/`
+@use 'vuetify/settings' with (
+  $color-pack: false,
+  $utilities: (
+    "rounded": (
+      property: border-radius,
+      class: rounded,
+      values: (
+        0: 0,
+        "sm": 0.25rem,
+        null: 0.5rem,
+        "lg": 1rem,
+        "xl": 1.5rem,
+        "xxl": 2rem,
+        "pill": 9999px,
+        "circle": 50%,
+      )
+    ),
+  )
+);
+
+// Global styles for enhanced rounded corners
+:root {
+  --v-border-radius: 16px;
+  --v-border-radius-lg: 20px;
+  --v-border-radius-xl: 24px;
+  --v-border-radius-xxl: 32px;
+}
+
+// Override Vuetify defaults for consistent large rounded corners
+.v-card {
+  border-radius: var(--v-border-radius) !important;
+  
+  &.rounded-lg {
+    border-radius: var(--v-border-radius-lg) !important;
+  }
+  
+  &.rounded-xl {
+    border-radius: var(--v-border-radius-xl) !important;
+  }
+  
+  &.rounded-xxl {
+    border-radius: var(--v-border-radius-xxl) !important;
+  }
+}
+
+.v-btn {
+  border-radius: var(--v-border-radius) !important;
+  
+  &.rounded-lg {
+    border-radius: var(--v-border-radius-lg) !important;
+  }
+  
+  &.rounded-xl {
+    border-radius: var(--v-border-radius-xl) !important;
+  }
+  
+  &.rounded-xxl {
+    border-radius: var(--v-border-radius-xxl) !important;
+  }
+}
+
+.v-text-field,
+.v-textarea,
+.v-select,
+.v-autocomplete {
+  .v-field {
+    border-radius: var(--v-border-radius) !important;
+    
+    &.rounded-lg {
+      border-radius: var(--v-border-radius-lg) !important;
+    }
+    
+    &.rounded-xl {
+      border-radius: var(--v-border-radius-xl) !important;
+    }
+    
+    &.rounded-xxl {
+      border-radius: var(--v-border-radius-xxl) !important;
+    }
+  }
+}
+
+.v-chip {
+  border-radius: var(--v-border-radius) !important;
+  
+  &.rounded-lg {
+    border-radius: var(--v-border-radius-lg) !important;
+  }
+  
+  &.rounded-xl {
+    border-radius: var(--v-border-radius-xl) !important;
+  }
+  
+  &.rounded-pill {
+    border-radius: 9999px !important;
+  }
+}
+
+.v-img {
+  border-radius: inherit;
+}
+
+// Custom scrollbar styles
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  
+  &:hover {
+    background: rgba(0, 0, 0, 0.3);
+  }
+}
+
+// Smooth animations for all interactive elements
+.v-card,
+.v-btn,
+.v-chip,
+.v-avatar {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+// Enhanced focus states
+.v-btn:focus-visible,
+.v-card:focus-visible,
+.v-chip:focus-visible {
+  outline: 2px solid rgb(var(--v-theme-primary));
+  outline-offset: 2px;
+}
