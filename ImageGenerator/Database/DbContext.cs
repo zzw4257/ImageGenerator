@@ -9,7 +9,7 @@ public class IgDbContext(DbContextOptions<IgDbContext> options) : DbContext(opti
     public DbSet<Invitation>? Invitations { get; set; }
     public DbSet<Conversation> Conversations { get; set; }
     public DbSet<GenerationRecord> GenerationRecords { get; set; }
-    public DbSet<Image> GeneratedImages { get; set; }
+    public DbSet<Image> Images { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

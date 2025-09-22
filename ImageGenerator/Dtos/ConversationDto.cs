@@ -30,3 +30,8 @@ public class ImageDto
     public bool IsFavorite { get; set; }
     public DateTime CreatedAt { get; set; }
 }
+
+public class UploadImageDto
+{
+    public IFormFile File { get; set; } = default!;
+}

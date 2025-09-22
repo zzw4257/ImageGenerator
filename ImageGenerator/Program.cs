@@ -21,7 +21,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseStaticFiles(); // 启用静态文件服务，用于提供生成的图片
+app.AddCustomStaticFile(Path.Combine(Directory.GetCurrentDirectory(), "images"), "/images");
 
 app.UseAuthentication();
 

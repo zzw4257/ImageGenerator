@@ -10,4 +10,5 @@ public interface IConversationService
     Task<GenerationRecordDto> GenerateImageAsync(Guid conversationId, GenerateImageDto generateDto);
     Task<List<ConversationDto>> GetUserConversationsAsync();
     Task<GenerationRecordDto> GenerateImageAnonymousAsync(GenerateImageDto generateDto);
+    Task<ImageDto> UploadImageAsync(UploadImageDto uploadDto);
 }

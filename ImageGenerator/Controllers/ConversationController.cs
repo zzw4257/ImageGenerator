@@ -126,4 +126,26 @@ public class ConversationController(IConversationService conversationService) : 
             return BadRequest($"生成图片失败: {ex.Message}");
         }
     }
+
+    [HttpPost("upload")]
+    public async Task<ActionResult<ImageDto>> UploadImage([FromForm] UploadImageDto uploadDto)
+    {
+        try
+        {
+            var result = await _chatService.UploadImageAsync(uploadDto);
+            return Ok(result);
+        }
+        catch (UnauthorizedAccessException)
+        {
+            return Unauthorized();
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest($"上传图片失败: {ex.Message}");
+        }
+    }
 }
