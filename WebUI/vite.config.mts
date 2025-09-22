@@ -85,7 +85,8 @@ export default defineConfig({
   server: {
     port: 3000,
     proxy:{
-      '/api': 'http://localhost:5192'
+      '/api': 'http://localhost:5192',
+      '/images': 'http://localhost:5192'
     }
   },
 })

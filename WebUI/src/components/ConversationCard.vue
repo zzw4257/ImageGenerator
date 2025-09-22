@@ -19,14 +19,63 @@
     />
 
     <!-- Card Content Section -->
-    <CardContent
+    <!-- <CardContent
       :title="conversation.title"
       :last-message="conversation.lastMessage"
       :timestamp="conversation.timestamp"
       :is-hovered="isHovered"
       :metadata="cardMetadata"
       :show-metadata="showMetadata"
-    />
+    /> -->
+
+    <v-card-text class="pa-4">
+    <div class="d-flex flex-column">
+      <!-- Title -->
+      <h3 
+        class="text-h6 font-weight-bold mb-2 text-truncate card-title"
+        :class="{ 'title-hover': isHovered }"
+      >
+        {{ conversation.title }}
+      </h3>
+      
+      <!-- Last Message -->
+      <p 
+        class="text-body-2 text-grey-darken-1 mb-3 text-truncate card-message"
+        :title="conversation.title"
+      >
+        {{ conversation.title }}
+      </p>
+      
+      <!-- Footer with timestamp and action indicator -->
+      <div class="d-flex align-center justify-space-between">
+        <CardTimestamp 
+          :timestamp="conversation.timestamp"
+          format="relative"
+        />
+        
+        <v-icon
+          size="small"
+          class="action-icon"
+          :class="{ 'icon-hover': isHovered }"
+        >
+          mdi-chevron-right
+        </v-icon>
+      </div>
+
+      <!-- Optional metadata chips -->
+      <div v-if="showMetadata && cardMetadata.length > 0" class="mt-3">
+        <v-chip
+          v-for="(meta, index) in cardMetadata"
+          :key="index"
+          size="x-small"
+          variant="outlined"
+          class="mr-1 mb-1"
+        >
+          {{ meta }}
+        </v-chip>
+      </div>
+    </div>
+  </v-card-text>
 
     <!-- Hover Overlay -->
     <CardHoverOverlay
@@ -44,7 +93,6 @@
 <script lang="ts" setup>
 import { ref, computed } from 'vue'
 import CardImageThumbnail from './CardImageThumbnail.vue'
-import CardContent from './CardContent.vue'
 import CardHoverOverlay from './CardHoverOverlay.vue'
 
 interface Conversation {
@@ -86,7 +134,7 @@ const props = withDefaults(defineProps<Props>(), {
   showOverlayActions: false,
   overlayTitle: 'View Conversation',
   overlayIcon: 'mdi-eye',
-  overlayActions: () => []
+  overlayActions: () => [],
 })
 
 const emit = defineEmits<{
@@ -161,10 +209,6 @@ const formatDate = (date: Date): string => {
 .conversation-card:hover {
   transform: translateY(-4px) scale(1.02);
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15) !important;
-}
-
-.card-hover {
-  /* Additional hover state styling can be added here if needed */
 }
 
 /* Ensure consistent border radius */

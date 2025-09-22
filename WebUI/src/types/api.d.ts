@@ -1,0 +1,35 @@
+import { GenerationType, GenerationStatus } from '../enums';
+
+export interface ConversationDto {
+    id: string;
+    title: string;
+    createdAt: string;
+    generationRecords: GenerationRecordDto[];
+}
+
+export interface GenerationRecordDto {
+    id: string;
+    generationType: GenerationType;
+    prompt: string;
+    generationParams: string;
+    status: GenerationStatus;
+    createdAt: string;
+    completedAt?: string | null;
+    inputImages: ImageDto[];
+    outputImage?: ImageDto | null;
+}
+
+export interface ImageDto {
+    id: string;
+    imagePath: string;
+    isFavorite: boolean;
+    createdAt: string;
+}
+
+export interface GenerateImageDto {
+    prompt: string;
+    generationType: GenerationType;
+    quality?: 'standard' | 'hd';
+    style?: 'vivid' | 'natural';
+    inputImageIds?: string[]; // GUIDs represented as strings
+}

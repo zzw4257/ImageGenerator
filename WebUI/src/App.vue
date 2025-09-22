@@ -1,13 +1,6 @@
 <template>
-  <v-app>
-    <router-view v-slot="{ Component, route }">
-      <transition
-        :name="(route.meta?.transition as string) || 'fade'"
-        mode="out-in"
-      >
-        <component :is="Component" :key="route.path" />
-      </transition>
-    </router-view>
+  <v-app class="fill-height">
+    <router-view></router-view>
   </v-app>
 </template>
 

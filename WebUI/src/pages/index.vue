@@ -1,7 +1,7 @@
 <template>
   <v-container fluid class="pa-8">
     <div class="d-flex justify-space-between align-center mb-6">
-      <h1 class="text-h3 font-weight-bold text-primary">Image Library</h1>
+      <h1 class="text-h3 font-weight-bold text-primary">Recent Conversation</h1>
       <v-btn
         color="primary"
         size="large"
@@ -31,7 +31,7 @@
     </v-row>
 
     <!-- Empty state -->
-    <div v-if="conversations.length === 0" class="text-center mt-12">
+    <div v-if="!loading && conversations.length === 0" class="text-center mt-12">
       <v-icon
         size="120"
         color="grey-lighten-2"
@@ -51,6 +51,10 @@
         Start Creating
       </v-btn>
     </div>
+
+    <div v-if="loading" class="d-flex align-center justify-center py-12">
+      <v-progress-circular indeterminate color="primary" />
+    </div>
   </v-container>
 </template>
 
@@ -58,8 +62,9 @@
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import ConversationCard from '@/components/ConversationCard.vue'
+import * as convoApi from '@/services/conversation'
 
-interface Conversation {
+interface ConversationUI {
   id: string
   title: string
   thumbnail: string
@@ -69,63 +74,35 @@ interface Conversation {
 }
 
 const router = useRouter()
-const conversations = ref<Conversation[]>([])
+const conversations = ref<ConversationUI[]>([])
+const loading = ref(false)
 
-// Mock data for demonstration
-const mockConversations: Conversation[] = [
-  {
-    id: '1',
-    title: 'Sunset Landscapes',
-    thumbnail: 'https://picsum.photos/400/300?random=1',
-    lastMessage: 'A beautiful sunset over mountains',
-    timestamp: new Date('2024-01-15'),
-    imageCount: 5
-  },
-  {
-    id: '2',
-    title: 'Abstract Art',
-    thumbnail: 'https://picsum.photos/400/300?random=2',
-    lastMessage: 'Colorful abstract composition',
-    timestamp: new Date('2024-01-14'),
-    imageCount: 8
-  },
-  {
-    id: '3',
-    title: 'Character Design',
-    thumbnail: 'https://picsum.photos/400/300?random=3',
-    lastMessage: 'Fantasy character with armor',
-    timestamp: new Date('2024-01-13'),
-    imageCount: 12
-  },
-  {
-    id: '4',
-    title: 'Nature Photography',
-    thumbnail: 'https://picsum.photos/400/300?random=4',
-    lastMessage: 'Forest landscape with fog',
-    timestamp: new Date('2024-01-12'),
-    imageCount: 3
+const loadConversations = async () => {
+  loading.value = true
+  try {
+    const items = await convoApi.listConversations()
+    conversations.value = (items || []).map((x) => ({
+      id: x.id || String(x.id ?? ''),
+      title: x.title || 'Untitled',
+      thumbnail: x.generationRecords[0]?.outputImage?.imagePath || 'https://picsum.photos/400/300',
+      timestamp: new Date(x.createdAt) || new Date(),
+      imageCount: x.generationRecords.length ?? 0,
+      lastMessage: x.generationRecords[0]?.prompt || '',
+    }))
+  } finally {
+    loading.value = false
   }
-]
+}
 
-onMounted(() => {
-  // Simulate loading conversations
-  setTimeout(() => {
-    conversations.value = mockConversations
-  }, 500)
-})
+onMounted(loadConversations)
 
-const createNewConversation = () => {
-  const newId = Date.now().toString()
-  router.push(`/conversation/${newId}`)
+const createNewConversation = async () => {
+  const conv: any = await convoApi.createConversation()
+  const id = conv?.id || conv?.chatId || Date.now().toString()
+  router.push(`/conversation/${id}`)
 }
 
 const openConversation = (id: string) => {
   router.push(`/conversation/${id}`)
 }
 </script>
-
-<style scoped>
-.v-container {
-  max-width: 1400px;
-}
-</style>
