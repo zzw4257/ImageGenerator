@@ -15,8 +15,12 @@ declare module 'vue' {
     CardTimestamp: typeof import('./components/CardTimestamp.vue')['default']
     ConversationCard: typeof import('./components/ConversationCard.vue')['default']
     HelloWorld: typeof import('./components/HelloWorld.vue')['default']
+    ImageDisplay: typeof import('./components/conversation/ImageDisplay.vue')['default']
+    InputPanel: typeof import('./components/conversation/InputPanel.vue')['default']
     LoginForm: typeof import('./components/LoginForm.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    SmoothPicture: typeof import('./components/SmoothPicture.vue')['default']
+    TimelineStrip: typeof import('./components/conversation/TimelineStrip.vue')['default']
   }
 }

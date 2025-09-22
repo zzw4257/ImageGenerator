@@ -90,7 +90,7 @@ withDefaults(defineProps<Props>(), {
   iconColor: 'white',
   titleClass: 'text-h6 text-white',
   subtitleClass: 'text-body-2 text-white',
-  opacity: 0.9,
+  opacity: 0.3,
   zIndex: 2,
   showActions: false,
   actions: () => []
