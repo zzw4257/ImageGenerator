@@ -2,7 +2,7 @@
   <div class="content-area">
     <v-card rounded="xl" elevation="2" class="image-display-card">
       <div class="image-container">
-        <SmoothPicture v-if="item?.image?.imagePath" :url="`/${item.image.imagePath}`" height="500" cover class="rounded-xl">
+        <SmoothPicture v-if="item && item.image?.imagePath" :url="`/${item.image.imagePath}`" height="500" cover class="rounded-xl">
           <template #placeholder>
             <div class="d-flex align-center justify-center fill-height">
               <v-progress-circular color="primary" indeterminate />
@@ -24,6 +24,9 @@
           {{ formatTime(item.timestamp) }}
         </v-chip>
         <v-spacer />
+        <v-btn variant="tonal" color="primary" size="small" prepend-icon="mdi-image-plus" @click="$emit('add-reference')">
+          Add as Reference
+        </v-btn>
         <v-btn icon variant="text" @click="$emit('download')"><v-icon>mdi-download</v-icon></v-btn>
         <v-btn icon variant="text" @click="$emit('share')"><v-icon>mdi-share</v-icon></v-btn>
         <v-btn icon variant="text" @click="$emit('delete')"><v-icon>mdi-delete</v-icon></v-btn>

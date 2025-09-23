@@ -9,14 +9,14 @@ export const createConversation = async () => {
 
 export const getConversation = async (chatId: string): Promise<ConversationDto> => {
   // OpenAPI: GET /api/Conversation/{chatId}
-  const { data } = await axios.get<ConversationDto | any>(`/Conversation/${encodeURIComponent(chatId)}`)
+  const { data } = await axios.get<ConversationDto | any>(`/Conversation/${chatId}`)
   return data
 }
 
 // Payload for generation can vary (prompt text, params, input images, etc.)
 export const generateImage = async (chatId: string, payload: GenerateImageDto): Promise<GenerationRecordDto> => {
   // OpenAPI: POST /api/Conversation/generate/{chatId}
-  const { data } = await axios.post<GenerationRecordDto>(`/Conversation/generate/${encodeURIComponent(chatId)}`, payload)
+  const { data } = await axios.post<GenerationRecordDto>(`/Conversation/generate/${chatId}`, payload)
   return data
 }
 
@@ -33,6 +33,7 @@ export const quickGenerate = async (payload: GenerateImageDto) => {
 }
 
 export const uploadImage = async (file: File): Promise<ImageDto> => {
+  // OpenAPI: POST /api/Conversation/upload
   const formData = new FormData()
   formData.append('file', file)
   const { data } = await axios.post<ImageDto>('/Conversation/upload', formData, {
@@ -41,4 +42,9 @@ export const uploadImage = async (file: File): Promise<ImageDto> => {
     }
   })
   return data
+}
+
+export const deleteConversation = async (chatId: string): Promise<void> => {
+  // OpenAPI: DELETE /api/Conversation/{chatId}
+  await axios.delete(`/Conversation/${chatId}`)
 }

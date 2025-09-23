@@ -26,6 +26,14 @@ export interface ImageDto {
     createdAt: string;
 }
 
+export interface InvitationDto {
+    id: string;
+    code: string;
+    createdAt: string;
+    remainingUses: number;
+    issuerId: string;
+}
+
 export interface GenerateImageDto {
     prompt: string;
     generationType: GenerationType;

@@ -105,7 +105,9 @@
 <script lang="ts" setup>
 import { ref, computed, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { useTheme, useDisplay } from 'vuetify'
+import { useDisplay } from 'vuetify'
+import { useAppStore } from '@/stores/app'
+import { useNotificationStore } from '@/stores/notification'
 
 interface NavigationItem {
   title: string
@@ -132,15 +134,13 @@ const isExpanded = computed(() => {
 
 const route = useRoute()
 const router = useRouter()
-const theme = useTheme()
+const appStore = useAppStore()
+const notificationStore = useNotificationStore()
 
 const rail = ref(true)
 const drawer = ref(isExpanded.value)
 const showSearch = ref(false)
 const searchQuery = ref('')
-const notificationCount = ref(3)
-
-const userAvatar = 'https://cdn.vuetifyjs.com/images/profiles/marcus.jpg'
 
 // Add this watch after the ref declarations
 watch(isExpanded, (newVal) => {
@@ -165,17 +165,11 @@ const navigationItems: NavigationItem[] = [
     icon: 'mdi-heart',
     to: '/favorites'
   },
-  // {
-  //   title: 'Collections',
-  //   subtitle: 'Organized groups',
-  //   icon: 'mdi-folder-multiple',
-  //   to: '/collections'
-  // },
   {
-    title: 'Gallery',
-    subtitle: 'All images',
-    icon: 'mdi-view-grid',
-    to: '/gallery'
+    title: 'Invitations',
+    subtitle: 'Manage codes',
+    icon: 'mdi-ticket',
+    to: '/invitation'
   }
 ]
 
@@ -195,13 +189,14 @@ const userMenuItems: UserMenuItem[] = [
     icon: 'mdi-logout',
     action: () => {
       // Handle logout
-      console.log('Signing out...')
+      appStore.clearAuthInfo()
+      router.push('/login')
+      notificationStore.info('Logged out')
     }
   }
 ]
 
 const pageTitle = computed(() => {
-  console.log('Route meta title:', route.meta)
   const routeTitle = route.meta?.title as string
   if (routeTitle) return routeTitle
 
@@ -217,6 +212,8 @@ const pageTitle = computed(() => {
       return 'Collections'
     case '/recent':
       return 'Recent Activity'
+    case '/invitation':
+      return 'Invitation Codes'
     default:
       if (route.path.startsWith('/conversation/')) {
         return 'Conversation'

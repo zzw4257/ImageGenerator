@@ -1,11 +1,20 @@
 <template>
   <v-app class="fill-height">
     <router-view></router-view>
+
+    <!-- Global Delete Dialog -->
+    <ConfirmDeleteDialog />
+
+    <!-- Global Notification Queue -->
+    <SnackbarQueue />
   </v-app>
 </template>
 
 <script lang="ts" setup>
 import { useVuetifyTheme } from './composables/useVuetifyTheme.ts'
+import ConfirmDeleteDialog from '@/components/ConfirmDeleteDialog.vue'
+import SnackbarQueue from '@/components/SnackbarQueue.vue'
+
 useVuetifyTheme();
 </script>
 

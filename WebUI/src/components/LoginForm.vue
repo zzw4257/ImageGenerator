@@ -8,6 +8,13 @@
             Login
         </v-btn>
         <div v-if="error" class="mt-3 text-error text-body-2">{{ error }}</div>
+        
+        <div class="text-center mt-4">
+            <span class="text-body-2 text-grey-darken-1">Don't have an account? </span>
+            <router-link to="/register" class="text-primary text-decoration-none">
+                Sign up
+            </router-link>
+        </div>
     </v-form>
 </template>
 

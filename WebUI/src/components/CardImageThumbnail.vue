@@ -8,25 +8,28 @@
       :class="{ 'thumbnail-hover': isHovered }"
     >
       <template v-slot:placeholder>
-        <div class="d-flex align-center justify-center fill-height">
+        <div v-if="thumbnail" class="d-flex align-center justify-center fill-height">
           <v-progress-circular
             color="grey-lighten-4"
             indeterminate
             size="small"
           ></v-progress-circular>
         </div>
+        <div v-else class="d-flex align-center justify-center fill-height no-thumbnail">
+          <v-icon size="48">mdi-image-off</v-icon>
+        </div>
       </template>
     </v-img>
     
-    <!-- Image count badge -->
+    <!-- Record count badge -->
     <v-chip
       v-if="showBadge"
-      class="image-count-badge"
+      class="record-count-badge"
       :color="badgeColor"
       size="small"
       :prepend-icon="badgeIcon"
     >
-      {{ imageCount }}
+      {{ recordCount }}
     </v-chip>
 
     <!-- Hover overlay gradient -->
@@ -40,7 +43,7 @@
 <script lang="ts" setup>
 interface Props {
   thumbnail: string
-  imageCount?: number
+  recordCount?: number
   height?: number | string
   isHovered?: boolean
   showBadge?: boolean
@@ -55,7 +58,7 @@ withDefaults(defineProps<Props>(), {
   showBadge: true,
   showHoverEffect: true,
   badgeColor: 'primary',
-  badgeIcon: 'mdi-image'
+  badgeIcon: 'mdi-comment'
 })
 </script>
 
@@ -75,7 +78,7 @@ withDefaults(defineProps<Props>(), {
   transform: scale(1.05);
 }
 
-.image-count-badge {
+.record-count-badge {
   position: absolute;
   top: 8px;
   right: 8px;
@@ -103,5 +106,9 @@ withDefaults(defineProps<Props>(), {
 .conversation-thumbnail {
   border-top-left-radius: 24px;
   border-top-right-radius: 24px;
+}
+
+.no-thumbnail{
+  background-image: linear-gradient(to top, #fbc2eb 0%, #a6c1ee 100%);
 }
 </style>

@@ -7,3 +7,11 @@ export interface TimelineItem {
   timestamp: Date
   image?: ImageDto
 }
+
+export interface ConversationUI {
+  id: string
+  thumbnail: string
+  lastMessage: string
+  timestamp: Date
+  recordCount: number
+}

@@ -47,7 +47,7 @@
           :variant="action.variant || 'outlined'"
           :size="action.size || 'small'"
           class="mx-1"
-          @click="$emit('action', action.key)"
+          @click.stop="$emit('action', action.key)"
         >
           <v-icon v-if="action.icon" :start="!!action.text">
             {{ action.icon }}
@@ -108,6 +108,7 @@ defineEmits<{
 }
 
 .overlay-content {
+  position: relative;
   max-width: 200px;
 }
 

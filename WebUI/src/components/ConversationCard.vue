@@ -1,92 +1,39 @@
 <template>
-  <v-card
-    class="conversation-card"
-    :class="{ 'card-hover': isHovered }"
-    rounded="xl"
-    elevation="2"
-    hover
-    @mouseenter="handleMouseEnter"
-    @mouseleave="handleMouseLeave"
-    @click="handleClick"
-  >
+  <v-card class="conversation-card" :class="{ 'card-hover': isHovered }" rounded="xl" elevation="2" hover
+    @mouseenter="handleMouseEnter" @mouseleave="handleMouseLeave" @click="handleClick">
     <!-- Image Thumbnail Section -->
-    <CardImageThumbnail
-      :thumbnail="conversation.thumbnail"
-      :image-count="conversation.imageCount"
-      :is-hovered="isHovered"
-      :height="thumbnailHeight"
-      :show-badge="showImageCount"
-    />
-
-    <!-- Card Content Section -->
-    <!-- <CardContent
-      :title="conversation.title"
-      :last-message="conversation.lastMessage"
-      :timestamp="conversation.timestamp"
-      :is-hovered="isHovered"
-      :metadata="cardMetadata"
-      :show-metadata="showMetadata"
-    /> -->
+    <CardImageThumbnail :thumbnail="conversation.thumbnail" :record-count="conversation.recordCount"
+      :is-hovered="isHovered" :height="thumbnailHeight" :show-badge="showRecordCount" />
 
     <v-card-text class="pa-4">
-    <div class="d-flex flex-column">
-      <!-- Title -->
-      <h3 
-        class="text-h6 font-weight-bold mb-2 text-truncate card-title"
-        :class="{ 'title-hover': isHovered }"
-      >
-        {{ conversation.title }}
-      </h3>
-      
-      <!-- Last Message -->
-      <p 
-        class="text-body-2 text-grey-darken-1 mb-3 text-truncate card-message"
-        :title="conversation.title"
-      >
-        {{ conversation.title }}
-      </p>
-      
-      <!-- Footer with timestamp and action indicator -->
-      <div class="d-flex align-center justify-space-between">
-        <CardTimestamp 
-          :timestamp="conversation.timestamp"
-          format="relative"
-        />
-        
-        <v-icon
-          size="small"
-          class="action-icon"
-          :class="{ 'icon-hover': isHovered }"
-        >
-          mdi-chevron-right
-        </v-icon>
-      </div>
+      <div class="d-flex flex-column">
+        <!-- Title -->
+        <h3 class="text-h6 font-weight-bold mb-2 text-truncate card-title" :class="{ 'title-hover': isHovered }">
+          {{ conversation.lastMessage ?? "Untitled" }}
+        </h3>
 
-      <!-- Optional metadata chips -->
-      <div v-if="showMetadata && cardMetadata.length > 0" class="mt-3">
-        <v-chip
-          v-for="(meta, index) in cardMetadata"
-          :key="index"
-          size="x-small"
-          variant="outlined"
-          class="mr-1 mb-1"
-        >
-          {{ meta }}
-        </v-chip>
+        <!-- Footer with timestamp and action indicator -->
+        <div class="d-flex align-center justify-space-between">
+          <CardTimestamp :timestamp="conversation.timestamp" format="relative" />
+
+          <v-icon class="action-icon" :class="{ 'icon-hover': isHovered }">
+            mdi-chevron-right
+          </v-icon>
+        </div>
+
+        <!-- Optional metadata chips -->
+        <div v-if="showMetadata && cardMetadata.length > 0" class="mt-3">
+          <v-chip v-for="(meta, index) in cardMetadata" :key="index" size="x-small" variant="outlined"
+            class="mr-1 mb-1">
+            {{ meta }}
+          </v-chip>
+        </div>
       </div>
-    </div>
-  </v-card-text>
+    </v-card-text>
 
     <!-- Hover Overlay -->
-    <CardHoverOverlay
-      :show="showHoverOverlay"
-      :title="overlayTitle"
-      :subtitle="overlaySubtitle"
-      :icon="overlayIcon"
-      :show-actions="showOverlayActions"
-      :actions="overlayActions"
-      @action="handleOverlayAction"
-    />
+    <CardHoverOverlay :show="showHoverOverlay" :title="overlayTitle" :subtitle="overlaySubtitle" :icon="overlayIcon"
+      :show-actions="showOverlayActions" :actions="overlayActions" @action="handleOverlayAction" />
   </v-card>
 </template>
 
@@ -94,15 +41,7 @@
 import { ref, computed } from 'vue'
 import CardImageThumbnail from './CardImageThumbnail.vue'
 import CardHoverOverlay from './CardHoverOverlay.vue'
-
-interface Conversation {
-  id: string
-  title: string
-  thumbnail: string
-  lastMessage: string
-  timestamp: Date
-  imageCount: number
-}
+import type { ConversationUI } from '@/types/ui'
 
 interface OverlayAction {
   key: string
@@ -114,9 +53,9 @@ interface OverlayAction {
 }
 
 interface Props {
-  conversation: Conversation
+  conversation: ConversationUI
   thumbnailHeight?: number | string
-  showImageCount?: boolean
+  showRecordCount?: boolean
   showMetadata?: boolean
   showHoverOverlay?: boolean
   showOverlayActions?: boolean
@@ -128,7 +67,7 @@ interface Props {
 
 const props = withDefaults(defineProps<Props>(), {
   thumbnailHeight: 200,
-  showImageCount: true,
+  showRecordCount: true,
   showMetadata: false,
   showHoverOverlay: true,
   showOverlayActions: false,
@@ -148,15 +87,15 @@ const isHovered = ref(false)
 
 const cardMetadata = computed(() => {
   if (!props.showMetadata) return []
-  
+
   return [
-    `${props.conversation.imageCount} images`,
+    `${props.conversation.recordCount} images`,
     formatDate(props.conversation.timestamp)
   ]
 })
 
 const overlaySubtitle = computed(() => {
-  return props.overlaySubtitle || `${props.conversation.imageCount} images generated`
+  return props.overlaySubtitle || `${props.conversation.recordCount} generation records`
 })
 
 const showHoverOverlay = computed(() => {
@@ -185,7 +124,7 @@ const formatDate = (date: Date): string => {
   const now = new Date()
   const diff = now.getTime() - date.getTime()
   const days = Math.floor(diff / (1000 * 60 * 60 * 24))
-  
+
   if (days === 0) {
     return 'Today'
   } else if (days === 1) {

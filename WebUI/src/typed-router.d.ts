@@ -20,8 +20,10 @@ declare module 'vue-router/auto-routes' {
   export interface RouteNamedMap {
     '/': RouteRecordInfo<'/', '/', Record<never, never>, Record<never, never>>,
     '/conversation/[id]': RouteRecordInfo<'/conversation/[id]', '/conversation/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,
-    '/gallery': RouteRecordInfo<'/gallery', '/gallery', Record<never, never>, Record<never, never>>,
+    '/favorites': RouteRecordInfo<'/favorites', '/favorites', Record<never, never>, Record<never, never>>,
+    '/invitation': RouteRecordInfo<'/invitation', '/invitation', Record<never, never>, Record<never, never>>,
     '/login': RouteRecordInfo<'/login', '/login', Record<never, never>, Record<never, never>>,
+    '/register': RouteRecordInfo<'/register', '/register', Record<never, never>, Record<never, never>>,
     '/settings': RouteRecordInfo<'/settings', '/settings', Record<never, never>, Record<never, never>>,
   }
 
@@ -44,12 +46,20 @@ declare module 'vue-router/auto-routes' {
       routes: '/conversation/[id]'
       views: never
     }
-    'src/pages/gallery.vue': {
-      routes: '/gallery'
+    'src/pages/favorites.vue': {
+      routes: '/favorites'
+      views: never
+    }
+    'src/pages/invitation.vue': {
+      routes: '/invitation'
       views: never
     }
     'src/pages/login.vue': {
       routes: '/login'
+      views: never
+    }
+    'src/pages/register.vue': {
+      routes: '/register'
       views: never
     }
     'src/pages/settings.vue': {

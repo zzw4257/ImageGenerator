@@ -4,7 +4,7 @@
       <v-row class="fill-height">
         <!-- Main Content Area -->
         <v-col cols="12" md="7" class="main-content">
-          <ImageDisplay :item="selectedItem" @download="downloadImage" @share="shareImage" @delete="deleteImage" />
+          <ImageDisplay :item="selectedItem" @download="downloadImage" @share="shareImage" @delete="deleteImage" @add-reference="addImageReference" />
         </v-col>
 
         <!-- Upload Sidebar -->
@@ -16,7 +16,7 @@
       <!-- Timeline Sidebar -->
       <v-row>
         <v-col cols="12" class="timeline-sidebar">
-          <TimelineStrip :items="timelineItems" :selected="selectedItem" @select="selectTimelineItem" />
+          <TimelineStrip :items="timelineItems" :selected="selectedItem" @select="selectTimelineItem" @add-reference="addTimelineReference" />
         </v-col>
       </v-row>
     </v-container>
@@ -33,6 +33,7 @@ import InputPanel from '@/components/conversation/InputPanel.vue'
 import TimelineStrip from '@/components/conversation/TimelineStrip.vue'
 import type { TimelineItem } from '@/types/ui'
 import { useConversationTimeline } from '@/composables/useConversationTimeline'
+import { useAppStore } from '@/stores/app'
 import { v4 } from 'uuid'
 import { GenerationType } from '@/enums'
 
@@ -45,6 +46,7 @@ defineOptions({
 
 const router = useRouter()
 const route = useRoute()
+const appStore = useAppStore()
 
 const promptText = ref('')
 const isGenerating = ref(false)
@@ -85,8 +87,29 @@ onMounted(async () => {
   }
 })
 
-const selectTimelineItem = (item: TimelineItem) => {
-  selectedItem.value = item
+const selectTimelineItem = async (item: TimelineItem) => {
+  // If selecting a prompt item and current prompt is not empty, show confirmation dialog
+  if (item.type === 'prompt' && promptText.value.trim() && promptText.value.trim() != item.prompt.trim()) {
+    await appStore.showPromptReplaceDialog({
+      currentPrompt: promptText.value,
+      newPrompt: item.prompt,
+      onConfirm: () => {
+        promptText.value = item.prompt
+        selectedItem.value = item
+      },
+      onCancel: () => {
+        // Just select the item without replacing the prompt
+        selectedItem.value = item
+      }
+    })
+  } else {
+    // If it's an image item or prompt is empty, just select normally
+    selectedItem.value = item
+    // If it's a prompt item and current prompt is empty, fill it
+    if (item.type === 'prompt' && !promptText.value.trim()) {
+      promptText.value = item.prompt
+    }
+  }
 }
 
 const generateImage = async () => {
@@ -159,6 +182,26 @@ const shareImage = () => {
 const deleteImage = () => {
   // Implementation for image deletion
   console.log('Delete image')
+}
+
+const addImageReference = () => {
+  if (selectedItem.value?.image) {
+    addToReference(selectedItem.value.image)
+  }
+}
+
+const addTimelineReference = (item: TimelineItem) => {
+  if (item.image) {
+    addToReference(item.image)
+  }
+}
+
+const addToReference = (image: ImageDto) => {
+  // Check if image is already in references
+  const exists = uploadedImages.value.find(img => img.id === image.id)
+  if (!exists) {
+    uploadedImages.value.push(image)
+  }
 }
 
 // moved into components where needed

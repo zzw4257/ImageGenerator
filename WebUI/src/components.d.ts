@@ -13,14 +13,18 @@ declare module 'vue' {
     CardHoverOverlay: typeof import('./components/CardHoverOverlay.vue')['default']
     CardImageThumbnail: typeof import('./components/CardImageThumbnail.vue')['default']
     CardTimestamp: typeof import('./components/CardTimestamp.vue')['default']
+    ConfirmDeleteDialog: typeof import('./components/ConfirmDeleteDialog.vue')['default']
+    ConfirmPromptReplaceDialog: typeof import('./components/ConfirmPromptReplaceDialog.vue')['default']
     ConversationCard: typeof import('./components/ConversationCard.vue')['default']
     HelloWorld: typeof import('./components/HelloWorld.vue')['default']
     ImageDisplay: typeof import('./components/conversation/ImageDisplay.vue')['default']
     InputPanel: typeof import('./components/conversation/InputPanel.vue')['default']
     LoginForm: typeof import('./components/LoginForm.vue')['default']
+    RegisterForm: typeof import('./components/RegisterForm.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SmoothPicture: typeof import('./components/SmoothPicture.vue')['default']
+    SnackbarQueue: typeof import('./components/SnackbarQueue.vue')['default']
     TimelineStrip: typeof import('./components/conversation/TimelineStrip.vue')['default']
   }
 }
