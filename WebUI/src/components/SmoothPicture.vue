@@ -156,8 +156,11 @@ const containerStyle = computed(() => {
       @load="onImageLoad"
     >
     <slot></slot>
-    </v-img>
-  </v-sheet>
+    <template #placeholder>
+      <slot name="placeholder"></slot>
+    </template>
+  </v-img>
+</v-sheet>
 </template>
 
 <style lang="css">

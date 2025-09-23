@@ -4,7 +4,7 @@
       <div class="d-flex justify-space-between align-center input-area-actions">
         <div>
           <v-btn class="upload-btn mr-2" icon="mdi-plus" size="small" variant="tonal" @click="uploadImage" />
-          <v-btn class="upload-btn" icon="mdi-creation" size="small" variant="tonal" />
+          <v-btn class="upload-btn" icon="mdi-creation" size="small" variant="tonal" @click="createPrompt"/>
         </div>
         <v-btn class="upload-btn" variant="tonal" icon="mdi-send" size="small" :loading="isGenerating" @click="emit('generate')" />
       </div>
@@ -21,7 +21,7 @@
       <div v-else class="uploaded-images">
         <SmoothPicture v-for="(image, index) in images" :key="index" aspect-ratio="1" rounded="lg" elevation="1" class="uploaded-image" :url="`/${image.imagePath}`" height="150" width="150" cover>
           <template #default>
-            <v-btn icon size="30px" class="ma-2 uploaded-image-remove" @click="emit('remove-image', index)">
+            <v-btn icon size="30px" class="ma-2 uploaded-image-remove" @click.stop="emit('remove-image', index)">
               <v-icon size="16">mdi-close</v-icon>
             </v-btn>
           </template>
@@ -34,8 +34,11 @@
 <script lang="ts" setup>
 import type { ImageDto } from '@/types/api';
 import SmoothPicture from '../SmoothPicture.vue';
+import { useNotificationStore } from '@/stores/notification';
 
 defineProps<{ images: ImageDto[]; isGenerating: boolean }>()
+
+const noticationStore = useNotificationStore();
 const model = defineModel<string>({ default: '' })
 const modelValue = model
 const emit = defineEmits<{
@@ -43,6 +46,7 @@ const emit = defineEmits<{
   (e: 'generate'): void
   (e: 'remove-image', index: number): void
 }>();
+let keydownHandler: ((e: KeyboardEvent) => void) | null = null
 
 function uploadImage() {
   const input = document.createElement("input");
@@ -57,6 +61,28 @@ function uploadImage() {
   };
   input.click();
 }
+
+function createPrompt() {
+  noticationStore.info('Feature coming soon!',{
+    icon: 'mdi-alert-circle-outline'
+  })
+}
+
+onMounted(() => {
+  keydownHandler = (e: KeyboardEvent) => {
+    if (e.shiftKey && e.key === 'Enter') {
+      emit('generate')
+    }
+  }
+  document.addEventListener('keydown', keydownHandler)
+})
+
+onUnmounted(() => {
+  if (keydownHandler) {
+    document.removeEventListener('keydown', keydownHandler)
+    keydownHandler = null
+  }
+})
 </script>
 
 <style scoped>

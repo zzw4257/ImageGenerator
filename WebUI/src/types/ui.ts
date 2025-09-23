@@ -5,7 +5,7 @@ export interface TimelineItem {
   type: 'prompt' | 'image'
   prompt: string
   timestamp: Date
-  image?: ImageDto
+  image: ImageDto[]
 }
 
 export interface ConversationUI {

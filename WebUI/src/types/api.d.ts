@@ -4,6 +4,7 @@ export interface ConversationDto {
     id: string;
     title: string;
     createdAt: string;
+    updatedAt: string;
     generationRecords: GenerationRecordDto[];
 }
 
@@ -40,4 +41,13 @@ export interface GenerateImageDto {
     quality?: 'standard' | 'hd';
     style?: 'vivid' | 'natural';
     inputImageIds?: string[]; // GUIDs represented as strings
+}
+
+export interface ProfileDto {
+    id: string;
+    username: string;
+    createdAt: string; // ISO date
+    subscriptionExpiration: string; // ISO date
+    credits: number;
+    lastCreditClaimedAt?: string | null; // ISO date or null
 }

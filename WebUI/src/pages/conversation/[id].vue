@@ -4,7 +4,7 @@
       <v-row class="fill-height">
         <!-- Main Content Area -->
         <v-col cols="12" md="7" class="main-content">
-          <ImageDisplay :item="selectedItem" @download="downloadImage" @share="shareImage" @delete="deleteImage" @add-reference="addImageReference" />
+          <ImageDisplay :item="selectedItem" @add-reference="addImageReference" />
         </v-col>
 
         <!-- Upload Sidebar -->
@@ -16,7 +16,8 @@
       <!-- Timeline Sidebar -->
       <v-row>
         <v-col cols="12" class="timeline-sidebar">
-          <TimelineStrip :items="timelineItems" :selected="selectedItem" @select="selectTimelineItem" @add-reference="addTimelineReference" />
+          <TimelineStrip :items="timelineItems" :selected="selectedItem" @select="selectTimelineItem"
+            @add-reference="addTimelineReference" />
         </v-col>
       </v-row>
     </v-container>
@@ -34,6 +35,7 @@ import TimelineStrip from '@/components/conversation/TimelineStrip.vue'
 import type { TimelineItem } from '@/types/ui'
 import { useConversationTimeline } from '@/composables/useConversationTimeline'
 import { useAppStore } from '@/stores/app'
+import { useNotificationStore } from '@/stores/notification'
 import { v4 } from 'uuid'
 import { GenerationType } from '@/enums'
 
@@ -47,6 +49,7 @@ defineOptions({
 const router = useRouter()
 const route = useRoute()
 const appStore = useAppStore()
+const notificationStore = useNotificationStore()
 
 const promptText = ref('')
 const isGenerating = ref(false)
@@ -120,29 +123,31 @@ const generateImage = async () => {
     id: v4(),
     type: 'prompt',
     prompt: promptText.value,
-    timestamp: new Date()
+    timestamp: new Date(),
+    image: []
   }
   timelineItems.value.push(promptItem)
 
   try {
     const idParam = (route.params as any).id as string
-    const payload:GenerateImageDto = { 
+    const payload: GenerateImageDto = {
       prompt: promptText.value,
       generationType: uploadedImages.value.length > 0 ? GenerationType.ImageToImage : GenerationType.TextToImage,
       inputImageIds: uploadedImages.value.map(img => img.id)
     }
     isGenerating.value = true
+    notificationStore.info('Generating image...')
     const result = await convoApi.generateImage(idParam, payload)
 
     // Try to map returned image dto or reload
-    const image =  result.outputImage;
+    const image = result.outputImage;
     if (image) {
       const imageItem: TimelineItem = {
         id: v4(),
         type: 'image',
         prompt: promptText.value,
         timestamp: new Date(),
-        image
+        image: [image]
       }
       timelineItems.value.push(imageItem)
       selectedItem.value = imageItem
@@ -150,10 +155,12 @@ const generateImage = async () => {
       // If no direct image returned, reload conversation
       await loadConversation(idParam)
     }
-  } catch (e) {
+  } catch (e: any) {
+    notificationStore.error('Failed to generate image: ' + e.message)
     console.error('Generate failed', e)
   } finally {
     promptText.value = ''
+    uploadedImages.value = []
     isGenerating.value = false
   }
 }
@@ -169,21 +176,6 @@ const removeImage = (index: number) => {
   uploadedImages.value.splice(index, 1)
 }
 
-const downloadImage = () => {
-  // Implementation for image download
-  console.log('Download image')
-}
-
-const shareImage = () => {
-  // Implementation for image sharing
-  console.log('Share image')
-}
-
-const deleteImage = () => {
-  // Implementation for image deletion
-  console.log('Delete image')
-}
-
 const addImageReference = () => {
   if (selectedItem.value?.image) {
     addToReference(selectedItem.value.image)
@@ -196,12 +188,15 @@ const addTimelineReference = (item: TimelineItem) => {
   }
 }
 
-const addToReference = (image: ImageDto) => {
-  // Check if image is already in references
-  const exists = uploadedImages.value.find(img => img.id === image.id)
-  if (!exists) {
-    uploadedImages.value.push(image)
-  }
+const addToReference = (image: ImageDto[]) => {
+  image.forEach(img => {
+    // Check if image is already in references
+    const exists = uploadedImages.value.find(uploadedImg => uploadedImg.id === img.id)
+    if (!exists) {
+      uploadedImages.value.push(img)
+    }
+  })
+  notificationStore.info('Images added to reference')
 }
 
 // moved into components where needed

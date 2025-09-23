@@ -89,4 +89,7 @@ export default defineConfig({
       '/images': 'http://localhost:5192'
     }
   },
+  build:{
+    outDir: "wwwroot"
+  }
 })

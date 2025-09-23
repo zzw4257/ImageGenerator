@@ -2,8 +2,8 @@
   <v-card rounded="xl" elevation="2" class="fill-height">
     <h3 class="text-h6 font-weight-bold ml-4 mt-4">Timeline</h3>
     <div class="timeline-wrapper pa-4">
-      <v-timeline side="end" align="start" truncate-line="both" direction="horizontal">
-      <v-timeline-item v-for="(item, index) in items.reverse()" :key="index" :dot-color="item.type === 'image' ? 'primary' : 'secondary'" class="timeline-item" @click="$emit('select', item)">
+  <v-timeline side="end" align="start" truncate-line="both" direction="horizontal">
+  <v-timeline-item v-for="(item, index) in reversedItems" :key="index" :dot-color="item.type === 'image' ? 'primary' : 'secondary'" class="timeline-item" @click="$emit('select', item)">
         <template #icon>
           <v-icon size="15px">{{ item.type === 'image' ? 'mdi-image' : 'mdi-message-text' }}</v-icon>
         </template>
@@ -12,12 +12,12 @@
           <div class="text-caption text-grey-darken-1 mb-1">{{ formatTime(item.timestamp) }}</div>
 
           <div class="d-flex align-center">
-            <v-avatar size="32" rounded="lg" class="mr-2"><v-img :src="`/${item.image?.imagePath}`" cover /></v-avatar>
+            <v-avatar v-if="item.image.length > 0" size="32" rounded="lg" class="mr-2"><v-img :src="`/${item.image[0]!.imagePath}`" cover /></v-avatar>
             <div class="flex-grow-1 mr-4">
               <div class="text-body-2 font-weight-medium">{{ item.type === 'image' ? 'Image Generated' : 'Prompt' }}</div>
               <div class="text-caption text-grey-darken-1 text-truncate">{{ item.prompt }}</div>
             </div>
-            <v-btn v-if="item.image?.imagePath" 
+            <v-btn v-if="item.image.length > 0" 
               icon="mdi-image-plus" 
               size="small" 
               variant="text" 
@@ -34,9 +34,12 @@
 </template>
 
 <script lang="ts" setup>
+import { computed } from 'vue'
 import type { TimelineItem } from '@/types/ui'
 
-defineProps<{ items: TimelineItem[]; selected: TimelineItem | null }>()
+const props = defineProps<{ items: TimelineItem[]; selected: TimelineItem | null }>()
+
+const reversedItems = computed(() => [...props.items].reverse())
 
 const formatTime = (date: Date): string => date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
 </script>

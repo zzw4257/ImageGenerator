@@ -8,13 +8,12 @@ export function useConversationTimeline() {
     const items: TimelineItem[] = []
     records.forEach((r) => {
   // prompt item — uses first input image (if any)
-      const promptImage: ImageDto | undefined = r.inputImages?.[0]
       items.push({
         id: `${r.id}-prompt`,
         type: 'prompt',
         prompt: r.prompt ?? '',
         timestamp: new Date(r.createdAt),
-        image: promptImage,
+        image: r.inputImages ?? [],
       })
   // output image item
       if (r.outputImage) {
@@ -23,7 +22,7 @@ export function useConversationTimeline() {
           type: 'image',
           prompt: r.prompt ?? '',
           timestamp: new Date(r.completedAt ?? r.createdAt),
-          image: r.outputImage,
+          image: [r.outputImage],
         })
       }
     })

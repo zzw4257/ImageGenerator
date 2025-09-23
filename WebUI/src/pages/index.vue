@@ -60,7 +60,7 @@ const loadConversations = async () => {
     conversations.value = (items || []).map((x) => ({
       id: x.id || String(x.id ?? ''),
       thumbnail: x.generationRecords[0]?.outputImage?.imagePath || '',
-      timestamp: new Date(x.createdAt) || new Date(),
+      timestamp: new Date(x.updatedAt+"Z") || new Date(),
       recordCount: x.generationRecords.length ?? 0,
       lastMessage: x.generationRecords[0]?.prompt || 'Untitled',
     }))

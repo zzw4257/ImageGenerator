@@ -8,15 +8,11 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
-    AppFooter: typeof import('./components/AppFooter.vue')['default']
-    CardContent: typeof import('./components/CardContent.vue')['default']
     CardHoverOverlay: typeof import('./components/CardHoverOverlay.vue')['default']
     CardImageThumbnail: typeof import('./components/CardImageThumbnail.vue')['default']
     CardTimestamp: typeof import('./components/CardTimestamp.vue')['default']
     ConfirmDeleteDialog: typeof import('./components/ConfirmDeleteDialog.vue')['default']
-    ConfirmPromptReplaceDialog: typeof import('./components/ConfirmPromptReplaceDialog.vue')['default']
     ConversationCard: typeof import('./components/ConversationCard.vue')['default']
-    HelloWorld: typeof import('./components/HelloWorld.vue')['default']
     ImageDisplay: typeof import('./components/conversation/ImageDisplay.vue')['default']
     InputPanel: typeof import('./components/conversation/InputPanel.vue')['default']
     LoginForm: typeof import('./components/LoginForm.vue')['default']
