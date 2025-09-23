@@ -66,7 +66,9 @@ public static class ModelConfigurationHelper
             Password = passwordEncryption,
             Salt = salt,
             CreatedAt = seedDate,
-            IsDeleted = false
+            IsDeleted = false,
+            Credits = 100,
+            LastCreditClaimedAt = seedDate
         });
 
         // 创建初始邀请码
@@ -97,6 +99,7 @@ public static class ModelConfigurationHelper
                 Id = Guid.Parse("00000000-0000-0000-0000-000000000004"),
                 UserId = adminUserId,
                 CreatedAt = seedDate,
+                UpdatedAt = seedDate,
                 IsDeleted = false
             }
         );

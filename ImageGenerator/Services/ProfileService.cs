@@ -37,7 +37,7 @@ public class ProfileService(IgDbContext context, IHttpContextAccessor httpContex
             throw new InvalidOperationException("今日已领取免费 credits");
         }
 
-        const int grant = 10;
+        const int grant = 30;
         user.Credits += grant;
         user.LastCreditClaimedAt = now;
         await _context.SaveChangesAsync();

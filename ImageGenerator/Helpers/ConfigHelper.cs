@@ -21,6 +21,7 @@ public static class ConfigHelper
         services.AddScoped<IInvitationService, InvitationService>();
         services.AddScoped<IConversationService, ConversationService>();
         services.AddScoped<IProfileService, ProfileService>();
+        services.AddScoped<IFavoriteService, FavoriteService>();
         
         services.AddScoped<OpenAIClient>();
         services.AddScoped<GeminiClient>();

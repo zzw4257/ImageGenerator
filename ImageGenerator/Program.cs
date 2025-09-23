@@ -23,6 +23,12 @@ app.UseHttpsRedirection();
 
 app.AddCustomStaticFile(Path.Combine(Directory.GetCurrentDirectory(), "images"), "/images");
 
+app.UseDefaultFiles();
+
+app.UseStaticFiles();
+
+app.MapFallbackToFile("/index.html");
+
 app.UseAuthentication();
 
 app.UseAuthorization();

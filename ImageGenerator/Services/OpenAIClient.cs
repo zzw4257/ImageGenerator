@@ -122,5 +122,15 @@ namespace ImageGenerator.Services
                 }
             };
         }
+
+        public int GetCreditCost(GenerateImageDto generateDto)
+        {
+            // OpenAI 默认费用：TextToImage=2, ImageToImage=3
+            return generateDto.GenerationType switch
+            {
+                Enums.GenerationType.ImageToImage => 3,
+                _ => 2
+            };
+        }
     }
 }

@@ -18,6 +18,16 @@ namespace ImageGenerator.Services
             return new { };
         }
 
+        public int GetCreditCost(GenerateImageDto generateDto)
+        {
+            // Gemini 默认费用：TextToImage=1, ImageToImage=2
+            return generateDto.GenerationType switch
+            {
+                Enums.GenerationType.ImageToImage => 2,
+                _ => 1
+            };
+        }
+
         public async Task<BinaryData> GenerateImageAsync(string prompt, object options)
         {
             var payload = new
@@ -26,10 +36,6 @@ namespace ImageGenerator.Services
                 {
                     new { parts = new[] { new { text = $"generate an image of {prompt}" } } }
                 },
-                generationConfig = new
-                {
-                    response_mime_type = "image/png"
-                }
             };
 
             var request = new HttpRequestMessage(HttpMethod.Post, $"{_endPoint}/models/gemini-2.5-flash-image-preview:generateContent")
@@ -46,18 +52,7 @@ namespace ImageGenerator.Services
                 throw new HttpRequestException($"Gemini API returned {(int)response.StatusCode}: {responseString}");
             }
 
-            using var doc = JsonDocument.Parse(responseString);
-            var candidates = doc.RootElement.GetProperty("candidates");
-            var inlineData = candidates[0].GetProperty("content").GetProperty("parts")[0].GetProperty("inlineData");
-            var b64 = inlineData.GetProperty("data").GetString();
-
-
-            if (string.IsNullOrEmpty(b64))
-            {
-                throw new InvalidOperationException("API returned empty image data.");
-            }
-
-            return new BinaryData(Convert.FromBase64String(b64));
+            return GetImageData(responseString);
         }
 
         public async Task<BinaryData> GenerateImageFromImageAsync(string prompt, Image[] images, object options)
@@ -120,17 +115,7 @@ namespace ImageGenerator.Services
                 throw new HttpRequestException($"Gemini API returned {(int)response.StatusCode}: {responseString}");
             }
 
-            using var doc = JsonDocument.Parse(responseString);
-            var candidates = doc.RootElement.GetProperty("candidates");
-            var inlineData = candidates[0].GetProperty("content").GetProperty("parts")[0].GetProperty("inlineData");
-            var b64 = inlineData.GetProperty("data").GetString();
-
-            if (string.IsNullOrEmpty(b64))
-            {
-                throw new InvalidOperationException("API returned empty image data.");
-            }
-
-            return new BinaryData(Convert.FromBase64String(b64));
+            return GetImageData(responseString);
         }
 
         private static string GetMimeType(string filePath)
@@ -146,6 +131,33 @@ namespace ImageGenerator.Services
                 ".heif" => "image/heif",
                 _ => "application/octet-stream",
             };
+        }
+
+        private static BinaryData GetImageData(string responseString)
+        {
+            using var doc = JsonDocument.Parse(responseString);
+            var candidates = doc.RootElement.GetProperty("candidates");
+            var parts = candidates[0].GetProperty("content").GetProperty("parts");
+
+            string? b64 = null;
+            foreach (var part in parts.EnumerateArray())
+            {
+                if (part.TryGetProperty("inlineData", out var inlineData))
+                {
+                    if (inlineData.TryGetProperty("data", out var data))
+                    {
+                        b64 = data.GetString();
+                        break;
+                    }
+                }
+            }
+
+            if (string.IsNullOrEmpty(b64))
+            {
+                throw new InvalidOperationException("API returned empty image data.");
+            }
+
+            return new BinaryData(Convert.FromBase64String(b64));
         }
     }
 }

@@ -67,7 +67,9 @@ public class AuthenticationService(IgDbContext context, JwtHelper jwtHelper) : I
         {
             Username = username,
             Password = passwordEncryption,
-            Salt = salt
+            Salt = salt,
+            Credits = 100,
+            LastCreditClaimedAt = DateTime.UtcNow
         };
 
         _context.Users!.Add(user);

@@ -3,6 +3,7 @@ using System;
 using ImageGenerator.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ImageGenerator.Migrations
 {
     [DbContext(typeof(IgDbContext))]
-    partial class IgDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250923030746_add_credit")]
+    partial class add_credit
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.8");
@@ -235,9 +238,8 @@ namespace ImageGenerator.Migrations
                         {
                             Id = new Guid("00000000-0000-0000-0000-000000000001"),
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            Credits = 100,
+                            Credits = 0,
                             IsDeleted = false,
-                            LastCreditClaimedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             Password = "C0FC41A30BEB7C221BB9CB69DF665943ED9F425211FFB8EFA9B5091F7C0BC7F1",
                             Salt = "admin-salt-123",
                             Username = "admin"
