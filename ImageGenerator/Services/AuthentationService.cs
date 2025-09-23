@@ -26,8 +26,6 @@ public class AuthenticationService(IgDbContext context, JwtHelper jwtHelper) : I
 
         var passwordEncryption = Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(password + user.Salt)));
 
-        Console.WriteLine(user.ToString());
-
         if (user.Password != passwordEncryption)
             return null!;
 
@@ -44,7 +42,7 @@ public class AuthenticationService(IgDbContext context, JwtHelper jwtHelper) : I
         };
     }
 
-    public async Task<RegisterDto> RegisterAsync(string username, string password, string invitationCode)
+    public async Task<LoginDto> RegisterAsync(string username, string password, string invitationCode)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(username);
         ArgumentException.ThrowIfNullOrWhiteSpace(password);
@@ -52,7 +50,7 @@ public class AuthenticationService(IgDbContext context, JwtHelper jwtHelper) : I
 
         var invitation = await _context.Invitations!
             .FirstOrDefaultAsync(x => x.Code == invitationCode && x.RemainingUses > 0) ?? throw new InvalidOperationException("Invalid or expired invitation code.");
-            
+
         invitation.RemainingUses--;
         if (invitation.RemainingUses == 0)
             invitation.IsDeleted = true;
@@ -73,12 +71,19 @@ public class AuthenticationService(IgDbContext context, JwtHelper jwtHelper) : I
         };
 
         _context.Users!.Add(user);
-        
+
         await _context.SaveChangesAsync();
 
-        return new RegisterDto
+        var claims = new List<Claim>
         {
-            Id = user.Id
+            new(ClaimTypes.Name, user.Id.ToString()),
+        };
+
+        return new LoginDto
+        {
+            UserId = user.Id,
+            Token = _jwtHelper.GetJwtToken(claims),
+            ExpirationTime = DateTime.Now.AddMinutes(30)
         };
     }
 }

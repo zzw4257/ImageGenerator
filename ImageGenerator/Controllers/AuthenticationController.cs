@@ -29,7 +29,7 @@ public class AuthenticationController(IAuthenticationService authenticationServi
     }
 
     [HttpPost("register")]
-    public async Task<ActionResult<RegisterDto>> Register([FromBody] RegisterFormDto registerFormDto)
+    public async Task<ActionResult<LoginDto>> Register([FromBody] RegisterFormDto registerFormDto)
     {
         try
         {
@@ -43,6 +43,10 @@ public class AuthenticationController(IAuthenticationService authenticationServi
         catch (NullReferenceException)
         {
             return NotFound();
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(ex.Message);
         }
     }
 }

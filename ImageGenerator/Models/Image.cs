@@ -3,6 +3,8 @@ namespace ImageGenerator.Models;
 public class Image
 {
     public Guid Id { get; set; } = Guid.NewGuid();
+    public Guid UserId { get; set; } = Guid.Empty;
+    public User User { get; set; } = null!;
     public required string ImagePath { get; set; } = string.Empty;
     public bool IsFavorite { get; set; } = false;
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;

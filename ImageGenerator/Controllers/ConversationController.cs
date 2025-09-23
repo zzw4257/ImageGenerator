@@ -104,29 +104,6 @@ public class ConversationController(IConversationService conversationService) : 
         }
     }
 
-    [HttpPost("generate")]
-    [AllowAnonymous]
-    public async Task<ActionResult<GenerationRecordDto>> GenerateImageAnonymous([FromBody] GenerateImageDto generateDto)
-    {
-        try
-        {
-            var result = await _chatService.GenerateImageAnonymousAsync(generateDto);
-            return Ok(result);
-        }
-        catch (UnauthorizedAccessException)
-        {
-            return Unauthorized();
-        }
-        catch (ArgumentException ex)
-        {
-            return BadRequest(ex.Message);
-        }
-        catch (Exception ex)
-        {
-            return BadRequest($"生成图片失败: {ex.Message}");
-        }
-    }
-
     [HttpPost("upload")]
     public async Task<ActionResult<ImageDto>> UploadImage([FromForm] UploadImageDto uploadDto)
     {
@@ -146,6 +123,28 @@ public class ConversationController(IConversationService conversationService) : 
         catch (Exception ex)
         {
             return BadRequest($"上传图片失败: {ex.Message}");
+        }
+    }
+
+    [HttpDelete("{chatId}")]
+    public async Task<IActionResult> DeleteConversation(Guid chatId)
+    {
+        try
+        {
+            await _chatService.DeleteConversationAsync(chatId);
+            return NoContent();
+        }
+        catch (UnauthorizedAccessException)
+        {
+            return Unauthorized();
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest($"删除对话失败: {ex.Message}");
         }
     }
 }

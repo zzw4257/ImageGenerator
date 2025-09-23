@@ -12,14 +12,13 @@ using OpenAI.Images;
 
 namespace ImageGenerator.Services;
 
-public class ConversationService(IgDbContext context, IHttpContextAccessor httpContextAccessor, IMapper mapper, IConfiguration configuration, HttpClient httpClient, ImageClient client) : IConversationService
+public class ConversationService(IgDbContext context, IHttpContextAccessor httpContextAccessor, IMapper mapper, ImageGenerationClientFactory clientFactory, IConfiguration configuration) : IConversationService
 {
     private readonly IgDbContext _context = context;
     private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
     private readonly IMapper _mapper = mapper;
+    private readonly ImageGenerationClientFactory _clientFactory = clientFactory;
     private readonly IConfiguration _configuration = configuration;
-    private readonly HttpClient _httpClient = httpClient;
-    private readonly ImageClient _client = client;
 
     public async Task<ConversationDto> CreateConversationAsync()
     {
@@ -75,8 +74,18 @@ public class ConversationService(IgDbContext context, IHttpContextAccessor httpC
         var conversation = await _context.Conversations
             .FirstOrDefaultAsync(c => c.Id == conversationId && c.UserId == userId) ?? throw new ArgumentException("对话不存在或无权访问");
 
+        // 计算并校验 Credits
+        var clientType = generateDto.ClientType ?? "gemini";
+        var cost = GetCreditCost(clientType, generateDto.GenerationType);
+
+        var user = await _context.Users!.FirstOrDefaultAsync(u => u.Id == userId) ?? throw new InvalidOperationException("用户不存在");
+        if (user.Credits < cost)
+        {
+            throw new InvalidOperationException("Lack of Credits");
+        }
+
         // 创建生成记录
-        var generationRecord = GenerateRecordFromDto(generateDto, conversationId);
+        var generationRecord = await GenerateRecordFromDto(generateDto, conversationId);
 
         // 处理输入图片（如果是 ImageToImage）
         if (generateDto.GenerationType == GenerationType.ImageToImage && generateDto.InputImageIds?.Count > 0)
@@ -87,42 +96,51 @@ public class ConversationService(IgDbContext context, IHttpContextAccessor httpC
 
             generationRecord.InputImages = inputImages;
         }
-
-        _context.GenerationRecords.Add(generationRecord);
-        await _context.SaveChangesAsync();
-
-        // 异步生成图片
-        await ProcessImageGenerationAsync(generationRecord.Id, generateDto);
-
-        return _mapper.Map<GenerationRecordDto>(generationRecord);
-    }
-
-    public async Task<GenerationRecordDto> GenerateImageAnonymousAsync(GenerateImageDto generateDto)
-    {
-        // 创建匿名生成记录（不关联用户或对话）
-        var generationRecord = GenerateRecordFromDto(generateDto, Guid.Parse("00000000-0000-0000-0000-000000000004"));
-
-        // 处理输入图片（如果是 ImageToImage）
-        if (generateDto.GenerationType == GenerationType.ImageToImage && generateDto.InputImageIds?.Count > 0)
+        // 扣费 + 写入记录（事务）
+        using (var tx = await _context.Database.BeginTransactionAsync())
         {
-            var inputImages = await _context.Images
-                .Where(img => generateDto.InputImageIds.Contains(img.Id))
-                .ToListAsync();
-
-            generationRecord.InputImages = inputImages;
+            try
+            {
+                user.Credits -= cost;
+                conversation.UpdatedAt = DateTime.UtcNow;
+                _context.GenerationRecords.Add(generationRecord);
+                await _context.SaveChangesAsync();
+                await tx.CommitAsync();
+            }
+            catch
+            {
+                await tx.RollbackAsync();
+                throw;
+            }
         }
 
-        _context.GenerationRecords.Add(generationRecord);
-        await _context.SaveChangesAsync();
-
         // 异步生成图片
         await ProcessImageGenerationAsync(generationRecord.Id, generateDto);
 
         return _mapper.Map<GenerationRecordDto>(generationRecord);
     }
 
-    private static GenerationRecord GenerateRecordFromDto(GenerateImageDto generateDto, Guid conversationId)
+    private async Task<GenerationRecord> GenerateRecordFromDto(GenerateImageDto generateDto, Guid conversationId)
     {
+        var InputImages = new List<Image>();
+
+        if (generateDto.InputImageIds != null)
+        {
+            foreach (var id in generateDto.InputImageIds)
+            {
+                var imgEntity = await _context.Images.FirstOrDefaultAsync(i => i.Id == id);
+                if (imgEntity != null)
+                {
+                    var candidate = Path.Combine(Directory.GetCurrentDirectory(), imgEntity.ImagePath.Replace("/", Path.DirectorySeparatorChar.ToString()));
+                    if (File.Exists(candidate))
+                    {
+                        InputImages.Add(new Image { ImagePath = imgEntity.ImagePath });
+                    }
+                    continue;
+                }
+            }
+        }
+
         return new GenerationRecord
         {
             ConversationId = conversationId, // 匿名用户没有对话
@@ -134,29 +152,10 @@ public class ConversationService(IgDbContext context, IHttpContextAccessor httpC
                 Style = generateDto.Style ?? "vivid"
             }),
             Status = GenerationStatus.Pending,
+            InputImages = InputImages,
             CreatedAt = DateTime.UtcNow
         };
-    }
-
-    private static ImageGenerationOptions GenerateImageOptionsFromDto(GenerateImageDto generateDto)
-    {
-        return new ImageGenerationOptions
-        {
-            Quality = generateDto.Quality?.ToLower() switch
-            {
-                "hd" => GeneratedImageQuality.High,
-                "standard" => GeneratedImageQuality.Standard,
-                _ => GeneratedImageQuality.Standard
-            },
-            Size = GeneratedImageSize.W1024xH1024,
-            Style = generateDto.Style?.ToLower() switch
-            {
-                "natural" => GeneratedImageStyle.Natural,
-                "vivid" => GeneratedImageStyle.Vivid,
-                _ => GeneratedImageStyle.Vivid
-            }
-        };
-    }
+    }  
 
     // 上传图片方法（仅支持 jpg, png）
     public async Task<ImageDto> UploadImageAsync(UploadImageDto uploadDto)
@@ -197,6 +196,47 @@ public class ConversationService(IgDbContext context, IHttpContextAccessor httpC
         return _mapper.Map<ImageDto>(image);
     }
 
+    public async Task DeleteConversationAsync(Guid conversationId)
+    {
+        var userId = GetCurrentUserId() ?? throw new UnauthorizedAccessException("用户未认证");
+
+        var conversation = await _context.Conversations
+            .Include(c => c.GenerationRecords)
+            .ThenInclude(gr => gr.InputImages)
+            .Include(c => c.GenerationRecords)
+            .ThenInclude(gr => gr.OutputImages)
+            .FirstOrDefaultAsync(c => c.Id == conversationId && c.UserId == userId) ?? throw new ArgumentException("对话不存在或无权访问");
+
+        // 删除相关的图片文件
+        foreach (var record in conversation.GenerationRecords)
+        {
+            foreach (var img in record.InputImages)
+            {
+                var inputImagePath = Path.Combine(Directory.GetCurrentDirectory(), img.ImagePath.Replace("/", Path.DirectorySeparatorChar.ToString()));
+                if (File.Exists(inputImagePath))
+                {
+                    File.Delete(inputImagePath);
+                }
+                img.IsDeleted = true;
+            }
+
+            if (record.OutputImages != null)
+            {
+                var outputImagePath = Path.Combine(Directory.GetCurrentDirectory(), record.OutputImages.ImagePath.Replace("/", Path.DirectorySeparatorChar.ToString()));
+                if (File.Exists(outputImagePath))
+                {
+                    File.Delete(outputImagePath);
+                }
+                record.OutputImages.IsDeleted = true;
+            }
+            record.IsDeleted = true;
+        }
+
+        conversation.IsDeleted = true;
+        // 删除对话及其生成记录
+        await _context.SaveChangesAsync();
+    }
+
     private async Task ProcessImageGenerationAsync(Guid generationRecordId, GenerateImageDto generateDto)
     {
         var generationRecord = await _context.GenerationRecords
@@ -213,8 +253,20 @@ public class ConversationService(IgDbContext context, IHttpContextAccessor httpC
 
             Console.WriteLine($"开始生成图片: {generationRecord.Prompt} (记录ID: {generationRecordId})");
 
-            // 调用 OpenAI DALL-E API
-            var imageBytes = await CallApiAsync(generationRecord.Prompt, GenerateImageOptionsFromDto(generateDto));
+            // 调用 Image Generation Client
+            BinaryData imageBytes;
+            var clientType = generateDto.ClientType ?? "gemini";
+            var imageGenerationClient = _clientFactory.GetClient(clientType);
+            var options = imageGenerationClient.ConvertOptions(generateDto);
+
+            if (generateDto.GenerationType == GenerationType.ImageToImage && generationRecord.InputImages.Count != 0)
+            {
+                imageBytes = await imageGenerationClient.GenerateImageFromImageAsync(generationRecord.Prompt, [.. generationRecord.InputImages], options);
+            }
+            else
+            {
+                imageBytes = await imageGenerationClient.GenerateImageAsync(generationRecord.Prompt, options);
+            }
 
             var imagePath = SaveImage(imageBytes, generationRecordId);
 
@@ -235,7 +287,24 @@ public class ConversationService(IgDbContext context, IHttpContextAccessor httpC
             // 记录错误并更新状态
             generationRecord.Status = GenerationStatus.Failed;
             Console.WriteLine($"Image generation failed: {ex.Message}");
-            // 可以在这里记录具体的错误信息
+            // 失败返还 Credits
+            try
+            {
+                var cost = GetCreditCost(generateDto.ClientType ?? "gemini", generateDto.GenerationType);
+                var conversation = await _context.Conversations.FirstOrDefaultAsync(c => c.Id == generationRecord.ConversationId);
+                if (conversation != null)
+                {
+                    var user = await _context.Users!.FirstOrDefaultAsync(u => u.Id == conversation.UserId);
+                    if (user != null)
+                    {
+                        user.Credits += cost;
+                    }
+                }
+            }
+            catch (Exception refundEx)
+            {
+                Console.WriteLine($"返还 credits 失败: {refundEx.Message}");
+            }
         }
         finally
         {
@@ -243,18 +312,23 @@ public class ConversationService(IgDbContext context, IHttpContextAccessor httpC
         }
     }
 
-    private async Task<BinaryData> CallApiAsync(string Prompt, ImageGenerationOptions GenerationParams)
+    private int GetCreditCost(string clientType, GenerationType generationType)
     {
+        var key = clientType.Trim().ToLowerInvariant();
         try
         {
-            GeneratedImage image = await _client.GenerateImageAsync(Prompt);
-            BinaryData bytes = image.ImageBytes;
-            return bytes;
+            var section = _configuration.GetSection("CreditCosts");
+            var defaultCost = section.GetValue<int?>("Default") ?? 1;
+            var clientSection = section.GetSection(key);
+            if (!clientSection.Exists()) return defaultCost;
+
+            var typeName = generationType.ToString();
+            var cost = clientSection.GetValue<int?>(typeName);
+            return cost ?? defaultCost;
         }
-        catch (Exception ex)
+        catch
         {
-            Console.WriteLine($"API 调用失败: {ex.Message}");
-            throw;
+            return 1;
         }
     }
 

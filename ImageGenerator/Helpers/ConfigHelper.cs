@@ -3,9 +3,6 @@ using ImageGenerator.Interface;
 using ImageGenerator.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using OpenAI.Images;
-using OpenAI;
-using System.ClientModel;
 
 namespace ImageGenerator.Helpers;
 
@@ -22,22 +19,14 @@ public static class ConfigHelper
 
         services.AddScoped<IAuthenticationService, AuthenticationService>();
         services.AddScoped<IInvitationService, InvitationService>();
-        services.AddScoped<IConversationService, ConversationService>(); // 注册 ChatService
-        services.AddSingleton(jwtHelper);
-        services.AddSingleton<ImageClient>(serviceProvider =>
-        {
-            var apiKey = Environment.GetEnvironmentVariable("OPENAI_API_KEY");
-            var model = "gpt-image-1";
-            var endPoint = new Uri("https://api.openai-proxy.org/v1");
-            var openAiApiKey = configuration["OpenAI:ApiKey"];
-            if (string.IsNullOrEmpty(openAiApiKey))
-                throw new InvalidOperationException("OpenAI API Key 未配置");
+        services.AddScoped<IConversationService, ConversationService>();
+        services.AddScoped<IProfileService, ProfileService>();
+        
+        services.AddScoped<OpenAIClient>();
+        services.AddScoped<GeminiClient>();
+        services.AddScoped<ImageGenerationClientFactory>();
 
-            return new(model, new ApiKeyCredential(openAiApiKey), new OpenAIClientOptions
-            {
-                Endpoint = endPoint
-            });
-        });
+        services.AddSingleton(jwtHelper);
 
         services.AddHttpContextAccessor(); // 注册 IHttpContextAccessor
         services.AddHttpClient(); // 注册 HttpClient

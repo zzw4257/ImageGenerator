@@ -66,7 +66,6 @@ public static class ModelConfigurationHelper
             Password = passwordEncryption,
             Salt = salt,
             CreatedAt = seedDate,
-            SubscriptionExpiration = seedDate.AddYears(10),
             IsDeleted = false
         });
 
