@@ -16,6 +16,7 @@ declare module 'vue' {
     ImageDisplay: typeof import('./components/conversation/ImageDisplay.vue')['default']
     InputPanel: typeof import('./components/conversation/InputPanel.vue')['default']
     LoginForm: typeof import('./components/LoginForm.vue')['default']
+    PromptTemplateDialog: typeof import('./components/PromptTemplateDialog.vue')['default']
     RegisterForm: typeof import('./components/RegisterForm.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']

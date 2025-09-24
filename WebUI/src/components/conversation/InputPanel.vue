@@ -4,14 +4,15 @@
       <div class="d-flex justify-space-between align-center input-area-actions">
         <div>
           <v-btn class="upload-btn mr-2" icon="mdi-plus" size="small" variant="tonal" @click="uploadImage" />
-          <v-btn class="upload-btn" icon="mdi-creation" size="small" variant="tonal" @click="createPrompt"/>
+          <v-btn class="upload-btn" icon="mdi-creation" size="small" variant="tonal" @click="openTemplateDialog"/>
         </div>
         <v-btn class="upload-btn" variant="tonal" icon="mdi-send" size="small" :loading="isGenerating" @click="emit('generate')" />
       </div>
       <v-textarea v-model="modelValue" placeholder="请输入内容" variant="solo" flat rows="5" class="pa-0"
         bg-color="rgba(0,0,0,0)" hide-details hide-spin-buttons auto-grow />
     </div>
-    <v-divider />
+  <v-divider />
+  <PromptTemplateDialog v-model="showTemplateDialog" @apply="onTemplateApplied" @close="showTemplateDialog=false" />
     <div class="pa-4">
       <h4 class="text-subtitle-1 font-weight-bold mb-3">Reference Images</h4>
       <div v-if="images.length === 0" class="text-center py-6">
@@ -35,6 +36,7 @@
 import type { ImageDto } from '@/types/api';
 import SmoothPicture from '../SmoothPicture.vue';
 import { useNotificationStore } from '@/stores/notification';
+import PromptTemplateDialog from '@/components/PromptTemplateDialog.vue'
 
 defineProps<{ images: ImageDto[]; isGenerating: boolean }>()
 
@@ -62,10 +64,14 @@ function uploadImage() {
   input.click();
 }
 
-function createPrompt() {
-  noticationStore.info('Feature coming soon!',{
-    icon: 'mdi-alert-circle-outline'
-  })
+const showTemplateDialog = ref(false)
+function openTemplateDialog() {
+  showTemplateDialog.value = true
+}
+
+function onTemplateApplied(payload: { finalPrompt: string }) {
+  modelValue.value = payload.finalPrompt
+  noticationStore.success('模板已应用', { icon: 'mdi-check-circle-outline' })
 }
 
 onMounted(() => {
