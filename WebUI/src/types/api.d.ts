@@ -22,6 +22,7 @@ export interface GenerationRecordDto {
 
 export interface ImageDto {
     id: string;
+    size: number;
     imagePath: string;
     isFavorite: boolean;
     createdAt: string;

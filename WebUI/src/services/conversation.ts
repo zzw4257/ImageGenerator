@@ -1,5 +1,5 @@
 import axios from '@/helpers/RequestHelper'
-import type { ConversationDto, GenerateImageDto, GenerationRecordDto, ImageDto } from '@/types/api'
+import type { ConversationDto, GenerateImageDto, GenerationRecordDto} from '@/types/api'
 
 export const createConversation = async () => {
   // OpenAPI: POST /api/Conversation/create
@@ -29,18 +29,6 @@ export const listConversations = async (): Promise<ConversationDto[]> => {
 export const quickGenerate = async (payload: GenerateImageDto) => {
   // OpenAPI: POST /api/Conversation/generate
   const { data } = await axios.post(`/Conversation/generate`, payload)
-  return data
-}
-
-export const uploadImage = async (file: File): Promise<ImageDto> => {
-  // OpenAPI: POST /api/Conversation/upload
-  const formData = new FormData()
-  formData.append('file', file)
-  const { data } = await axios.post<ImageDto>('/Conversation/upload', formData, {
-    headers: {
-      'Content-Type': 'multipart/form-data'
-    }
-  })
   return data
 }
 

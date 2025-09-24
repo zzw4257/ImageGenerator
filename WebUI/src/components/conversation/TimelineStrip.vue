@@ -8,14 +8,14 @@
           <v-icon size="15px">{{ item.type === 'image' ? 'mdi-image' : 'mdi-message-text' }}</v-icon>
         </template>
 
-        <v-card rounded="lg" elevation="1" class="timeline-card pa-3" :class="{ 'timeline-card-active': selected?.id === item.id }">
+        <v-card rounded="lg" elevation="1" max-width="540" class="timeline-card pa-3" :class="{ 'timeline-card-active': selected?.id === item.id }">
           <div class="text-caption text-grey-darken-1 mb-1">{{ formatTime(item.timestamp) }}</div>
 
           <div class="d-flex align-center">
             <v-avatar v-if="item.image.length > 0" size="32" rounded="lg" class="mr-2"><v-img :src="`/${item.image[0]!.imagePath}`" cover /></v-avatar>
             <div class="flex-grow-1 mr-4">
               <div class="text-body-2 font-weight-medium">{{ item.type === 'image' ? 'Image Generated' : 'Prompt' }}</div>
-              <div class="text-caption text-grey-darken-1 text-truncate">{{ item.prompt }}</div>
+              <div class="text-caption text-grey-darken-1 text-collapse">{{ item.prompt }}</div>
             </div>
             <v-btn v-if="item.image.length > 0" 
               icon="mdi-image-plus" 
@@ -57,5 +57,15 @@ const formatTime = (date: Date): string => date.toLocaleTimeString([], { hour: '
   flex-direction: column;
   flex-wrap: nowrap;
   overflow-x: auto;
+}
+
+.text-collapse{
+  display: -webkit-box;
+  text-wrap: break-word;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 </style>

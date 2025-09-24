@@ -27,7 +27,7 @@ const imageLoaded = ref(false);
 const imageAspectRatio = ref(1);
 
 function handleFullSize() {
-  if (imgContainerRef.value) {
+  if (imgContainerRef.value && imageLoaded.value) {
     const container = document.createElement("div");
     const mask = document.createElement("div");
     mask.classList.add("smooth-picutre-mask");
@@ -182,6 +182,8 @@ const containerStyle = computed(() => {
 
 .smooth-picture {
   cursor: zoom-in;
+  height: 100%;
+  width: 100%;
 }
 
 .zoomed-picture {

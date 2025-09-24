@@ -10,7 +10,8 @@
         <!-- Upload Sidebar -->
         <v-col cols="12" md="5" class="upload-sidebar">
           <InputPanel v-model="promptText" :images="uploadedImages" :isGenerating="isGenerating"
-            @trigger-upload="triggerUpload" @generate="generateImage" @remove-image="removeImage" />
+            @trigger-upload="triggerUpload" @generate="generateImage" @remove-image="removeImage"
+            @select-image="selectImage" />
         </v-col>
       </v-row>
       <!-- Timeline Sidebar -->
@@ -38,6 +39,7 @@ import { useAppStore } from '@/stores/app'
 import { useNotificationStore } from '@/stores/notification'
 import { v4 } from 'uuid'
 import { GenerationType } from '@/enums'
+import { uploadImage } from '@/services/upload'
 
 // Define layout for this page
 defineOptions({
@@ -166,9 +168,43 @@ const generateImage = async () => {
 }
 
 const triggerUpload = async (file: File) => {
-  const res = await convoApi.uploadImage(file)
-  if (res) {
-    uploadedImages.value.push(res)
+  const placeholderId = v4()
+  const placeholderImage = {
+    id: placeholderId,
+    imagePath: '', 
+    createdAt: new Date().toISOString(),
+    isFavorite: false,
+    size: 0
+  } as ImageDto
+  uploadedImages.value.push(placeholderImage)
+
+  try {
+    const res = await uploadImage(file)
+    const index = uploadedImages.value.findIndex(img => img.id === placeholderId)
+    if (index !== -1) {
+      if (res) {
+        uploadedImages.value.splice(index, 1, res)
+      } else {
+        uploadedImages.value.splice(index, 1)
+        notificationStore.error('Image upload failed.')
+      }
+    }
+  } catch (e: any) {
+    const index = uploadedImages.value.findIndex(img => img.id === placeholderId)
+    if (index !== -1) {
+      uploadedImages.value.splice(index, 1)
+    }
+    notificationStore.error('Image upload failed: ' + e.message)
+    console.error('Upload failed', e)
+  }
+}
+
+const selectImage = (image: ImageDto) => {
+  // Add selected image from library to uploadedImages
+  if (!uploadedImages.value.find(img => img.id === image.id)) {
+    uploadedImages.value.push(image)
+  } else {
+    notificationStore.info('Image already in references')
   }
 }
 

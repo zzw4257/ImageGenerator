@@ -12,7 +12,7 @@ export function useConversationTimeline() {
         id: `${r.id}-prompt`,
         type: 'prompt',
         prompt: r.prompt ?? '',
-        timestamp: new Date(r.createdAt),
+        timestamp: new Date(r.createdAt+'Z'),
         image: r.inputImages ?? [],
       })
   // output image item
