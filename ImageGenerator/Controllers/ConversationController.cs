@@ -104,27 +104,6 @@ public class ConversationController(IConversationService conversationService) : 
         }
     }
 
-    [HttpPost("upload")]
-    public async Task<ActionResult<ImageDto>> UploadImage([FromForm] UploadImageDto uploadDto)
-    {
-        try
-        {
-            var result = await _chatService.UploadImageAsync(uploadDto);
-            return Ok(result);
-        }
-        catch (UnauthorizedAccessException)
-        {
-            return Unauthorized();
-        }
-        catch (ArgumentException ex)
-        {
-            return BadRequest(ex.Message);
-        }
-        catch (Exception ex)
-        {
-            return BadRequest($"上传图片失败: {ex.Message}");
-        }
-    }
 
     [HttpDelete("{chatId}")]
     public async Task<IActionResult> DeleteConversation(Guid chatId)

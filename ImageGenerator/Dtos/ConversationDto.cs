@@ -30,6 +30,7 @@ public class ImageDto
     public string ImagePath { get; set; } = string.Empty;
     public bool IsFavorite { get; set; }
     public DateTime CreatedAt { get; set; }
+    public long Size { get; set; }
 }
 
 public class UploadImageDto

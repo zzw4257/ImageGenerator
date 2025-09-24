@@ -20,6 +20,7 @@ public static class ConfigHelper
         services.AddScoped<IAuthenticationService, AuthenticationService>();
         services.AddScoped<IInvitationService, InvitationService>();
         services.AddScoped<IConversationService, ConversationService>();
+        services.AddScoped<IImageStorageService, ImageStorageService>();
         services.AddScoped<IProfileService, ProfileService>();
         services.AddScoped<IFavoriteService, FavoriteService>();
         

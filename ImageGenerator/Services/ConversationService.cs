@@ -184,45 +184,45 @@ public class ConversationService(IgDbContext context, IHttpContextAccessor httpC
     }
 
     // 上传图片方法（仅支持 jpg, png）
-    public async Task<ImageDto> UploadImageAsync(UploadImageDto uploadDto)
-    {
-        var userId = GetCurrentUserId() ?? throw new UnauthorizedAccessException("用户未认证");
-        var file = uploadDto.File;
-        if (file == null || file.Length == 0)
-            throw new ArgumentException("未选择文件");
+    // public async Task<ImageDto> UploadImageAsync(UploadImageDto uploadDto)
+    // {
+    //     var userId = GetCurrentUserId() ?? throw new UnauthorizedAccessException("用户未认证");
+    //     var file = uploadDto.File;
+    //     if (file == null || file.Length == 0)
+    //         throw new ArgumentException("未选择文件");
 
-        var allowedExtensions = new[] { ".jpg", ".jpeg", ".png" };
-        var ext = Path.GetExtension(file.FileName).ToLowerInvariant();
-        if (!allowedExtensions.Contains(ext))
-            throw new ArgumentException("仅支持 jpg, png 格式的图片");
+    //     var allowedExtensions = new[] { ".jpg", ".jpeg", ".png" };
+    //     var ext = Path.GetExtension(file.FileName).ToLowerInvariant();
+    //     if (!allowedExtensions.Contains(ext))
+    //         throw new ArgumentException("仅支持 jpg, png 格式的图片");
 
-        // 创建保存目录
-        var currentDir = Directory.GetCurrentDirectory();
-        var saveDirectory = Path.Combine(currentDir, "images", "uploads");
-        Directory.CreateDirectory(saveDirectory);
+    //     // 创建保存目录
+    //     var currentDir = Directory.GetCurrentDirectory();
+    //     var saveDirectory = Path.Combine(currentDir, "images", "uploads");
+    //     Directory.CreateDirectory(saveDirectory);
 
-        // 生成文件名
-        var fileName = $"{Guid.NewGuid()}{ext}";
-        var filePath = Path.Combine(saveDirectory, fileName);
+    //     // 生成文件名
+    //     var fileName = $"{Guid.NewGuid()}{ext}";
+    //     var filePath = Path.Combine(saveDirectory, fileName);
 
-        // 保存文件
-        using (var stream = new FileStream(filePath, FileMode.Create))
-        {
-            await file.CopyToAsync(stream);
-        }
+    //     // 保存文件
+    //     using (var stream = new FileStream(filePath, FileMode.Create))
+    //     {
+    //         await file.CopyToAsync(stream);
+    //     }
 
-        // 创建图片记录
-        var image = new Image
-        {
-            IsFavorite = false,
-            UserId = userId,
-            ImagePath = Path.Combine("images", "uploads", fileName).Replace("\\", "/"),
-        };
+    //     // 创建图片记录
+    //     var image = new Image
+    //     {
+    //         IsFavorite = false,
+    //         UserId = userId,
+    //         ImagePath = Path.Combine("images", "uploads", fileName).Replace("\\", "/"),
+    //     };
 
-        _context.Images.Add(image);
-        await _context.SaveChangesAsync();
-        return _mapper.Map<ImageDto>(image);
-    }
+    //     _context.Images.Add(image);
+    //     await _context.SaveChangesAsync();
+    //     return _mapper.Map<ImageDto>(image);
+    // }
     private async Task ProcessImageGenerationAsync(Guid generationRecordId, GenerateImageDto generateDto)
     {
         var userId = GetCurrentUserId() ?? throw new UnauthorizedAccessException("用户未认证");
@@ -262,7 +262,9 @@ public class ConversationService(IgDbContext context, IHttpContextAccessor httpC
             {
                 ImagePath = imagePath,
                 UserId = userId,
-                CreatedAt = DateTime.UtcNow
+                CreatedAt = DateTime.UtcNow,
+                Size = imageBytes.ToArray().LongLength,
+                Type = ImageType.Generated
             };
 
             _context.Images.Add(image);
