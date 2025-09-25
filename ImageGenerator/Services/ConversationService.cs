@@ -8,6 +8,7 @@ using System.Security.Claims;
 using System.Text.Json;
 using AutoMapper;
 using OpenAI.Images;
+using ImageGenerator.Helpers;
 
 
 namespace ImageGenerator.Services;
@@ -50,19 +51,18 @@ public class ConversationService(IgDbContext context, IHttpContextAccessor httpC
         return _mapper.Map<ConversationDto>(conversation);
     }
 
-    public async Task<List<ConversationDto>> GetUserConversationsAsync()
+    public async Task<PagedList<Conversation, ConversationDto>> GetUserConversationsAsync(PaginationBaseDto param)
     {
         var userId = GetCurrentUserId() ?? throw new UnauthorizedAccessException("用户未认证");
-        var conversations = await _context.Conversations
+        var conversations = _context.Conversations
             .Include(c => c.GenerationRecords.OrderByDescending(gr => gr.CreatedAt))
             .ThenInclude(gr => gr.InputImages)
             .Include(c => c.GenerationRecords.OrderByDescending(gr => gr.CreatedAt))
             .ThenInclude(gr => gr.OutputImages)
             .Where(c => c.UserId == userId)
-            .OrderByDescending(c => c.UpdatedAt)
-            .ToListAsync();
+            .OrderByDescending(c => c.UpdatedAt);
 
-        return _mapper.Map<List<ConversationDto>>(conversations);
+        return await PagedList<Conversation, ConversationDto>.CreateAsync(conversations.AsQueryable(), param, _mapper);
     }
 
     public async Task<GenerationRecordDto> GenerateImageAsync(Guid conversationId, GenerateImageDto generateDto)

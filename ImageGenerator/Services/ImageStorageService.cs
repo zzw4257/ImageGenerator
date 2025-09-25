@@ -6,10 +6,10 @@ using ImageGenerator.Interface;
 using ImageGenerator.Models;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
-using Microsoft.Extensions.Configuration;
 using SixLabors.ImageSharp;
 using SixLaborsImage = SixLabors.ImageSharp.Image;
 using SixLabors.ImageSharp.Processing;
+using ImageGenerator.Helpers;
 
 namespace ImageGenerator.Services;
 
@@ -87,14 +87,13 @@ public class ImageStorageService(IgDbContext context, IHttpContextAccessor httpC
         return _mapper.Map<ImageDto>(image);
     }
 
-    public async Task<List<ImageDto>> ListUserImagesAsync()
+    public async Task<PagedList<Models.Image, ImageDto>> ListUserImagesAsync(PaginationBaseDto param)
     {
         var userId = GetCurrentUserId() ?? throw new UnauthorizedAccessException("未认证");
-        var images = await _context.Images
+        var images = _context.Images
             .Where(i => i.UserId == userId && i.Type == ImageType.Uploaded && !i.IsDeleted)
-            .OrderByDescending(i => i.CreatedAt)
-            .ToListAsync();
-        return [.. images.Select(_mapper.Map<ImageDto>)];
+            .OrderByDescending(i => i.CreatedAt);
+        return await PagedList<Models.Image, ImageDto>.CreateAsync(images.AsQueryable(), param, _mapper);
     }
 
     private Guid? GetCurrentUserId()

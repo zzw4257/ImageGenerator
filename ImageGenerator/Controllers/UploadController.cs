@@ -2,6 +2,7 @@ using ImageGenerator.Dtos;
 using ImageGenerator.Interface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ImageGenerator.Helpers;
 
 namespace ImageGenerator.Controllers;
 
@@ -35,12 +36,13 @@ public class UploadController(IImageStorageService storageService) : ControllerB
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<ImageDto>>> List()
+    public async Task<ActionResult<List<ImageDto>>> List([FromQuery] PaginationBaseDto param)
     {
         try
         {
-            var images = await _storage.ListUserImagesAsync();
-            return Ok(images);
+            var images = await _storage.ListUserImagesAsync(param);
+            Response.Headers.AddPaginationHeader(images);
+            return Ok(images.Items);
         }
         catch (UnauthorizedAccessException)
         {

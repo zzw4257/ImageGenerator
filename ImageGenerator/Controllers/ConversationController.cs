@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using ImageGenerator.Interface;
 using ImageGenerator.Dtos;
+using ImageGenerator.Models;
+using ImageGenerator.Helpers;
 
 namespace ImageGenerator.Controllers;
 
@@ -87,12 +89,13 @@ public class ConversationController(IConversationService conversationService) : 
     /// 获取当前用户的所有对话列表
     /// </summary>
     [HttpGet("conversations")]
-    public async Task<ActionResult<List<ConversationDto>>> GetUserConversations()
+    public async Task<ActionResult<List<ConversationDto>>> GetUserConversations([FromQuery] PaginationBaseDto param)
     {
         try
         {
-            var result = await _chatService.GetUserConversationsAsync();
-            return Ok(result);
+            var result = await _chatService.GetUserConversationsAsync(param);
+            Response.Headers.AddPaginationHeader(result);
+            return Ok(result.Items);
         }
         catch (UnauthorizedAccessException)
         {

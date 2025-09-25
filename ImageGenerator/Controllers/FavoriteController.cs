@@ -2,6 +2,7 @@ using ImageGenerator.Dtos;
 using ImageGenerator.Interface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ImageGenerator.Helpers;
 
 namespace ImageGenerator.Controllers;
 
@@ -49,12 +50,13 @@ public class FavoriteController(IFavoriteService favoriteService) : ControllerBa
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<ImageDto>>> GetFavorites()
+    public async Task<ActionResult<List<ImageDto>>> GetFavorites([FromQuery] PaginationBaseDto param)
     {
         try
         {
-            var favorites = await _favoriteService.GetFavoriteImagesAsync();
-            return Ok(favorites);
+            var favorites = await _favoriteService.GetFavoriteImagesAsync(param);
+            Response.Headers.AddPaginationHeader(favorites);
+            return Ok(favorites.Items);
         }
         catch (InvalidOperationException ex)
         {

@@ -2,12 +2,10 @@ using ImageGenerator.Interface;
 using ImageGenerator.Dtos;
 using ImageGenerator.Models;
 using ImageGenerator.Database;
-using ImageGenerator.Enums;
+using ImageGenerator.Helpers;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
-using System.Text.Json;
 using AutoMapper;
-using OpenAI.Images;
 
 
 namespace ImageGenerator.Services;
@@ -49,15 +47,14 @@ public class FavoriteService(IgDbContext context, IHttpContextAccessor httpConte
         await _context.SaveChangesAsync();
     }
 
-    public async Task<List<ImageDto>> GetFavoriteImagesAsync()
+    public async Task<PagedList<Image, ImageDto>> GetFavoriteImagesAsync(PaginationBaseDto param)
     {
         var userId = GetCurrentUserId() ?? throw new UnauthorizedAccessException("User not authenticated.");
 
-        var favoriteImages = await _context.Images!
-            .Where(img => img.UserId == userId && img.IsFavorite && !img.IsDeleted)
-            .ToListAsync();
+        var favoriteImages =  _context.Images!
+            .Where(img => img.UserId == userId && img.IsFavorite && !img.IsDeleted);
 
-        return _mapper.Map<List<ImageDto>>(favoriteImages);
+        return await PagedList<Image, ImageDto>.CreateAsync(favoriteImages.AsQueryable(), param, _mapper);
     }
     
     private Guid? GetCurrentUserId()

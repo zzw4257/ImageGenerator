@@ -9,10 +9,8 @@ public class ImageGenerationParams
     public string Style { get; set; } = "vivid";
 }
 
-public class GenerationRecord
+public class GenerationRecord: ModelBase
 {
-    [Key]
-    public Guid Id { get; set; } = Guid.NewGuid();
     [Required]
     public Guid ConversationId { get; set; } = Guid.Empty;
     public GenerationType GenerationType { get; set; }
@@ -22,11 +20,8 @@ public class GenerationRecord
     public string GenerationParams { get; set; } = string.Empty; // JSON serialized GenerationParams
     [Required]
     public GenerationStatus Status { get; set; }
-    [Required]
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime? CompletedAt { get; set; }
     public Conversation Conversation { get; set; } = null!;
     public ICollection<Image> InputImages { get; set; } = [];
     public Image? OutputImages { get; set; }
-    public bool IsDeleted { get; set; } = false;
 }
