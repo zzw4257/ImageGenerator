@@ -1,5 +1,5 @@
 import axios from '@/helpers/RequestHelper'
-import type { ImageDto } from '@/types'
+import type { ImageDto, PaginationMeta } from '@/types'
 
 export const uploadImage = async (file: File): Promise<ImageDto> => {
   // OpenAPI: POST /api/Upload
@@ -13,8 +13,8 @@ export const uploadImage = async (file: File): Promise<ImageDto> => {
   return data
 }
 
-export const listUploadedImages = async (): Promise<ImageDto[]> => {
-  // OpenAPI: GET /api/Upload
-  const { data } = await axios.get<ImageDto[]>('/Upload')
-  return data
+export const listUploadedImages = async (page = 0, pageSize = 24): Promise<{ items: ImageDto[]; pagination: PaginationMeta }> => {
+  const { data, headers } = await axios.get<ImageDto[]>('/Upload', { params: { pageNumber: page, pageSize } })
+  const pagination: PaginationMeta = JSON.parse(headers['x-pagination'])
+  return { items: data, pagination }
 }

@@ -23,6 +23,15 @@
                             </v-card>
                         </v-col>
                     </v-row>
+                    <div class="d-flex justify-center mt-4">
+                        <v-pagination
+                          v-model="pageNumberUI"
+                          :length="pagination.TotalPages"
+                          rounded="circle"
+                          total-visible="7"
+                          @update:modelValue="onPageChange"
+                        />
+                    </div>
                     <div v-if="favoriteImages.length === 0" class="text-center py-12">
                         <v-icon size="80" color="grey-lighten-2" class="mb-4">mdi-heart-outline</v-icon>
                         <h3 class="text-h6 mb-2">No favorites yet</h3>
@@ -44,16 +53,25 @@ const notificationStore = useNotificationStore()
 
 const loading = ref(false)
 const favoriteImages = ref<ImageDto[]>([])
+const pagination = ref({ TotalCount: 0, PageSize: 24, PageNumber: 0, TotalPages: 0 })
+const pageNumberUI = ref(1)
+const pageSize = ref(24)
 
 const loadFavorites = async () => {
     loading.value = true
     try {
-        favoriteImages.value = await listFavorites()
+        const { items, pagination: meta } = await listFavorites(pageNumberUI.value - 1, pageSize.value)
+        favoriteImages.value = items
+        pagination.value = meta
     } catch (e) {
         notificationStore.error('Failed to load favorites')
     } finally {
         loading.value = false
     }
+}
+
+function onPageChange() {
+    loadFavorites()
 }
 
 const toggleFavorite = async (img: ImageDto) => {

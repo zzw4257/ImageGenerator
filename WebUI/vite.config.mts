@@ -1,7 +1,6 @@
 // Plugins
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
-import Fonts from 'unplugin-fonts/vite'
 import Layouts from 'vite-plugin-vue-layouts-next'
 import Vue from '@vitejs/plugin-vue'
 import VueRouter from 'unplugin-vue-router/vite'
@@ -46,17 +45,17 @@ export default defineConfig({
         configFile: 'src/styles/settings.scss',
       },
     }),
-    Fonts({
-      fontsource: {
-        families: [
-          {
-            name: 'Roboto',
-            weights: [100, 300, 400, 500, 700, 900],
-            styles: ['normal', 'italic'],
-          },
-        ],
-      },
-    }),
+    // Fonts({
+    //   fontsource: {
+    //     families: [
+    //       {
+    //         name: 'Roboto',
+    //         weights: [100, 300, 400, 500, 700, 900],
+    //         styles: ['normal', 'italic'],
+    //       },
+    //     ],
+    //   },
+    // }),
   ],
   optimizeDeps: {
     exclude: [

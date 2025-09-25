@@ -21,7 +21,7 @@
           <div class="text-center">
             <v-icon size="120" class="mb-4">mdi-image-outline</v-icon>
             <h3 class="text-h5 mb-2">Select an image from timeline</h3>
-            <p class="text-body-1">Or generate a new one below</p>
+            <p class="text-body-1">Or generate a new one</p>
           </div>
         </div>
       </div>

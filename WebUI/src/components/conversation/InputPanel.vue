@@ -3,16 +3,15 @@
     <div class="pt-4 pb-4">
       <div class="d-flex justify-space-between align-center input-area-actions">
         <div>
-          
           <v-menu>
-      <template v-slot:activator="{ props }">
-        <v-btn class="upload-btn mr-2" icon="mdi-plus" size="small" variant="tonal" v-bind="props" />
-      </template>
-      <v-list>
-        <v-list-item @click="triggerUploadImage">Upload Image</v-list-item>
-        <v-list-item @click="openLibraryDialog">Select From Library</v-list-item>
-      </v-list>
-    </v-menu>
+            <template v-slot:activator="{ props }">
+              <v-btn class="upload-btn mr-2" icon="mdi-plus" size="small" variant="tonal" v-bind="props" />
+            </template>
+            <v-list rounded="lg" dense>
+              <v-list-item @click="triggerUploadImage">Upload Image</v-list-item>
+              <v-list-item @click="openLibraryDialog">Select From Library</v-list-item>
+            </v-list>
+          </v-menu>
           <v-btn class="upload-btn" icon="mdi-creation" size="small" variant="tonal" @click="openTemplateDialog" />
         </div>
         <v-btn class="upload-btn" variant="tonal" icon="mdi-send" size="small" :loading="isGenerating"
@@ -23,7 +22,8 @@
     </div>
     <v-divider />
     <PromptTemplateDialog v-model="showTemplateDialog" @apply="onTemplateApplied" @close="showTemplateDialog = false" />
-    <LibraryDialog v-model="showLibraryDialog" @select="(image) => emit('select-image', image)" @close="showLibraryDialog = false" />
+    <LibraryDialog v-model="showLibraryDialog" @select="(image) => emit('select-image', image)"
+      @close="showLibraryDialog = false" />
     <div class="pa-4">
       <h4 class="text-subtitle-1 font-weight-bold mb-3">Reference Images</h4>
       <div v-if="images.length === 0" class="text-center py-6">
@@ -31,8 +31,8 @@
         <p class="text-caption text-grey-darken-1">No images uploaded yet</p>
       </div>
       <div v-else class="uploaded-images">
-        <SmoothPicture v-for="(image, index) in images" :key="index" :keep-aspect-ratio="false" rounded="lg" elevation="1"
-          class="uploaded-image" :url="`/${image.imagePath}`" height="150" width="150">
+        <SmoothPicture v-for="(image, index) in images" :key="index" :keep-aspect-ratio="false" rounded="lg"
+          elevation="1" class="uploaded-image" :url="`/${image.imagePath}`" height="150" width="150">
           <template #default>
             <v-btn icon size="30px" class="ma-2 uploaded-image-remove" @click.stop="emit('remove-image', index)">
               <v-icon size="16">mdi-close</v-icon>

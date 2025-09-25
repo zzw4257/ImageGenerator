@@ -20,6 +20,16 @@
       </v-col>
     </v-row>
 
+    <div class="d-flex justify-center mt-6">
+      <v-pagination
+        v-model="pageNumberUI"
+        :length="pagination.TotalPages"
+        rounded="circle"
+        total-visible="7"
+        @update:modelValue="onPageChange"
+      />
+    </div>
+
     <!-- Empty state -->
     <div v-if="!loading && conversations.length === 0" class="text-center mt-12">
       <v-icon size="120" color="grey-lighten-2" class="mb-4">
@@ -52,11 +62,15 @@ const notificationStore = useNotificationStore()
 const router = useRouter()
 const conversations = ref<ConversationUI[]>([])
 const loading = ref(false)
+const pagination = ref({ TotalCount: 0, PageSize: 9, PageNumber: 0, TotalPages: 0 })
+// v-pagination is 1-based for UI convenience
+const pageNumberUI = ref(1)
+const pageSize = ref(9)
 
 const loadConversations = async () => {
   loading.value = true
   try {
-    const items = await convoApi.listConversations()
+    const { items, pagination: meta } = await convoApi.listConversations(pageNumberUI.value - 1, pageSize.value)
     conversations.value = (items || []).map((x) => ({
       id: x.id || String(x.id ?? ''),
       thumbnail: x.generationRecords[0]?.outputImage?.imagePath || '',
@@ -64,9 +78,14 @@ const loadConversations = async () => {
       recordCount: x.generationRecords.length ?? 0,
       lastMessage: x.generationRecords[0]?.prompt || 'Untitled',
     }))
+    pagination.value = meta
   } finally {
     loading.value = false
   }
+}
+
+function onPageChange() {
+  loadConversations()
 }
 
 onMounted(loadConversations)

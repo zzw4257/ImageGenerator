@@ -1,5 +1,5 @@
 import axios from '@/helpers/RequestHelper'
-import type { ConversationDto, GenerateImageDto, GenerationRecordDto} from '@/types/api'
+import type { ConversationDto, GenerateImageDto, GenerationRecordDto, PaginationMeta} from '@/types/api'
 
 export const createConversation = async () => {
   // OpenAPI: POST /api/Conversation/create
@@ -20,10 +20,12 @@ export const generateImage = async (chatId: string, payload: GenerateImageDto): 
   return data
 }
 
-export const listConversations = async (): Promise<ConversationDto[]> => {
-  // OpenAPI: GET /api/Conversation/conversations
-  const { data } = await axios.get<ConversationDto[]>(`/Conversation/conversations`)
-  return data
+export const listConversations = async (page = 0, pageSize = 12): Promise<{ items: ConversationDto[]; pagination: PaginationMeta }> => {
+  const { data, headers } = await axios.get<ConversationDto[]>(`/Conversation/conversations`, {
+    params: { pageNumber: page, pageSize }
+  })
+  const pagination: PaginationMeta = JSON.parse(headers['x-pagination'])
+  return { items: data, pagination }
 }
 
 export const quickGenerate = async (payload: GenerateImageDto) => {

@@ -8,6 +8,13 @@ export interface ConversationDto {
     generationRecords: GenerationRecordDto[];
 }
 
+export interface PaginationMeta {
+  TotalCount: number
+  PageSize: number
+  PageNumber: number
+  TotalPages: number
+}
+
 export interface GenerationRecordDto {
     id: string;
     generationType: GenerationType;
