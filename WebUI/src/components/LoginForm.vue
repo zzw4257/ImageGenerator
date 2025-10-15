@@ -21,6 +21,10 @@
 <script lang="ts" setup>
 import { ref, computed } from 'vue';
 import type { AuthInfo } from '@/types';
+
+/**
+ * A component that provides a login form for users to authenticate.
+ */
 import { useAppStore } from '@/stores/app';
 import { useRouter } from 'vue-router';
 import * as authApi from '@/services/auth'

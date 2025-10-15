@@ -1,8 +1,16 @@
 import type { GenerationRecordDto, ImageDto } from '@/types/api'
 import type { TimelineItem } from '@/types/ui'
 
+/**
+ * A composable for transforming conversation records into a timeline format.
+ */
 export function useConversationTimeline() {
 
+  /**
+   * Maps an array of generation records to an array of timeline items.
+   * @param records - The array of generation records.
+   * @returns An array of timeline items.
+   */
   const mapRecordsToTimeline = (records: GenerationRecordDto[]): TimelineItem[] => {
     if (!Array.isArray(records)) return []
     const items: TimelineItem[] = []

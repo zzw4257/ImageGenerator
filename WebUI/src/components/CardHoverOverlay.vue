@@ -60,27 +60,48 @@
 </template>
 
 <script lang="ts" setup>
+/**
+ * Represents an action button in the overlay.
+ */
 interface Action {
+  /** The unique key for the action. */
   key: string
+  /** The text to display on the button. */
   text?: string
+  /** The icon to display on the button. */
   icon?: string
+  /** The color of the button. */
   color?: string
+  /** The variant of the button. */
   variant?: 'text' | 'outlined' | 'flat' | 'elevated' | 'tonal' | 'plain'
+  /** The size of the button. */
   size?: 'x-small' | 'small' | 'default' | 'large' | 'x-large'
 }
 
 interface Props {
+  /** Whether to show the overlay. */
   show: boolean
+  /** The main title text. */
   title: string
+  /** The subtitle text. */
   subtitle?: string
+  /** The icon to display. */
   icon?: string
+  /** The size of the icon. */
   iconSize?: string | number
+  /** The color of the icon. */
   iconColor?: string
+  /** Custom CSS class for the title. */
   titleClass?: string
+  /** Custom CSS class for the subtitle. */
   subtitleClass?: string
+  /** The opacity of the overlay. */
   opacity?: number
+  /** The z-index of the overlay. */
   zIndex?: number
+  /** Whether to show the action buttons. */
   showActions?: boolean
+  /** The list of action buttons to display. */
   actions?: Action[]
 }
 

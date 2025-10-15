@@ -90,6 +90,11 @@
 <script lang="ts" setup>
 import { useAppStore } from '@/stores/app'
 
+/**
+ * A reusable dialog component for confirming delete actions and handling prompt replacements.
+ * This component is controlled by the `app` store.
+ */
+
 const appStore = useAppStore()
 
 // Delete dialog handlers

@@ -47,6 +47,10 @@
 <script lang="ts" setup>
 import { onMounted, ref, computed } from 'vue'
 import { useNotificationStore } from '@/stores/notification'
+
+/**
+ * A page that displays the user's profile information and allows them to claim daily credits.
+ */
 import { getProfile, claimCredits } from '@/services/profile'
 import type { ProfileDto } from '@/types/api'
 

@@ -6,8 +6,17 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ImageGenerator.Helpers;
 
+/// <summary>
+/// A helper class for configuring services.
+/// </summary>
 public static class ConfigHelper
 {
+    /// <summary>
+    /// Registers all the necessary services for the application.
+    /// </summary>
+    /// <param name="services">The service collection.</param>
+    /// <param name="configuration">The configuration manager.</param>
+    /// <returns>The configured service collection.</returns>
     public static IServiceCollection RegisterServices(this IServiceCollection services, ConfigurationManager configuration)
     {
         JwtConfig jwtConfig = new();
@@ -30,9 +39,9 @@ public static class ConfigHelper
 
         services.AddSingleton(jwtHelper);
 
-        services.AddHttpContextAccessor(); // 注册 IHttpContextAccessor
-        services.AddHttpClient(); // 注册 HttpClient
-        services.AddAutoMapper(typeof(Program)); // 注册 AutoMapper
+        services.AddHttpContextAccessor();
+        services.AddHttpClient();
+        services.AddAutoMapper(typeof(Program));
         services.AddControllers();
         services.AddEndpointsApiExplorer();
 

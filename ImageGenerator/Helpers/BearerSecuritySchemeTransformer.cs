@@ -4,8 +4,17 @@ using Microsoft.OpenApi.Models;
 
 namespace ImageGenerator.Helpers;
 
+/// <summary>
+/// A transformer for OpenAPI documents that adds a Bearer security scheme.
+/// </summary>
 public sealed class BearerSecuritySchemeTransformer(IAuthenticationSchemeProvider authenticationSchemeProvider) : IOpenApiDocumentTransformer
 {
+    /// <summary>
+    /// Transforms the OpenAPI document to include a Bearer security scheme.
+    /// </summary>
+    /// <param name="document">The OpenAPI document.</param>
+    /// <param name="context">The transformer context.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
     public async Task TransformAsync(OpenApiDocument document, OpenApiDocumentTransformerContext context, CancellationToken cancellationToken)
     {
         var authenticationSchemes = await authenticationSchemeProvider.GetAllSchemesAsync();

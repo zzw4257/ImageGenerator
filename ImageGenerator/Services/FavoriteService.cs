@@ -10,6 +10,9 @@ using AutoMapper;
 
 namespace ImageGenerator.Services;
 
+/// <summary>
+/// Provides services for managing a user's favorite images.
+/// </summary>
 public class FavoriteService(IgDbContext context, IHttpContextAccessor httpContextAccessor, IMapper mapper, ImageGenerationClientFactory clientFactory) : IFavoriteService
 {
     private readonly IgDbContext _context = context;
@@ -17,6 +20,12 @@ public class FavoriteService(IgDbContext context, IHttpContextAccessor httpConte
     private readonly IMapper _mapper = mapper;
     private readonly ImageGenerationClientFactory _clientFactory = clientFactory;
 
+    /// <summary>
+    /// Adds a specified image to the current user's favorites.
+    /// </summary>
+    /// <param name="imageId">The ID of the image to add to favorites.</param>
+    /// <exception cref="UnauthorizedAccessException">Thrown if the user is not authenticated.</exception>
+    /// <exception cref="InvalidOperationException">Thrown if the image is not found, does not belong to the user, or is already in favorites.</exception>
     public async Task AddToFavoritesAsync(Guid imageId)
     {
         var userId = GetCurrentUserId() ?? throw new UnauthorizedAccessException("User not authenticated.");
@@ -32,6 +41,12 @@ public class FavoriteService(IgDbContext context, IHttpContextAccessor httpConte
         await _context.SaveChangesAsync();
     }
 
+    /// <summary>
+    /// Removes a specified image from the current user's favorites.
+    /// </summary>
+    /// <param name="imageId">The ID of the image to remove from favorites.</param>
+    /// <exception cref="UnauthorizedAccessException">Thrown if the user is not authenticated.</exception>
+    /// <exception cref="InvalidOperationException">Thrown if the image is not found, does not belong to the user, or is not in favorites.</exception>
     public async Task RemoveFromFavoritesAsync(Guid imageId)
     {
         var userId = GetCurrentUserId() ?? throw new UnauthorizedAccessException("User not authenticated.");
@@ -47,6 +62,12 @@ public class FavoriteService(IgDbContext context, IHttpContextAccessor httpConte
         await _context.SaveChangesAsync();
     }
 
+    /// <summary>
+    /// Retrieves a paginated list of the current user's favorite images.
+    /// </summary>
+    /// <param name="param">The pagination parameters.</param>
+    /// <returns>A <see cref="PagedList{T, TDto}"/> of favorite images.</returns>
+    /// <exception cref="UnauthorizedAccessException">Thrown if the user is not authenticated.</exception>
     public async Task<PagedList<Image, ImageDto>> GetFavoriteImagesAsync(PaginationBaseDto param)
     {
         var userId = GetCurrentUserId() ?? throw new UnauthorizedAccessException("User not authenticated.");

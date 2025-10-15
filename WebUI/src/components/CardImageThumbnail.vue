@@ -42,13 +42,21 @@
 
 <script lang="ts" setup>
 interface Props {
+  /** The URL of the thumbnail image. */
   thumbnail: string
+  /** The number of records to display in the badge. */
   recordCount?: number
+  /** The height of the thumbnail. */
   height?: number | string
+  /** Whether the thumbnail is being hovered. */
   isHovered?: boolean
+  /** Whether to show the record count badge. */
   showBadge?: boolean
+  /** Whether to show the hover effect. */
   showHoverEffect?: boolean
+  /** The color of the badge. */
   badgeColor?: string
+  /** The icon to display in the badge. */
   badgeIcon?: string
 }
 

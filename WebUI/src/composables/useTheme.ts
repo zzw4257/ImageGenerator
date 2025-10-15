@@ -1,6 +1,11 @@
 import { type ThemeDefinition } from "vuetify";
 import colors from "vuetify/util/colors";
 
+/**
+ * Creates a light theme definition from a given color.
+ * @param color - The color to create the theme from.
+ * @returns The theme definition.
+ */
 function createTheme(color: any): ThemeDefinition {
   return {
     colors: {
@@ -22,6 +27,11 @@ function createTheme(color: any): ThemeDefinition {
   };
 }
 
+/**
+ * Creates a dark theme definition from a given color.
+ * @param color - The color to create the theme from.
+ * @returns The theme definition.
+ */
 function createDarkTheme(color: any): ThemeDefinition {
   return {
     colors: {
@@ -45,6 +55,10 @@ function createDarkTheme(color: any): ThemeDefinition {
   };
 }
 
+/**
+ * Generates a record of all the themes.
+ * @returns A record of all the themes.
+ */
 export function generateTheme(): Record<string, ThemeDefinition> {
   const themes: Record<string, ThemeDefinition> = {};
 

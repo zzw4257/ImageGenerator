@@ -51,6 +51,10 @@
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+
+/**
+ * The main page of the application, displaying a list of recent conversations.
+ */
 import ConversationCard from '@/components/ConversationCard.vue'
 import * as convoApi from '@/services/conversation'
 import { useAppStore } from '@/stores/app'

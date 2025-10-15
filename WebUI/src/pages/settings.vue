@@ -36,6 +36,10 @@
 <script setup lang="ts">
 import { ref, watchEffect } from 'vue';
 import { useAppStore } from '@/stores/app';
+
+/**
+ * A page for managing user settings, such as theme and color preferences.
+ */
 import type { ThemePreference } from '@/types/index';
 
 const appStore = useAppStore();

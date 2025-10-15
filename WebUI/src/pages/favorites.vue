@@ -46,6 +46,10 @@
 <script lang="ts" setup>
 import { onMounted, ref } from 'vue'
 import { useNotificationStore } from '@/stores/notification'
+
+/**
+ * A page that displays the user's favorite images.
+ */
 import type { ImageDto } from '@/types/api'
 import { listFavorites, addFavorite, removeFavorite } from '@/services/favorite'
 

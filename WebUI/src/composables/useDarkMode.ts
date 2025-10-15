@@ -1,5 +1,8 @@
 import { useAppStore } from "@/stores/app";
 
+/**
+ * A composable for managing dark mode.
+ */
 export function useDarkMode() {
   const store = useAppStore();
   const HTMLnode = document.documentElement;

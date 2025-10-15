@@ -68,6 +68,10 @@
 <script lang="ts" setup>
 import { ref, computed } from 'vue';
 import type { AuthInfo } from '@/types';
+
+/**
+ * A component that provides a registration form for new users.
+ */
 import { useAppStore } from '@/stores/app';
 import { useRouter } from 'vue-router';
 import { useNotificationStore } from '@/stores/notification';

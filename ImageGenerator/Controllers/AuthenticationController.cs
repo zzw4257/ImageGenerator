@@ -6,10 +6,18 @@ namespace ImageGenerator.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+/// <summary>
+/// Handles user authentication, including login and registration.
+/// </summary>
 public class AuthenticationController(IAuthenticationService authenticationService) : ControllerBase
 {
     private readonly IAuthenticationService _authenticationService = authenticationService;
 
+    /// <summary>
+    /// Authenticates a user and returns a login DTO with a JWT token.
+    /// </summary>
+    /// <param name="loginFormDto">The login form data containing the username and password.</param>
+    /// <returns>An <see cref="ActionResult"/> containing the <see cref="LoginDto"/>.</returns>
     [HttpPost("login")]
     public async Task<ActionResult<LoginDto>> Login([FromBody] LoginFormDto loginFormDto)
     {
@@ -28,6 +36,11 @@ public class AuthenticationController(IAuthenticationService authenticationServi
         }
     }
 
+    /// <summary>
+    /// Registers a new user and returns a login DTO with a JWT token.
+    /// </summary>
+    /// <param name="registerFormDto">The registration form data containing the username, password, and invitation code.</param>
+    /// <returns>An <see cref="ActionResult"/> containing the <see cref="LoginDto"/>.</returns>
     [HttpPost("register")]
     public async Task<ActionResult<LoginDto>> Register([FromBody] RegisterFormDto registerFormDto)
     {

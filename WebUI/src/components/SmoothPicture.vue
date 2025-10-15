@@ -4,18 +4,30 @@ import { computed, nextTick, ref } from "vue";
 import type { VImg } from "vuetify/components";
 
 const props = defineProps({
+  /**
+   * The URL of the image to display.
+   */
   url: {
     type: String,
     required: true,
   },
+  /**
+   * The maximum height of the image.
+   */
   maxHeight: {
     type: Number,
     default: 570,
   },
+  /**
+   * The maximum width of the image.
+   */
   maxWidth: {
     type: Number,
     default: 800,
   },
+  /**
+   * Whether to maintain the aspect ratio of the image.
+   */
   keepAspectRatio: {
     type: Boolean,
     default: false,

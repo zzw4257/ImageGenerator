@@ -11,8 +11,11 @@
 import { computed } from 'vue'
 
 interface Props {
+  /** The timestamp to display. */
   timestamp: Date
+  /** The format to display the timestamp in. */
   format?: 'relative' | 'absolute' | 'short'
+  /** Whether to show an icon next to the timestamp. */
   showIcon?: boolean
 }
 

@@ -3,6 +3,9 @@ import { useTheme } from 'vuetify';
 import { useAppStore } from '@/stores/app';
 import type { ThemePreference } from '@/types/index';
 
+/**
+ * A composable for managing the Vuetify theme.
+ */
 export function useVuetifyTheme() {
   const theme = useTheme();
   const store = useAppStore();

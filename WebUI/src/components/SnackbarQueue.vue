@@ -65,6 +65,11 @@
 import { computed } from 'vue'
 import { useNotificationStore } from '@/stores/notification'
 
+/**
+ * A component that displays a queue of snackbar notifications.
+ * This component is controlled by the `notification` store.
+ */
+
 const notificationStore = useNotificationStore()
 
 const currentMessage = computed(() => notificationStore.currentMessage)

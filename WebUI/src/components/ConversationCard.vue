@@ -43,25 +43,44 @@ import CardImageThumbnail from './CardImageThumbnail.vue'
 import CardHoverOverlay from './CardHoverOverlay.vue'
 import type { ConversationUI } from '@/types/ui'
 
+/**
+ * Represents an action button for the overlay.
+ */
 interface OverlayAction {
+  /** The unique key for the action. */
   key: string
+  /** The text to display on the button. */
   text?: string
+  /** The icon to display on the button. */
   icon?: string
+  /** The color of the button. */
   color?: string
+  /** The variant of the button. */
   variant?: 'text' | 'outlined' | 'flat' | 'elevated' | 'tonal' | 'plain'
+  /** The size of the button. */
   size?: 'x-small' | 'small' | 'default' | 'large' | 'x-large'
 }
 
 interface Props {
+  /** The conversation data to display. */
   conversation: ConversationUI
+  /** The height of the thumbnail image. */
   thumbnailHeight?: number | string
+  /** Whether to show the record count badge. */
   showRecordCount?: boolean
+  /** Whether to show metadata chips. */
   showMetadata?: boolean
+  /** Whether to show the hover overlay. */
   showHoverOverlay?: boolean
+  /** Whether to show action buttons in the overlay. */
   showOverlayActions?: boolean
+  /** The title for the hover overlay. */
   overlayTitle?: string
+  /** The subtitle for the hover overlay. */
   overlaySubtitle?: string
+  /** The icon for the hover overlay. */
   overlayIcon?: string
+  /** The list of actions for the hover overlay. */
   overlayActions?: OverlayAction[]
 }
 

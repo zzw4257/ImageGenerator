@@ -5,8 +5,16 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ImageGenerator.Database;
 
+/// <summary>
+/// A helper class for configuring the database model.
+/// </summary>
 public static class ModelConfigurationHelper
 {
+    /// <summary>
+    /// Configures the entity relationships for the database model.
+    /// </summary>
+    /// <param name="_">The database context.</param>
+    /// <param name="modelBuilder">The model builder.</param>
     public static void AddEntityRelationship(this IgDbContext _, ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Invitation>()
@@ -16,8 +24,8 @@ public static class ModelConfigurationHelper
 
         modelBuilder.Entity<User>()
             .HasQueryFilter(e => !e.IsDeleted)
-            .HasMany<Invitation>() // User 有多个 Invitation
-            .WithOne(i => i.Issuer) // 每个 Invitation 只有一个 Issuer
+            .HasMany<Invitation>()
+            .WithOne(i => i.Issuer)
             .OnDelete(DeleteBehavior.Restrict);
 
         modelBuilder.Entity<User>()
@@ -47,16 +55,21 @@ public static class ModelConfigurationHelper
             .HasQueryFilter(e => !e.IsDeleted);
     }
 
+    /// <summary>
+    /// Seeds the database with initial data.
+    /// </summary>
+    /// <param name="_">The database context.</param>
+    /// <param name="modelBuilder">The model builder.</param>
     public static void SeedData(this IgDbContext _, ModelBuilder modelBuilder)
     {
         var adminUserId = Guid.Parse("00000000-0000-0000-0000-000000000001");
         var salt = "admin-salt-123";
 
-        // 使用与 AuthenticationService 相同的加密方式
+        // Use the same encryption method as in AuthenticationService
         var passwordBytes = Encoding.UTF8.GetBytes("admin123" + salt);
         var passwordEncryption = Convert.ToHexString(SHA256.HashData(passwordBytes));
 
-        // 创建管理员用户 - 使用静态日期时间值
+        // Create admin user - use static datetime value
         var seedDate = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
         modelBuilder.Entity<User>().HasData(new User
@@ -71,7 +84,7 @@ public static class ModelConfigurationHelper
             LastCreditClaimedAt = seedDate
         });
 
-        // 创建初始邀请码
+        // Create initial invitation codes
         modelBuilder.Entity<Invitation>().HasData(
             new Invitation
             {

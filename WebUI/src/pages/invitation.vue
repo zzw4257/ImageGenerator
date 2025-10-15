@@ -122,6 +122,10 @@
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue'
 import * as invitationApi from '@/services/invitation'
+
+/**
+ * A page for managing invitation codes.
+ */
 import type { InvitationDto } from '@/types/api'
 import { useAppStore } from '@/stores/app'
 import { useNotificationStore } from '@/stores/notification'

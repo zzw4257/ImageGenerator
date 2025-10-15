@@ -10,13 +10,17 @@ namespace ImageGenerator.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
+/// <summary>
+/// Manages conversations and image generation within them.
+/// </summary>
 public class ConversationController(IConversationService conversationService) : ControllerBase
 {
     private readonly IConversationService _chatService = conversationService;
 
     /// <summary>
-    /// 创建新的对话
+    /// Creates a new conversation for the current user.
     /// </summary>
+    /// <returns>An <see cref="ActionResult"/> containing the created <see cref="ConversationDto"/>.</returns>
     [HttpPost("create")]
     public async Task<ActionResult<ConversationDto>> CreateConversation()
     {
@@ -36,8 +40,10 @@ public class ConversationController(IConversationService conversationService) : 
     }
 
     /// <summary>
-    /// 获取指定对话的详细信息
+    /// Gets the details of a specific conversation.
     /// </summary>
+    /// <param name="chatId">The ID of the conversation to retrieve.</param>
+    /// <returns>An <see cref="ActionResult"/> containing the <see cref="ConversationDto"/>.</returns>
     [HttpGet("{chatId}")]
     public async Task<ActionResult<ConversationDto>> GetConversation(Guid chatId)
     {
@@ -61,8 +67,11 @@ public class ConversationController(IConversationService conversationService) : 
     }
 
     /// <summary>
-    /// 在指定对话中生成图片
+    /// Generates an image within a specific conversation.
     /// </summary>
+    /// <param name="chatId">The ID of the conversation.</param>
+    /// <param name="generateDto">The data for generating the image.</param>
+    /// <returns>An <see cref="ActionResult"/> containing the <see cref="GenerationRecordDto"/>.</returns>
     [HttpPost("generate/{chatId}")]
     public async Task<ActionResult<GenerationRecordDto>> GenerateImage(Guid chatId, [FromBody] GenerateImageDto generateDto)
     {
@@ -86,8 +95,10 @@ public class ConversationController(IConversationService conversationService) : 
     }
 
     /// <summary>
-    /// 获取当前用户的所有对话列表
+    /// Gets a paginated list of conversations for the current user.
     /// </summary>
+    /// <param name="param">The pagination parameters.</param>
+    /// <returns>An <see cref="ActionResult"/> containing a list of <see cref="ConversationDto"/>.</returns>
     [HttpGet("conversations")]
     public async Task<ActionResult<List<ConversationDto>>> GetUserConversations([FromQuery] PaginationBaseDto param)
     {
@@ -107,7 +118,11 @@ public class ConversationController(IConversationService conversationService) : 
         }
     }
 
-
+    /// <summary>
+    /// Deletes a specific conversation.
+    /// </summary>
+    /// <param name="chatId">The ID of the conversation to delete.</param>
+    /// <returns>An <see cref="IActionResult"/> indicating the result of the operation.</returns>
     [HttpDelete("{chatId}")]
     public async Task<IActionResult> DeleteConversation(Guid chatId)
     {

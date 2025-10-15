@@ -13,6 +13,9 @@ using ImageGenerator.Helpers;
 
 namespace ImageGenerator.Services;
 
+/// <summary>
+/// Provides services for managing conversations and generating images.
+/// </summary>
 public class ConversationService(IgDbContext context, IHttpContextAccessor httpContextAccessor, IMapper mapper, ImageGenerationClientFactory clientFactory) : IConversationService
 {
     private readonly IgDbContext _context = context;
@@ -20,9 +23,14 @@ public class ConversationService(IgDbContext context, IHttpContextAccessor httpC
     private readonly IMapper _mapper = mapper;
     private readonly ImageGenerationClientFactory _clientFactory = clientFactory;
 
+    /// <summary>
+    /// Creates a new conversation for the current user.
+    /// </summary>
+    /// <returns>A <see cref="ConversationDto"/> representing the newly created conversation.</returns>
+    /// <exception cref="UnauthorizedAccessException">Thrown if the user is not authenticated.</exception>
     public async Task<ConversationDto> CreateConversationAsync()
     {
-        var userId = GetCurrentUserId() ?? throw new UnauthorizedAccessException("用户未认证");
+        var userId = GetCurrentUserId() ?? throw new UnauthorizedAccessException("User not authenticated.");
         var conversation = new Conversation
         {
             UserId = userId,
@@ -35,9 +43,15 @@ public class ConversationService(IgDbContext context, IHttpContextAccessor httpC
         return _mapper.Map<ConversationDto>(conversation);
     }
 
+    /// <summary>
+    /// Retrieves a specific conversation for the current user.
+    /// </summary>
+    /// <param name="conversationId">The ID of the conversation to retrieve.</param>
+    /// <returns>A <see cref="ConversationDto"/> if found; otherwise, null.</returns>
+    /// <exception cref="UnauthorizedAccessException">Thrown if the user is not authenticated.</exception>
     public async Task<ConversationDto?> GetConversationAsync(Guid conversationId)
     {
-        var userId = GetCurrentUserId() ?? throw new UnauthorizedAccessException("用户未认证");
+        var userId = GetCurrentUserId() ?? throw new UnauthorizedAccessException("User not authenticated.");
         var conversation = await _context.Conversations
             .Include(c => c.GenerationRecords.OrderBy(gr => gr.CreatedAt))
                 .ThenInclude(gr => gr.InputImages)
@@ -51,9 +65,15 @@ public class ConversationService(IgDbContext context, IHttpContextAccessor httpC
         return _mapper.Map<ConversationDto>(conversation);
     }
 
+    /// <summary>
+    /// Retrieves a paginated list of conversations for the current user.
+    /// </summary>
+    /// <param name="param">The pagination parameters.</param>
+    /// <returns>A <see cref="PagedList{T, TDto}"/> of conversations.</returns>
+    /// <exception cref="UnauthorizedAccessException">Thrown if the user is not authenticated.</exception>
     public async Task<PagedList<Conversation, ConversationDto>> GetUserConversationsAsync(PaginationBaseDto param)
     {
-        var userId = GetCurrentUserId() ?? throw new UnauthorizedAccessException("用户未认证");
+        var userId = GetCurrentUserId() ?? throw new UnauthorizedAccessException("User not authenticated.");
         var conversations = _context.Conversations
             .Include(c => c.GenerationRecords.OrderByDescending(gr => gr.CreatedAt))
             .ThenInclude(gr => gr.InputImages)
@@ -65,28 +85,37 @@ public class ConversationService(IgDbContext context, IHttpContextAccessor httpC
         return await PagedList<Conversation, ConversationDto>.CreateAsync(conversations.AsQueryable(), param, _mapper);
     }
 
+    /// <summary>
+    /// Generates an image within a specified conversation, deducting credits from the user.
+    /// </summary>
+    /// <param name="conversationId">The ID of the conversation in which to generate the image.</param>
+    /// <param name="generateDto">The DTO containing image generation parameters.</param>
+    /// <returns>A <see cref="GenerationRecordDto"/> representing the initial record of the image generation task.</returns>
+    /// <exception cref="UnauthorizedAccessException">Thrown if the user is not authenticated.</exception>
+    /// <exception cref="ArgumentException">Thrown if the conversation does not exist or the user does not have access.</exception>
+    /// <exception cref="InvalidOperationException">Thrown if the user is not found or has insufficient credits.</exception>
     public async Task<GenerationRecordDto> GenerateImageAsync(Guid conversationId, GenerateImageDto generateDto)
     {
-        var userId = GetCurrentUserId() ?? throw new UnauthorizedAccessException("用户未认证");
+        var userId = GetCurrentUserId() ?? throw new UnauthorizedAccessException("User not authenticated.");
 
-        // 验证对话是否存在且属于当前用户
+        // Verify that the conversation exists and belongs to the current user
         var conversation = await _context.Conversations
-            .FirstOrDefaultAsync(c => c.Id == conversationId && c.UserId == userId) ?? throw new ArgumentException("对话不存在或无权访问");
+            .FirstOrDefaultAsync(c => c.Id == conversationId && c.UserId == userId) ?? throw new ArgumentException("Conversation does not exist or access is denied.");
 
-        // 计算并校验 Credits（委托给具体 client）
+        // Calculate and validate credits (delegated to the specific client)
         var client = _clientFactory.GetClient(generateDto.ClientType ?? "gemini");
         var cost = client.GetCreditCost(generateDto);
 
-        var user = await _context.Users!.FirstOrDefaultAsync(u => u.Id == userId) ?? throw new InvalidOperationException("用户不存在");
+        var user = await _context.Users!.FirstOrDefaultAsync(u => u.Id == userId) ?? throw new InvalidOperationException("User not found.");
         if (user.Credits < cost)
         {
             throw new InvalidOperationException("Lack of Credits");
         }
 
-        // 创建生成记录
+        // Create generation record
         var generationRecord = await GenerateRecordFromDto(generateDto, conversationId);
 
-        // 处理输入图片（如果是 ImageToImage）
+        // Process input images (if ImageToImage)
         if (generateDto.GenerationType == GenerationType.ImageToImage && generateDto.InputImageIds?.Count > 0)
         {
             var inputImages = await _context.Images
@@ -104,18 +133,24 @@ public class ConversationService(IgDbContext context, IHttpContextAccessor httpC
         return _mapper.Map<GenerationRecordDto>(generationRecord);
     }
 
+    /// <summary>
+    /// Deletes a conversation and its associated records and images.
+    /// </summary>
+    /// <param name="conversationId">The ID of the conversation to delete.</param>
+    /// <exception cref="UnauthorizedAccessException">Thrown if the user is not authenticated.</exception>
+    /// <exception cref="ArgumentException">Thrown if the conversation does not exist or the user does not have access.</exception>
     public async Task DeleteConversationAsync(Guid conversationId)
     {
-        var userId = GetCurrentUserId() ?? throw new UnauthorizedAccessException("用户未认证");
+        var userId = GetCurrentUserId() ?? throw new UnauthorizedAccessException("User not authenticated.");
 
         var conversation = await _context.Conversations
             .Include(c => c.GenerationRecords)
             .ThenInclude(gr => gr.InputImages)
             .Include(c => c.GenerationRecords)
             .ThenInclude(gr => gr.OutputImages)
-            .FirstOrDefaultAsync(c => c.Id == conversationId && c.UserId == userId) ?? throw new ArgumentException("对话不存在或无权访问");
+            .FirstOrDefaultAsync(c => c.Id == conversationId && c.UserId == userId) ?? throw new ArgumentException("Conversation does not exist or access is denied.");
 
-        // 删除相关的图片文件
+        // Delete associated image files
         foreach (var record in conversation.GenerationRecords)
         {
             foreach (var img in record.InputImages)
