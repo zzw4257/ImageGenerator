@@ -2,11 +2,11 @@
 
 状态: 任务刚布置，进入 Slim MVP 一周冲刺阶段。请全员先通读本文件与 `MVP_MIN_SPEC.md`，即可开干。
 
-本分支: aetherflow/mvp  
+本分支: aetherflow/mvp
 目标: 一周内完成“Credits 可用、生成可跑、交互可看”的端到端演示。
 
 相关文档:
-- 精简规格: MVP_MIN_SPEC.md
+- 精简规格: [MVP_MIN_SPEC.md](MVP_MIN_SPEC.md)
 - 历史较大文档: old_docs/（已归档，先不看）
 - 启动脚本: start.sh（macOS/Linux）、start.bat（Windows）
 
@@ -123,11 +123,11 @@
 
 
 ## 8. Demo 演示脚本（对外演示按此走）
-1) 登录（或自动） -> 访问首页  
-2) 选择一个预制菜 -> 跳到生成页且预填参数  
-3) 切换 Provider = Flux（或 Stub） -> 显示“将消耗 X Credits”  
-4) 点击 Generate -> Loading -> 出图 -> 下载按钮可用  
-5) 打开“钱包与历史” -> 看到扣费流水和生成历史  
+1) 登录（或自动） -> 访问首页
+2) 选择一个预制菜 -> 跳到生成页且预填参数
+3) 切换 Provider = Flux（或 Stub） -> 显示“将消耗 X Credits”
+4) 点击 Generate -> Loading -> 出图 -> 下载按钮可用
+5) 打开“钱包与历史” -> 看到扣费流水和生成历史
 6) 点击“发放 10 Credits” -> 余额增加 -> 回生成页再来一张
 
 
@@ -138,5 +138,5 @@
 - 以 `.csproj` 为准进行构建；`.sln` 仅做 VS Windows 备选项
 - 任何新增接口/字段，请同步更新 Scalar 文档注释，保持可读
 
-——  
+——
 有问题在群里同步，或在仓库提 Issue。让我们把 Slim MVP 一周端到端 Demo 跑起来。
