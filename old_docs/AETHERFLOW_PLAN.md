@@ -1,9 +1,9 @@
 # Aetherflow 平台计划与架构设计文档
 
-**版本**: 1.0  
-**创建日期**: 2025年10月19日（第5周周日）  
-**项目周期**: 2-3周 MVP开发  
-**团队规模**: 7人  
+**版本**: 1.0
+**创建日期**: 2025年10月19日（第5周周日）
+**项目周期**: 2-3周 MVP开发
+**团队规模**: 7人
 **技术栈**: .NET 8 + Vue 3 + TypeScript + SQLite/PostgreSQL
 
 ---
@@ -248,7 +248,7 @@ public enum ResourceStatus
 public class ApiKeyEncryption
 {
     private readonly byte[] _key; // 从环境变量加载
-    
+
     public string Encrypt(string plainText)
     {
         using var aes = Aes.Create();
@@ -257,7 +257,7 @@ public class ApiKeyEncryption
         // AES-256-CBC加密
         // 返回 Base64(IV + CipherText)
     }
-    
+
     public string Decrypt(string encrypted)
     {
         // 解密逻辑
@@ -511,17 +511,17 @@ CREATE TABLE Disputes (
 1. **需求管理** (10%)
    - 维护 SPEC 文档，细化用户故事
    - 编写 API 设计文档
-   
+
 2. **项目管理** (40%)
    - 制定并更新开发计划
    - 每日站会主持（15分钟）
    - 周进度跟踪与风险识别
-   
+
 3. **技术支持** (30%)
    - Code Review
    - 协助后端复杂模块开发
    - 数据库设计与优化
-   
+
 4. **对外沟通** (20%)
    - 周报编写
    - 答辩材料准备
@@ -614,12 +614,12 @@ export const walletService = {
 export const useWalletStore = defineStore('wallet', () => {
   const balance = ref(0);
   const transactions = ref<Transaction[]>([]);
-  
+
   async function fetchBalance() {
     const res = await walletService.getBalance();
     balance.value = res.data.balance;
   }
-  
+
   return { balance, transactions, fetchBalance };
 });
 ```
@@ -651,14 +651,14 @@ export const useWalletStore = defineStore('wallet', () => {
      - Anthropic (Claude)
      - Google (Gemini)
      - 国内：通义万相、文心一言、智谱清言等
-   
+
    - 每个平台记录：
      - 官方 API 文档链接
      - 定价模式（按次/按Token/月付）
      - API 限流规则
      - 是否支持第三方集成
      - 示例代码
-   
+
    - 输出文档：`AIGC_Platforms_Research.md`
 
 2. **合规性调研** (15小时)
@@ -671,7 +671,7 @@ export const useWalletStore = defineStore('wallet', () => {
      - 官方 API Key 托管 ✅
      - 用户自有账号授权 ✅
      - 代理/爬虫 ❌
-   
+
    - 输出文档：`Compliance_Analysis.md`
 
 3. **可集成性技术验证** (15小时)
@@ -679,7 +679,7 @@ export const useWalletStore = defineStore('wallet', () => {
    - 编写 OpenAI DALL-E 集成 Demo
    - 测试 API 响应时间、错误处理
    - 验证密钥托管安全性
-   
+
    - 输出代码：`/demos/` 目录
 
 4. **竞品分析** (10小时)
@@ -688,7 +688,7 @@ export const useWalletStore = defineStore('wallet', () => {
      - RunPod (GPU租赁)
      - Together AI (模型托管)
    - 分析定价策略、用户体验
-   
+
    - 输出文档：`Competitor_Analysis.md`
 
 **第二周 - 测试验证** (40小时):
@@ -790,27 +790,27 @@ Week 8 (Nov 9): 最终验收与答辩准备
   - Git 仓库初始化
 
 #### 周一-周二 (Oct 20-21)
-- **PM**: 
+- **PM**:
   - 编写 API 设计文档
   - 设计数据库 ER 图
   - 创建 GitHub Project 看板
-  
+
 - **后端团队**:
   - 搭建 .NET 项目结构
   - 配置 EF Core + 数据库迁移
   - 实现 User 和 Wallet 模型
   - 完成 JWT 认证中间件
-  
+
 - **前端团队**:
   - 初始化 Vue 3 项目
   - 配置 Vuetify + 路由
   - 实现登录/注册页面 UI
   - 封装 Axios + 拦截器
-  
+
 - **调研**:
   - 完成 10+ AIGC 平台调研
   - 输出《AIGC_Platforms_Research.md》
-  
+
 - **DevOps**:
   - 编写 Docker Compose
   - 配置 GitHub Actions
@@ -822,25 +822,25 @@ Week 8 (Nov 9): 最终验收与答辩准备
   - 完成 Identity Service (注册/登录 API)
   - 完成 Wallet Service (余额查询 API)
   - 单元测试（JWT、密码加密）
-  
+
 - **后端2**:
   - 完成 ApiKeyEncryption 模块
   - 实现 Resource Gateway 接入逻辑
   - Stability AI 客户端封装
-  
+
 - **前端1**:
   - 对接登录/注册 API
   - 实现个人中心页面
   - 钱包余额展示
-  
+
 - **前端2**:
   - 实现资源接入向导界面
   - 资源列表页面
-  
+
 - **调研**:
   - 完成合规性分析文档
   - 编写 Stability AI Demo
-  
+
 - **DevOps**:
   - 协助解决 CORS 问题
   - 配置开发环境文档
@@ -851,23 +851,23 @@ Week 8 (Nov 9): 最终验收与答辩准备
 - **后端1**:
   - 完成 Wallet Recharge API（支付宝沙箱集成）
   - Transaction 记录与查询
-  
+
 - **后端2**:
   - 完成 Generation Service 核心逻辑
   - 智能路由选择算法
   - 任务队列（简单版）
-  
+
 - **前端1**:
   - 实现图片生成界面（核心功能）
   - 结果展示与下载
-  
+
 - **前端2**:
   - 资源仪表盘（统计数据可视化）
-  
+
 - **调研**:
   - OpenAI 集成 Demo
   - 竞品分析文档
-  
+
 - **PM**:
   - 第一周总结会
   - Code Review
@@ -885,20 +885,20 @@ Week 8 (Nov 9): 最终验收与答辩准备
   - 完善交易流水 API
   - 实现佣金自动计算
   - 退款逻辑
-  
+
 - **后端2**:
   - 完善 Generation Service
   - 失败重试机制
   - 资源池同步（定时任务）
-  
+
 - **前端1**:
   - 生成历史页面
   - 交易流水页面
-  
+
 - **前端2**:
   - 资源管理（暂停/启用/删除）
   - 收益统计页面
-  
+
 - **调研→测试**:
   - 转入测试角色
   - 编写测试用例（50+）
@@ -909,16 +909,16 @@ Week 8 (Nov 9): 最终验收与答辩准备
   - Dispute 争议处理 API
   - 系统监控接口（/health, /metrics）
   - API 文档完善
-  
+
 - **前端团队**:
   - 管理后台界面（用户管理、交易监控）
   - 争议处理界面
   - 响应式优化（移动端适配）
-  
+
 - **测试**:
   - 功能测试（完成 30+ 用例）
   - Bug 记录与反馈
-  
+
 - **DevOps**:
   - 性能优化（SQL 查询、API 响应时间）
   - Redis 集成（可选）
@@ -930,17 +930,17 @@ Week 8 (Nov 9): 最终验收与答辩准备
   - Bug 修复（高优先级）
   - 功能细节打磨
   - 用户体验优化
-  
+
 - **后端**:
   - 日志系统完善
   - 异常处理统一
   - 安全加固（SQL注入、XSS防护）
-  
+
 - **前端**:
   - Loading 状态完善
   - 错误提示优化
   - 暗黑模式调试
-  
+
 - **测试**:
   - 集成测试（API 端到端）
   - 安全测试（OWASP）
@@ -950,19 +950,19 @@ Week 8 (Nov 9): 最终验收与答辩准备
   - 性能测试与优化
   - 数据库索引优化
   - API 限流配置
-  
+
 - **前端**:
   - UI/UX 最终调整
   - 截图与录屏准备
-  
+
 - **测试**:
   - 回归测试
   - 压力测试（100并发）
-  
+
 - **DevOps**:
   - 预生产环境部署
   - 备份恢复演练
-  
+
 - **PM**:
   - 第二周总结
   - 准备演示 Demo
@@ -980,12 +980,12 @@ Week 8 (Nov 9): 最终验收与答辩准备
   - 完整的功能测试（所有用例）
   - 性能测试报告
   - 安全测试报告
-  
+
 - **开发团队**:
   - Bug 修复（中低优先级）
   - 代码重构与优化
   - 文档完善
-  
+
 - **DevOps**:
   - 生产环境部署
   - HTTPS 配置
@@ -996,7 +996,7 @@ Week 8 (Nov 9): 最终验收与答辩准备
   - 生产环境验证测试
   - 性能监控配置
   - 数据备份验证
-  
+
 - **PM**:
   - 编写答辩 PPT
   - 准备演示脚本
@@ -1260,5 +1260,5 @@ Aetherflow MVP 的成功关键在于：
 - 即时通讯：微信群/Discord
 - 代码仓库：https://github.com/zzw4257/ImageGenerator (aetherflow/mvp 分支)
 
-**最后更新**: 2025-10-19  
+**最后更新**: 2025-10-19
 **下次审查**: 2025-10-25 (Week 1 回顾)
