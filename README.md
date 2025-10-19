@@ -1,107 +1,142 @@
-# Image Generator AI
+# Aetherflow (Slim MVP) – README
 
-[![Star History Chart](https://api.star-history.com/svg?repos=zzw4257/zmage&type=Date)](https://star-history.com/#zzw4257/zmage&Date)
+状态: 任务刚布置，进入 Slim MVP 一周冲刺阶段。请全员先通读本文件与 `MVP_MIN_SPEC.md`，即可开干。
 
-这是一个使用 .NET 和 Vue.js 构建的全栈AI图像生成应用程序。它允许用户通过AI模型创建、查看和管理图像。
+本分支: aetherflow/mvp  
+目标: 一周内完成“Credits 可用、生成可跑、交互可看”的端到端演示。
 
-## 项目概述
+相关文档:
+- 精简规格: MVP_MIN_SPEC.md
+- 历史较大文档: old_docs/（已归档，先不看）
+- 启动脚本: start.sh（macOS/Linux）、start.bat（Windows）
 
-**Image Generator** 应用程序允许用户通过邀请码注册、登录，然后在会话中生成图像。该应用程序支持不同的AI模型进行图像生成，并允许用户收藏和管理他们生成的图像。
 
-### 后端 (`ImageGenerator`)
+## 1. 当前MVP范围（Slim）
+- 后端（.NET 9 + SQLite + Scalar）
+  - 最小接口集：Auth/Login、Wallet（balance/transactions/grant）、Presets、Generation（submit/query）
+  - Credits 必须可用（扣费、发放、流水记录）
+  - 生成 Provider 双通道：
+    - StubProvider：静态图占位，用于联调与演示
+    - HttpProvider（可选其一或多）：Qwen Image（DashScope）、Flux（本地/开源）
+- 前端（Vue 3 + TS + Vuetify）
+  - 深色主题、三页：首页（预制菜卡片墙）/ 生成页 / 钱包与历史
+  - 费用提示、轮询查询任务状态、空态/错误态友好展示
+  - “预制菜（Preset）”演示素材：由PM提供封面+Prompt；也可先用后端预置
 
-后端使用 C# 和 ASP.NET Core 构建。它为用户认证、会话管理、图像生成等提供RESTful API。它的设计是可扩展的，允许添加新的图像生成客户端。
 
-### 前端 (`WebUI`)
+## 2. 团队分工（关注域，非硬性指派）
+- 项目负责人（PM，含前端展示的资产生成）：周子为
+- 后端开发 1：陈以恒（Credits/Wallet/Transactions、生成任务与Provider适配）
+- 后端开发 2：罗建明（.NET 9、Scalar/SQLite、Stub/本地Provider、健康检查与日志）
+- 前端开发 1（UI向）：钱满亮（深色主题、卡片/列表、动效、空态/错误态）
+- 前端开发 2（数据+资产管理）：金裕涵（Preset配置/JSON、历史/筛选/分页、持久化）
+- 前端开发 3（后端对接项）：项科深（API service、鉴权拦截、轮询、错误重试、统一通知）
+- 前期调研 + 后期对比测试：魏云翔（Qwen/Flux接入可行性、性能/体验对比、Demo可靠性测试）
 
-前端是使用 Vue.js 和 TypeScript 构建的单页应用程序。它提供了一个用户友好的界面，用于与后端API交互，允许用户生成图像、查看他们的会话历史记录和管理他们喜欢的图像。
 
-## 技术栈
+## 3. 技术基线与约定
+- 后端
+  - 运行时: .NET 9（≥9），推荐 `dotnet` CLI 构建运行
+  - API 文档: Scalar（开发环境）→ http://localhost:5000/scalar/v1
+  - OpenAPI JSON: /openapi/ig.json（开发环境）
+  - 数据库: SQLite（开发），默认 Data Source=User.db
+  - 解决方案: `.csproj` 直接可 build/run；`.sln` 仅 Windows VS 备选
+  - 配置:
+    - 在 appsettings.json 中配置 CreditCosts、静态资源目录
+    - 外部 API Key 使用环境变量（例如 `DASHSCOPE_API_KEY`），不要硬编码
+- 前端
+  - 技术: Vue 3 + TypeScript + Vite + Pinia + Vuetify（深色主题）
+  - 路由: /（首页-预制菜）、/generate（生成页）、/account（钱包与历史）
+  - 交互: 轮询 `GET /api/generate/{taskId}` 每 2–3s，最多 30 次或状态完成即停
+  - 费用显示: 根据 provider/参数实时显示将消耗的 Credits（余额不足禁用）
 
-[![bcryptjs](https://img.shields.io/badge/bcryptjs-3.0.2-blue?style=flat-square)](https://github.com/dcodeIO/bcrypt.js)
+提交规范（必须）:
+- 小步快跑，频率高；信息明确
+- 前缀: feat:/fix:/docs:/chore:
+- 示例: `feat: add wallet balance API`, `fix: handle refund when generation fails`
 
-## 项目结构
 
-### 后端
+## 4. 快速启动
+前置:
+- 后端: .NET 9
+- 前端: Node.js 18+ 与 pnpm
 
-- `Controllers/`: 包含处理传入HTTP请求的API控制器。
-- `Services/`: 包含应用程序的业务逻辑。
-- `Database/`: 包含EntityFramework Core DbContext和迁移。
-- `Models/`: 包含应用程序的数据模型。
-- `Dtos/`: 包含用于API通信的数据传输对象。
-- `Interfaces/`: 包含服务的接口。
-- `Helpers/`: 包含帮助类和实用程序。
+方式A：一键脚本
+- macOS/Linux:
+  - `chmod +x start.sh && ./start.sh`
+- Windows:
+  - 双击 `start.bat`
 
-### 前端
+方式B：手动
+- 后端:
+  - `cd ImageGenerator`
+  - `dotnet restore`
+  - 首次本地数据库迁移（若需要，按实现方式执行）
+  - `dotnet run`
+  - 后端API: http://localhost:5000
+  - Scalar文档: http://localhost:5000/scalar/v1
+- 前端:
+  - `cd WebUI`
+  - `pnpm install`
+  - `pnpm dev`
+  - 前端站点: http://localhost:5173
 
-- `src/`: 主要源代码目录。
-  - `components/`: 可重用的Vue组件。
-  - `pages/`: 应用程序的主要页面。
-  - `services/`: 用于向后端发出API请求的模块。
-  - `stores/`: 用于状态管理的Pinia存储。
-  - `composables/`: 可重用的Vue组合式函数。
-  - `router/`: Vue路由器配置。
-  - `layouts/`: 应用程序的布局组件。
-  - `assets/`: 静态资产，如图像和样式。
 
-## 快速上手 (macOS)
+## 5. 最小API一览（以实际实现为准）
+- Auth
+  - POST `/api/auth/login` -> { token }
+- Wallet
+  - GET `/api/wallet/balance` -> { credits }
+  - GET `/api/wallet/transactions?skip=&take=` -> [...]
+  - POST `/api/wallet/grant` { amount, memo? } -> { ok }
+- Presets
+  - GET `/api/presets` -> 预制菜列表
+- Generate
+  - POST `/api/generate` { presetId?|prompt, provider, params } -> { taskId, estCost }
+  - GET `/api/generate/{taskId}` -> { status: Pending|Running|Succeeded|Failed, imageUrl?, error? }
 
-本指南将引导您在macOS上使用Visual Studio Code配置和运行.NET项目。
 
-### 前提条件
+## 6. 预制菜 Preset（示例Schema）
+用于首页卡片和生成页的“预置任务”。开发期可在后端种子 6–9 个，并在 `wwwroot/images/presets/` 放封面。
 
-- [Visual Studio Code](https://code.visualstudio.com/) 已安装。
-- 项目代码已下载到您的本地计算机。
+示例:
+```
+{
+  "id": "string",
+  "name": "product shot - neon",
+  "coverUrl": "/images/presets/neon-shoe.png",
+  "provider": "Stub|Qwen|Flux",
+  "prompt": "a neon-lit product photograph of a sneaker on glossy floor, cinematic lighting, high contrast, 4k",
+  "priceCredits": 2,
+  "defaultParams": { "width": 768, "height": 512, "aspectRatio": "3:2", "style": "cinematic" },
+  "tags": ["product", "neon", "cinematic"]
+}
+```
 
-### 1. 安装VS Code插件
 
-首先，在VS Code中安装以下插件，它们将极大地改善您的.NET开发体验：
+## 7. Credits 映射与扣费建议
+- 映射（示例）:
+  - `Stub.TextToImage = 0`（演示不扣费）
+  - `Qwen.TextToImage = 2`
+  - `Flux.TextToImage = 1`
+- 扣费时机（推荐简化）: 提交任务时扣费，失败自动补一条 Refund（等额）
 
-- **C# Dev Kit**: 官方C#扩展，提供了丰富的C#语言支持。
-- **.NET Core Extension Pack**: 包含一组有用的.NET相关扩展。
-- **vscode-solution-explorer**: 在VS Code中添加一个解决方案资源管理器，方便管理.NET解决方案。
 
-您可以在VS Code的扩展市场中搜索并安装它们：
+## 8. Demo 演示脚本（对外演示按此走）
+1) 登录（或自动） -> 访问首页  
+2) 选择一个预制菜 -> 跳到生成页且预填参数  
+3) 切换 Provider = Flux（或 Stub） -> 显示“将消耗 X Credits”  
+4) 点击 Generate -> Loading -> 出图 -> 下载按钮可用  
+5) 打开“钱包与历史” -> 看到扣费流水和生成历史  
+6) 点击“发放 10 Credits” -> 余额增加 -> 回生成页再来一张
 
-![VS Code Extensions](https://i.imgur.com/8V5mZ4u.png)
 
-### 2. 下载并安装.NET SDK
+## 9. 注意事项
+- 任务刚布置：优先完成最小闭环，不要扩展需求
+- 外部 API Key 必须使用环境变量注入，代码仓库不得出现明文
+- 图片统一由后端下发 URL，前端不直连第三方 API
+- 以 `.csproj` 为准进行构建；`.sln` 仅做 VS Windows 备选项
+- 任何新增接口/字段，请同步更新 Scalar 文档注释，保持可读
 
-根据您的Mac处理器类型（Intel或Apple Silicon），下载并安装合适的.NET SDK。
-
-- **查看处理器类型**:
-  1. 点击屏幕左上角的苹果图标。
-  2. 选择“关于本机”。
-  3. 查看“处理器”信息。如果是Intel，选择x64版本；如果是Apple M系列芯片，选择Arm64版本。
-
-- **下载.NET 6.0 SDK**:
-  [点击此处进入下载页面](https://dotnet.microsoft.com/download/dotnet/6.0)
-
-  ![Download .NET SDK](https://i.imgur.com/Trf8v2L.png)
-
-### 3. 在VS Code中打开并运行项目
-
-1. **重启VS Code** 并使用VS Code打开项目根目录。
-
-2. **自动安装依赖**:
-   由于您已经安装了相关插件，项目依赖项将会自动安装。
-
-3. **使用Solution Explorer**:
-   - 将`vscode-solution-explorer`插件拖到VS Code侧边栏的第一个选项卡下方的空白区域。
-   - 打开`Solution Explorer`，您将看到项目结构。
-
-4. **构建项目**:
-   - 在`Solution Explorer`中，右键点击解决方案文件 (`.sln`)，然后选择“Build”。
-
-   ![Build Solution](https://i.imgur.com/4z3Y4Y1.png)
-
-5. **运行项目**:
-   - 在`Solution Explorer`中，找到可以运行的服务（通常是`ImageGenerator`项目），右键点击它，然后选择“Run”。
-
-   ![Run Project](https://i.imgur.com/7nJ2c8Y.png)
-
-   如果运行失败，请尝试关闭VS Code，然后重新启动并再次执行“Run”操作。
-
-### 运行成功
-
-项目成功运行后，后端API将在`http://localhost:5000`可用，前端将在`http://localhost:5173`可用。
+——  
+有问题在群里同步，或在仓库提 Issue。让我们把 Slim MVP 一周端到端 Demo 跑起来。
