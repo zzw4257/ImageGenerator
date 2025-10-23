@@ -56,6 +56,43 @@ export const useHistoryStore = defineStore('history', {
       } finally {
         this.genLoading = false
       }
+    },
+
+    // 获取所有生成历史记录（用于筛选）
+    async fetchAllGenerations() {
+      this.genLoading = true
+      this.genError = null
+      try {
+        // 获取所有对话记录，不分页
+        const res = await axios.get('/Conversation/conversations', { 
+          params: { pageNumber: 0, pageSize: 1000 } // 使用大页面大小获取所有数据
+        })
+        
+        // 从conversations中提取所有generation records
+        const allRecords: GenerationHistoryItem[] = []
+        res.data.forEach((conversation: any) => {
+          if (conversation.generationRecords && conversation.generationRecords.length > 0) {
+            conversation.generationRecords.forEach((record: any) => {
+              allRecords.push({
+                ...record,
+                conversationId: conversation.id,
+                thumbnail: record.outputImage?.imagePath || '/images/placeholder.svg'
+              })
+            })
+          }
+        })
+        
+        // 按创建时间排序
+        allRecords.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+        
+        return allRecords
+      } catch (e: any) {
+        this.genError = e?.message ?? String(e)
+        console.error('获取所有生成历史失败:', e)
+        return []
+      } finally {
+        this.genLoading = false
+      }
     }
   }
 })

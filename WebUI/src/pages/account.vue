@@ -300,13 +300,14 @@
 
   const transactions = ref<TransactionDto[]>([])
   const generationHistory = ref<any[]>([])
+  const allGenerationHistory = ref<any[]>([]) // 存储所有历史记录用于筛选
 
   const transactionPage = ref(1)
   const transactionTotalPages = ref(1)
   const historyPage = ref(1)
   const historyTotalPages = ref(1)
   const filteredHistoryPage = ref(1)
-  const filteredHistoryPageSize = ref(10)
+  const filteredHistoryPageSize = ref(10) // 与原始分页保持一致
 
   const historyStore = useHistoryStore()
   const notificationStore = useNotificationStore()
@@ -356,8 +357,9 @@
   const currentHistory = computed(() => {
     if (hasActiveFilters.value && filteredHistory.value.length > 0) {
       // 如果有筛选条件且有筛选结果，显示筛选后的分页数据
-      const start = (filteredHistoryPage.value - 1) * filteredHistoryPageSize.value
-      const end = start + filteredHistoryPageSize.value
+      // 使用与原始分页相同的页面大小（10条记录）
+      const start = (filteredHistoryPage.value - 1) * 10
+      const end = start + 10
       return filteredHistory.value.slice(start, end)
     } else {
       // 否则显示原始数据
@@ -369,7 +371,8 @@
   const currentHistoryTotalPages = computed(() => {
     if (hasActiveFilters.value && filteredHistory.value.length > 0) {
       // 如果有筛选条件且有筛选结果，基于筛选结果计算页数
-      return Math.ceil(filteredHistory.value.length / filteredHistoryPageSize.value)
+      // 使用与原始分页相同的页面大小（10条记录）
+      return Math.ceil(filteredHistory.value.length / 10)
     } else {
       // 否则使用原始分页页数
       return historyTotalPages.value
@@ -396,8 +399,19 @@
   })
 
   // 筛选函数
-  function applyFilters() {
-    let filtered = [...generationHistory.value]
+  async function applyFilters() {
+    // 如果没有加载所有历史记录，先加载
+    if (allGenerationHistory.value.length === 0) {
+      try {
+        allGenerationHistory.value = await historyStore.fetchAllGenerations()
+      } catch (error) {
+        console.error('加载所有历史记录失败:', error)
+        notificationStore.error('加载历史记录失败，无法进行筛选')
+        return
+      }
+    }
+
+    let filtered = [...allGenerationHistory.value]
 
     // 状态筛选
     if (filterOptions.value.status !== null) {
@@ -432,7 +446,10 @@
     filteredHistory.value = filtered
     filteredHistoryPage.value = 1 // 重置筛选分页到第一页
     showFilterDialog.value = false
-    notificationStore.success(`筛选完成，找到 ${filtered.length} 条记录`)
+    
+    // 计算筛选结果的总页数
+    const totalPages = Math.ceil(filtered.length / 10)
+    notificationStore.success(`筛选完成，找到 ${filtered.length} 条记录，共 ${totalPages} 页`)
   }
 
   // 重置筛选
@@ -445,6 +462,7 @@
       dateTo: ''
     }
     filteredHistory.value = []
+    allGenerationHistory.value = [] // 清空所有历史记录缓存
     filteredHistoryPage.value = 1 // 重置筛选分页到第一页
     showFilterDialog.value = false
     notificationStore.info('筛选条件已重置')
