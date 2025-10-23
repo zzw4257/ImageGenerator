@@ -67,34 +67,6 @@ public class ConversationController(IConversationService conversationService) : 
     }
 
     /// <summary>
-    /// Generates an image within a specific conversation.
-    /// </summary>
-    /// <param name="chatId">The ID of the conversation.</param>
-    /// <param name="generateDto">The data for generating the image.</param>
-    /// <returns>An <see cref="ActionResult"/> containing the <see cref="GenerationRecordDto"/>.</returns>
-    [HttpPost("generate/{chatId}")]
-    public async Task<ActionResult<GenerationRecordDto>> GenerateImage(Guid chatId, [FromBody] GenerateImageDto generateDto)
-    {
-        try
-        {
-            var result = await _chatService.GenerateImageAsync(chatId, generateDto);
-            return Ok(result);
-        }
-        catch (UnauthorizedAccessException)
-        {
-            return Unauthorized();
-        }
-        catch (ArgumentException ex)
-        {
-            return BadRequest(ex.Message);
-        }
-        catch (Exception ex)
-        {
-            return BadRequest($"生成图片失败: {ex.Message}");
-        }
-    }
-
-    /// <summary>
     /// Gets a paginated list of conversations for the current user.
     /// </summary>
     /// <param name="param">The pagination parameters.</param>

@@ -13,12 +13,11 @@ namespace ImageGenerator.Services;
 /// <summary>
 /// Provides services for managing a user's favorite images.
 /// </summary>
-public class FavoriteService(IgDbContext context, IHttpContextAccessor httpContextAccessor, IMapper mapper, ImageGenerationClientFactory clientFactory) : IFavoriteService
+public class FavoriteService(IgDbContext context, IHttpContextAccessor httpContextAccessor, IMapper mapper) : IFavoriteService
 {
     private readonly IgDbContext _context = context;
     private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
     private readonly IMapper _mapper = mapper;
-    private readonly ImageGenerationClientFactory _clientFactory = clientFactory;
 
     /// <summary>
     /// Adds a specified image to the current user's favorites.

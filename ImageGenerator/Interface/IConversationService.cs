@@ -23,14 +23,6 @@ public interface IConversationService
     Task<ConversationDto?> GetConversationAsync(Guid conversationId);
 
     /// <summary>
-    /// Generates an image within a conversation.
-    /// </summary>
-    /// <param name="conversationId">The ID of the conversation.</param>
-    /// <param name="generateDto">The DTO with the generation parameters.</param>
-    /// <returns>A DTO representing the generation record.</returns>
-    Task<GenerationRecordDto> GenerateImageAsync(Guid conversationId, GenerateImageDto generateDto);
-
-    /// <summary>
     /// Retrieves a paginated list of the user's conversations.
     /// </summary>
     /// <param name="param">The pagination parameters.</param>

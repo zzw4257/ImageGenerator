@@ -34,6 +34,11 @@ public class IgDbContext(DbContextOptions<IgDbContext> options) : DbContext(opti
     public DbSet<Image> Images { get; set; }
 
     /// <summary>
+    /// The Transactions table.
+    /// </summary>
+    public DbSet<Transaction> Transactions { get; set; }
+
+    /// <summary>
     /// Configures the model for the database context.
     /// </summary>
     /// <param name="modelBuilder">The model builder.</param>

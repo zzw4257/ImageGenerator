@@ -1,10 +1,8 @@
 using ImageGenerator.Interface;
-using Microsoft.Extensions.DependencyInjection;
-using System;
 
-namespace ImageGenerator.Services
+namespace ImageGenerator.Provider
 {
-    public class ImageGenerationClientFactory(IServiceProvider serviceProvider)
+    public class ImageProvider(IServiceProvider serviceProvider)
     {
         private readonly IServiceProvider _serviceProvider = serviceProvider;
 
@@ -12,8 +10,9 @@ namespace ImageGenerator.Services
         {
             return clientType.ToLower() switch
             {
-                "openai" => _serviceProvider.GetRequiredService<OpenAIClient>(),
-                "gemini" => _serviceProvider.GetRequiredService<GeminiClient>(),
+                "stub" => _serviceProvider.GetRequiredService<StubProvider>(),
+                "openai" => _serviceProvider.GetRequiredService<OpenAIProvider>(),
+                "gemini" => _serviceProvider.GetRequiredService<GeminiProvider>(),
                 _ => throw new NotSupportedException($"Client type '{clientType}' is not supported."),
             };
         }

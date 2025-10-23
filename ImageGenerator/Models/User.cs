@@ -38,7 +38,7 @@ public class User: ModelBase
     /// <summary>
     /// The number of credits the user has for image generation.
     /// </summary>
-    public int Credits { get; set; } = 0;
+    public decimal Credits { get; set; } = 0;
 
     /// <summary>
     /// The timestamp when the user last claimed their credits.

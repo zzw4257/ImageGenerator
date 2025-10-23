@@ -1,26 +1,21 @@
 using ImageGenerator.Dtos;
 using ImageGenerator.Interface;
 using ImageGenerator.Models;
-using Microsoft.Extensions.Configuration;
 using OpenAI;
 using OpenAI.Images;
-using System;
 using System.ClientModel;
-using System.IO;
-using System.Net.Http;
 using System.Text.Json;
-using System.Threading.Tasks;
 
-namespace ImageGenerator.Services
+namespace ImageGenerator.Provider
 {
-    public class OpenAIClient : IImageGenerationClient
+    public class OpenAIProvider : IImageGenerationClient
     {
         private readonly ImageClient _client;
         private readonly string _apiKey;
         private readonly string _endPoint;
         private readonly HttpClient _httpClient;
 
-        public OpenAIClient(IConfiguration configuration, HttpClient httpClient)
+        public OpenAIProvider(IConfiguration configuration, HttpClient httpClient)
         {
             _httpClient = httpClient;
             _apiKey = configuration["OpenAI:ApiKey"] ?? throw new InvalidOperationException("OpenAI API Key 未配置");
