@@ -417,7 +417,7 @@ import { useNotificationStore } from '@/stores/notification'
       const request: GenerateRequestDto = {
         conversationId: conversation.id,
         prompt: form.value.prompt,
-        provider: form.value.model,
+        provider: form.value.model.toLowerCase(), // 转换为小写以匹配后端期望
         params: JSON.stringify(params),
         quality: 'standard',
         style: 'vivid'
@@ -510,14 +510,14 @@ import { useNotificationStore } from '@/stores/notification'
       {
         id: '1',
         prompt: 'A beautiful sunset over mountains',
-        thumbnail: '/images/generated/thumb1.jpg',
+        thumbnail: '/images/placeholder.svg',
         status: 'completed',
         createdAt: new Date(Date.now() - 1000 * 60 * 5),
       },
       {
         id: '2',
         prompt: 'Abstract geometric patterns in blue',
-        thumbnail: '/images/generated/thumb2.jpg',
+        thumbnail: '/images/placeholder.svg',
         status: 'completed',
         createdAt: new Date(Date.now() - 1000 * 60 * 30),
       },

@@ -29,8 +29,15 @@ export const getConversation = async (chatId: string): Promise<ConversationDto> 
  * @returns A promise that resolves to the generation record.
  */
 export const generateImage = async (chatId: string, payload: GenerateImageDto): Promise<GenerationRecordDto> => {
-  // OpenAPI: POST /api/Conversation/generate/{chatId}
-  const { data } = await axios.post<GenerationRecordDto>(`/Conversation/generate/${chatId}`, payload)
+  // 使用正确的生成API端点
+  const { data } = await axios.post<GenerationRecordDto>('/api/generate', {
+    conversationId: chatId,
+    prompt: payload.prompt,
+    provider: payload.clientType || 'Stub',
+    params: JSON.stringify(payload),
+    quality: 'standard',
+    style: 'vivid'
+  })
   return data
 }
 

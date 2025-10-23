@@ -69,7 +69,7 @@
                 </template>
 
                 <v-list-item-title class="text-body-1 font-weight-medium">
-                  {{ getTransactionDescription(transaction.type, transaction.memo) }}
+                  {{ getTransactionDescription(transaction.type, transaction.description) }}
                 </v-list-item-title>
 
                 <v-list-item-subtitle class="d-flex align-center mt-1">
@@ -98,6 +98,7 @@
               :length="transactionTotalPages"
               rounded="circle"
               total-visible="5"
+              @update:modelValue="handleTransactionPageChange"
             />
           </v-card-actions>
         </v-card>
@@ -144,7 +145,7 @@
           <v-card-text class="pa-0">
             <v-list>
               <v-list-item
-                v-for="task in (filteredHistory.length > 0 ? filteredHistory : generationHistory)"
+                v-for="task in currentHistory"
                 :key="task.id"
                 class="px-4 py-3"
               >
@@ -164,13 +165,13 @@
                     size="x-small"
                     variant="flat"
                   >
-                    {{ task.statusText }}
+                    {{ getStatusText(task.status) }}
                   </v-chip>
                   <span class="text-caption text-grey">
                     {{ formatDateTime(task.createdAt) }}
                   </span>
                   <span class="text-caption font-weight-medium">
-                    • {{ task.credits }} Credits
+                    • {{ task.credits || 0 }} Credits
                   </span>
                 </v-list-item-subtitle>
 
@@ -190,8 +191,8 @@
 
           <v-card-actions class="pa-4">
             <v-pagination
-              v-model="historyPage"
-              :length="historyTotalPages"
+              v-model="currentHistoryPage"
+              :length="currentHistoryTotalPages"
               rounded="circle"
               total-visible="5"
             />
@@ -304,6 +305,8 @@
   const transactionTotalPages = ref(1)
   const historyPage = ref(1)
   const historyTotalPages = ref(1)
+  const filteredHistoryPage = ref(1)
+  const filteredHistoryPageSize = ref(10)
 
   const historyStore = useHistoryStore()
   const notificationStore = useNotificationStore()
@@ -321,10 +324,11 @@
   // 筛选选项
   const statusOptions = [
     { title: '全部', value: null },
-    { title: '成功', value: 'Succeeded' },
-    { title: '失败', value: 'Failed' },
-    { title: '处理中', value: 'Processing' },
-    { title: '等待中', value: 'Pending' }
+    { title: '成功', value: 2 }, // Completed
+    { title: '失败', value: 3 }, // Failed
+    { title: '处理中', value: 1 }, // Processing
+    { title: '等待中', value: 0 }, // Pending
+    { title: '已取消', value: 4 } // Cancelled
   ]
 
   const providerOptions = [
@@ -348,12 +352,55 @@
            filterOptions.value.dateTo !== ''
   })
 
+  // 计算属性：当前显示的历史记录（筛选后或原始）
+  const currentHistory = computed(() => {
+    if (hasActiveFilters.value && filteredHistory.value.length > 0) {
+      // 如果有筛选条件且有筛选结果，显示筛选后的分页数据
+      const start = (filteredHistoryPage.value - 1) * filteredHistoryPageSize.value
+      const end = start + filteredHistoryPageSize.value
+      return filteredHistory.value.slice(start, end)
+    } else {
+      // 否则显示原始数据
+      return generationHistory.value
+    }
+  })
+
+  // 计算属性：当前分页的总页数
+  const currentHistoryTotalPages = computed(() => {
+    if (hasActiveFilters.value && filteredHistory.value.length > 0) {
+      // 如果有筛选条件且有筛选结果，基于筛选结果计算页数
+      return Math.ceil(filteredHistory.value.length / filteredHistoryPageSize.value)
+    } else {
+      // 否则使用原始分页页数
+      return historyTotalPages.value
+    }
+  })
+
+  // 计算属性：当前分页页码
+  const currentHistoryPage = computed({
+    get() {
+      if (hasActiveFilters.value && filteredHistory.value.length > 0) {
+        return filteredHistoryPage.value
+      } else {
+        return historyPage.value
+      }
+    },
+    set(value: number) {
+      if (hasActiveFilters.value && filteredHistory.value.length > 0) {
+        filteredHistoryPage.value = value
+      } else {
+        historyPage.value = value
+        loadGenerationHistory()
+      }
+    }
+  })
+
   // 筛选函数
   function applyFilters() {
     let filtered = [...generationHistory.value]
 
     // 状态筛选
-    if (filterOptions.value.status) {
+    if (filterOptions.value.status !== null) {
       filtered = filtered.filter(task => task.status === filterOptions.value.status)
     }
 
@@ -383,6 +430,7 @@
     }
 
     filteredHistory.value = filtered
+    filteredHistoryPage.value = 1 // 重置筛选分页到第一页
     showFilterDialog.value = false
     notificationStore.success(`筛选完成，找到 ${filtered.length} 条记录`)
   }
@@ -396,7 +444,8 @@
       dateFrom: '',
       dateTo: ''
     }
-    filteredHistory.value = [...generationHistory.value]
+    filteredHistory.value = []
+    filteredHistoryPage.value = 1 // 重置筛选分页到第一页
     showFilterDialog.value = false
     notificationStore.info('筛选条件已重置')
   }
@@ -419,26 +468,38 @@
     return icons[type as keyof typeof icons] || 'mdi-circle'
   }
 
-  function getTransactionDescription(type: string, memo?: string) {
+  function getTransactionDescription(type: string, description?: string) {
     const descriptions = {
       Recharge: 'Credits 充值',
       Consume: '图像生成消费',
       Earn: '获得 Credits',
       Refund: '退款'
     }
-    return memo || descriptions[type as keyof typeof descriptions] || type
+    return description || descriptions[type as keyof typeof descriptions] || type
   }
 
-  function getStatusColor (status: string) {
+  function getStatusColor (status: number) {
     const colors = {
-      completed: 'success',
-      processing: 'warning',
-      failed: 'error',
+      0: 'orange', // Pending
+      1: 'blue',   // Processing
+      2: 'green',  // Completed
+      3: 'red',    // Failed
     }
     return colors[status as keyof typeof colors] || 'grey'
   }
 
-  function truncatePrompt (prompt: string, length = 40) {
+  function getStatusText (status: number) {
+    const texts = {
+      0: '等待中',
+      1: '处理中', 
+      2: '成功',
+      3: '失败'
+    }
+    return texts[status as keyof typeof texts] || '未知'
+  }
+
+  function truncatePrompt (prompt: string | undefined, length = 40) {
+    if (!prompt) return '无提示词'
     return prompt.length > length ? prompt.slice(0, Math.max(0, length)) + '...' : prompt
   }
 
@@ -447,7 +508,9 @@
   }
 
   function formatDateTime (date: string) {
-    return new Date(date).toLocaleString('zh-CN', {
+    // 统一处理时间格式，不添加'Z'后缀
+    const dateObj = new Date(date)
+    return dateObj.toLocaleString('zh-CN', {
       month: 'short',
       day: 'numeric',
       hour: '2-digit',
@@ -488,8 +551,8 @@
       await historyStore.fetchGenerations(historyPage.value - 1, 10)
       generationHistory.value = historyStore.generations
       historyTotalPages.value = historyStore.genPagination.TotalPages
-      // 初始化筛选数据
-      filteredHistory.value = [...generationHistory.value]
+      // 初始化筛选数据为空，只有在应用筛选时才显示筛选结果
+      filteredHistory.value = []
     } catch (error: any) {
       console.error('加载生成历史失败:', error)
       notificationStore.error('加载生成历史失败')
@@ -501,7 +564,7 @@
   async function grantCredits () {
     granting.value = true
     try {
-      await grantCreditsApi(10, '开发测试发放')
+      await grantCreditsApi(10)
       await loadWalletBalance()
       await loadTransactions()
       notificationStore.success('Credits 发放成功！')
@@ -516,6 +579,11 @@
   function viewResult (task: any) {
     // 查看生成结果
     console.log('查看任务:', task.id)
+  }
+
+  function handleTransactionPageChange(page: number) {
+    transactionPage.value = page
+    loadTransactions()
   }
 
   onMounted(async () => {

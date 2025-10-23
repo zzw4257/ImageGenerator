@@ -220,6 +220,12 @@
       to: '/favorites'
     },
     {
+      title: 'Account',
+      subtitle: 'Balance & History',
+      icon: 'mdi-account-circle',
+      to: '/account'
+    },
+    {
       title: 'Invitations',
       subtitle: 'Manage codes',
       icon: 'mdi-ticket',
@@ -264,6 +270,9 @@
       }
       case '/favorites': {
         return 'Favorites'
+      }
+      case '/account': {
+        return 'Account & History'
       }
       case '/collections': {
         return 'Collections'

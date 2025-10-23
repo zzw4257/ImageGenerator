@@ -6,8 +6,9 @@ export interface TransactionDto {
   amount: number
   type: 'Recharge' | 'Consume' | 'Earn' | 'Refund'
   balanceAfter: number
-  memo?: string
+  description: string
   createdAt: string
+  creatorId: string
 }
 
 export interface BalanceDto {
@@ -51,9 +52,9 @@ export const listTransactions = async (page = 0, pageSize = 12): Promise<{ items
 /**
  * 发放Credits
  */
-export const grantCredits = async (amount: number, memo?: string): Promise<TransactionDto> => {
+export const grantCredits = async (amount: number): Promise<TransactionDto> => {
   try {
-    const { data } = await axios.post<TransactionDto>('/wallet/grant', { amount, memo })
+    const { data } = await axios.post<TransactionDto>('/wallet/grant', amount)
     return data
   } catch (error) {
     ErrorHandler.handle(error, '发放Credits')

@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import axios from '@/helpers/RequestHelper'
+import type { GenerationRecordDto } from '@/types/api'
 
 function parsePagination(headers: any) {
   const h = headers?.['x-pagination'] ?? headers?.['X-Pagination']
@@ -7,31 +8,51 @@ function parsePagination(headers: any) {
   try { return JSON.parse(h) } catch { return { TotalCount: 0, PageSize: 12, PageNumber: 0, TotalPages: 1 } }
 }
 
+export interface GenerationHistoryItem extends GenerationRecordDto {
+  conversationId: string
+  thumbnail: string
+}
+
 export const useHistoryStore = defineStore('history', {
   state: () => ({
-    generations: [] as any[],
+    generations: [] as GenerationHistoryItem[],
     genPagination: { TotalPages: 1, PageNumber: 0, PageSize: 12, TotalCount: 0 } as any,
     genLoading: false,
     genError: null as string | null,
   }),
   actions: {
-    // 尝试使用常见历史接口名；后端若不同可在这里调整 endpoint
+    // 获取生成历史 - 通过Conversation API
     async fetchGenerations(page = 0, pageSize = 12) {
       this.genLoading = true
       this.genError = null
       try {
-        // 优先尝试 /generate/history，若 404 再尝试 Conversation 路径
-        let res
-        try {
-          res = await axios.get('/generate/history', { params: { pageNumber: page, pageSize } })
-        } catch (e: any) {
-          res = await axios.get('/Conversation/conversations', { params: { pageNumber: page, pageSize } })
-        }
-        this.generations = res.data
+        const res = await axios.get('/Conversation/conversations', { 
+          params: { pageNumber: page, pageSize } 
+        })
+        
+        // 从conversations中提取所有generation records
+        const allRecords: GenerationHistoryItem[] = []
+        res.data.forEach((conversation: any) => {
+          if (conversation.generationRecords && conversation.generationRecords.length > 0) {
+            conversation.generationRecords.forEach((record: any) => {
+              allRecords.push({
+                ...record,
+                conversationId: conversation.id,
+                thumbnail: record.outputImage?.imagePath || '/images/placeholder.svg'
+              })
+            })
+          }
+        })
+        
+        // 按创建时间排序
+        allRecords.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+        
+        this.generations = allRecords
         this.genPagination = parsePagination(res.headers)
       } catch (e: any) {
         this.genError = e?.message ?? String(e)
         this.generations = []
+        console.error('获取生成历史失败:', e)
       } finally {
         this.genLoading = false
       }

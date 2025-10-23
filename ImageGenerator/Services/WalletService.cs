@@ -105,10 +105,12 @@ public class WalletService(IgDbContext context, IHttpContextAccessor httpContext
 
         return new TransactionDto
         {
+            Id = transaction.Id,
             Type = transaction.Type,
             Amount = transaction.Amount,
             BalanceAfter = transaction.BalanceAfter,
             Description = transaction.Description,
+            CreatedAt = transaction.CreatedAt,
             CreatorId = transaction.CreatorId
         };
     }

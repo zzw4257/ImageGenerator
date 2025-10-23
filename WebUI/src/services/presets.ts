@@ -18,7 +18,7 @@ export interface PresetDto {
  */
 export const listPresets = async (page = 0, pageSize = 12): Promise<{ items: PresetDto[]; pagination: any }> => {
   try {
-    const { data, headers } = await axios.get<PresetDto[]>('/presets', { params: { pageNumber: page, pageSize } })
+    const { data, headers } = await axios.get<PresetDto[]>('/Presets', { params: { pageNumber: page, pageSize } })
     const pagination = headers['x-pagination'] ? JSON.parse(headers['x-pagination']) : { TotalCount: data.length, PageSize: pageSize, PageNumber: page, TotalPages: 1 }
     return { items: data, pagination }
   } catch (error) {
@@ -32,7 +32,7 @@ export const listPresets = async (page = 0, pageSize = 12): Promise<{ items: Pre
  */
 export const getPreset = async (id: string): Promise<PresetDto> => {
   try {
-    const { data } = await axios.get<PresetDto>(`/presets/${encodeURIComponent(id)}`)
+    const { data } = await axios.get<PresetDto>(`/Presets/${encodeURIComponent(id)}`)
     return data
   } catch (error) {
     ErrorHandler.handle(error, '获取预设详情')
