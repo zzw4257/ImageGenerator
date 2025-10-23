@@ -352,9 +352,10 @@ public class GenerateService(
             scopedContext.Transactions.Add(refundTransaction);
             await scopedContext.SaveChangesAsync();
         }
-        catch
+        catch (Exception ex)
         {
             // 退款失败，记录日志但不影响主流程
+            Console.WriteLine($"[RefundCreditsAsync] Refund failed for TaskId: {taskId}, Reason: {reason}. Exception: {ex.Message}\n{ex.StackTrace}");
         }
     }
 
