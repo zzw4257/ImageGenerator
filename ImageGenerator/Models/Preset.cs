@@ -15,6 +15,11 @@ public class Preset : ModelBase
     public string Name { get; set; } = string.Empty;
 
     /// <summary>
+    /// 预制菜的简短描述，说明其用途或效果。
+    /// </summary>
+    public string Description { get; set; } = string.Empty;
+
+    /// <summary>
     /// 预制菜的封面图 URL (例如 "/images/presets/product-shot.png").
     /// </summary>
     [Required]

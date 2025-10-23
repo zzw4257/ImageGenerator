@@ -220,6 +220,10 @@ namespace ImageGenerator.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("INTEGER");
 
@@ -252,78 +256,84 @@ namespace ImageGenerator.Migrations
                             Id = new Guid("00000000-0000-0000-0000-00000000000a"),
                             CoverUrl = "/images/presets/product-shot.png",
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            DefaultParams = "{\"style\": \"cinematic\", \"width\": 1024, \"height\": 1024}",
+                            DefaultParams = "{\"style\": \"photorealistic\", \"width\": 1024, \"height\": 1024, \"aspectRatio\": \"1:1\"}",
+                            Description = "适合电商/广告用途的专业产品照片，强调光线布置、角度与核心细节。",
                             IsDeleted = false,
                             Name = "产品商业摄影 (Qwen)",
                             PriceCredits = 2,
-                            Prompt = "A high-resolution, studio-lit product photograph of a [product description] on a [background surface]. The lighting is a [lighting setup] to emphasize subtle curves. Ultra-realistic, 4k.",
+                            Prompt = "A high-resolution, studio-lit product photograph of a [product description:matte black wireless earbud case] on a [background surface/description:brushed aluminum surface with soft vignette]. The lighting is a [lighting setup:three-point softbox] to [lighting purpose:emphasize subtle curves]. The camera angle is a [angle type:slight low angle] to showcase [specific feature:charging indicator + hinge]. Ultra-realistic, with sharp focus on [key detail:texture + logo etching]. [Aspect ratio:1:1].",
                             Provider = "Qwen",
-                            Tags = "[\"product\",\"cinematic\",\"qwen\"]"
+                            Tags = "[\"product\",\"studio\",\"qwen\"]"
                         },
                         new
                         {
                             Id = new Guid("00000000-0000-0000-0000-00000000000b"),
-                            CoverUrl = "/images/presets/neon-shoe.png",
+                            CoverUrl = "/images/presets/text-graphic.png",
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            DefaultParams = "{\"aspectRatio\": \"3:2\", \"width\": 768, \"height\": 512}",
+                            DefaultParams = "{\"style\": \"graphic\", \"width\": 768, \"height\": 768, \"aspectRatio\": \"1:1\"}",
+                            Description = "用于生成包含特定文字的图形 / 标识，明确字体感受、风格与配色。",
                             IsDeleted = false,
-                            Name = "霓虹风格 (Flux)",
+                            Name = "文字图形标识 (Flux)",
                             PriceCredits = 1,
-                            Prompt = "a neon-lit product photograph of a sneaker on glossy floor, cinematic lighting, high contrast, 4k, [subject]",
+                            Prompt = "Create a [image type:logo badge] for [brand/concept:Arctic Labs] with the text \"[text to render:POLAR AI]\" in a [font style:geometric sans-serif]. The design should be [style description:minimal, futuristic] with a [color scheme:icy blue + white gradient].",
                             Provider = "Flux",
-                            Tags = "[\"product\",\"neon\",\"flux\"]"
+                            Tags = "[\"text\",\"logo\",\"graphic\",\"flux\"]"
                         },
                         new
                         {
                             Id = new Guid("00000000-0000-0000-0000-00000000000c"),
                             CoverUrl = "/images/presets/sticker.png",
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            DefaultParams = "{\"style\": \"sticker\", \"width\": 512, \"height\": 512}",
+                            DefaultParams = "{\"style\": \"sticker\", \"width\": 512, \"height\": 512, \"aspectRatio\": \"1:1\"}",
+                            Description = "用于创建带有指定风格的贴纸 / 图标素材，强调线条、配色与透明背景。",
                             IsDeleted = false,
                             Name = "风格化贴纸 (Stub)",
                             PriceCredits = 0,
-                            Prompt = "A kawaii chibi sticker of a [subject], clean bold outline, soft cell shading, transparent background.",
+                            Prompt = "A [style:kawaii chibi] sticker of a [subject:cat astronaut], featuring [key characteristics:round helmet, floating fish] and a [color palette:pastel neon mix]. The design should have [line style:clean bold outline] and [shading style:soft cell shading]. The background must be transparent.",
                             Provider = "Stub",
-                            Tags = "[\"sticker\",\"chibi\",\"stub\"]"
+                            Tags = "[\"sticker\",\"chibi\",\"icon\",\"stub\"]"
                         },
                         new
                         {
                             Id = new Guid("00000000-0000-0000-0000-00000000000d"),
                             CoverUrl = "/images/presets/photorealistic.png",
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            DefaultParams = "{\"aspectRatio\": \"16:9\", \"width\": 1024, \"height\": 576}",
+                            DefaultParams = "{\"style\": \"photorealistic\", \"width\": 1024, \"height\": 576, \"aspectRatio\": \"16:9\"}",
+                            Description = "对于逼真的图片，请使用摄影术语。提及拍摄角度、镜头类型、光线和细节，引导模型生成逼真的效果。",
                             IsDeleted = false,
-                            Name = "逼真摄影 (Qwen)",
+                            Name = "逼真摄影场景 (Qwen)",
                             PriceCredits = 2,
-                            Prompt = "A photorealistic close-up of [subject], set in [environment]. The scene is illuminated by [lighting description], creating a serene atmosphere. Captured with a Canon EOS R5.",
+                            Prompt = "A photorealistic [shot type:close-up] of [subject:a mystical fox], [action or expression:looking into the distance], set in [environment:ancient forest]. The scene is illuminated by [lighting description:soft golden hour rim light], creating a [mood:serene] atmosphere. Captured with a [camera/lens details:Canon EOS R5 + 85mm f1.2], emphasizing [key textures and details:detailed fur, shimmering particles]. The image should be in a [aspect ratio:16:9] format.",
                             Provider = "Qwen",
-                            Tags = "[\"photo\",\"realistic\",\"qwen\"]"
+                            Tags = "[\"photo\",\"realistic\",\"camera\",\"qwen\"]"
                         },
                         new
                         {
                             Id = new Guid("00000000-0000-0000-0000-00000000000e"),
                             CoverUrl = "/images/presets/minimal.png",
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            DefaultParams = "{\"aspectRatio\": \"3:2\", \"width\": 768, \"height\": 512}",
+                            DefaultParams = "{\"style\": \"minimalist\", \"width\": 768, \"height\": 512, \"aspectRatio\": \"3:2\"}",
+                            Description = "生成带大量留白与单主体的极简风图像，适合做背景或叠加文案。",
                             IsDeleted = false,
                             Name = "极简负空间 (Flux)",
                             PriceCredits = 1,
-                            Prompt = "A minimalist composition featuring a single [subject] positioned in the lower right. The background is a vast, empty off-white canvas, creating significant negative space.",
+                            Prompt = "A minimalist composition featuring a single [subject:solitary bonsai] positioned in the [position in frame:lower right] of the frame. The background is a vast, empty [color:off-white] canvas, creating significant negative space. Soft, subtle lighting. [Aspect ratio:3:2].",
                             Provider = "Flux",
-                            Tags = "[\"minimalist\",\"art\",\"flux\"]"
+                            Tags = "[\"minimalist\",\"art\",\"negative space\",\"flux\"]"
                         },
                         new
                         {
                             Id = new Guid("00000000-0000-0000-0000-00000000000f"),
                             CoverUrl = "/images/presets/comic.png",
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            DefaultParams = "{\"style\": \"comic\", \"width\": 512, \"height\": 768}",
+                            DefaultParams = "{\"style\": \"comic\", \"width\": 512, \"height\": 910, \"aspectRatio\": \"9:16\"}",
+                            Description = "生成漫画风单格场景，分离前景角色动作与背景设定，可含对白框。",
                             IsDeleted = false,
                             Name = "漫画单格 (Stub)",
                             PriceCredits = 0,
-                            Prompt = "A single comic book panel in a neo-noir ink wash style. In the foreground, [character description]. In the background, [setting details].",
+                            Prompt = "A single comic book panel in a [art style:neo-noir ink wash] style. In the foreground, [character description and action:detective leaning over a glowing map]. In the background, [setting details:rain streaked window + neon signs]. The panel has a [dialogue/caption box:caption] with the text \"[Text:We were already too late]\". The lighting creates a [mood:brooding] mood. [Aspect ratio:9:16].",
                             Provider = "Stub",
-                            Tags = "[\"comic\",\"noir\",\"stub\"]"
+                            Tags = "[\"comic\",\"noir\",\"storyboard\",\"stub\"]"
                         });
                 });
 
