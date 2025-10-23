@@ -1,0 +1,16 @@
+
+> image-generator@0.0.0 dev D:\__Files\lessons\_normal\新产品开发与项目管理\项目\ImageGenerator\WebUI
+> vite
+
+[33mYou are using Node.js 20.18.0. Vite requires Node.js version 20.19+ or 22.12+. Please upgrade your Node.js version.[39m
+
+  [32m[1mVITE[22m v7.1.6[39m  [2mready in [0m[1m1599[22m[2m[0m ms[22m
+
+  [32m➜[39m  [1mLocal[22m:   [36mhttp://localhost:[1m3000[22m/[39m
+[2m  [32m➜[39m  [1mNetwork[22m[2m: use [22m[1m--host[22m[2m to expose[22m
+[2m[32m  ➜[39m[22m[2m  press [22m[1mh + enter[22m[2m to show help[22m
+[2m16:30:08[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32m✨ new dependencies optimized: [33muuid, animejs[32m[39m
+[2m16:30:08[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32m✨ optimized dependencies changed. reloading[39m
+[2m17:03:14[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/conversation/PromptTemplateDialog.vue[22m
+[2m17:03:25[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/conversation/PromptTemplateDialog.vue[22m
+^C ELIFECYCLE  Command failed with exit code 3221225786.

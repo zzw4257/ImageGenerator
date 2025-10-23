@@ -1,0 +1,759 @@
+从 D:\__Files\lessons\_normal\新产品开发与项目管理\项目\ImageGenerator\ImageGenerator\Properties\launchSettings.json 使用启动设置...
+正在生成...
+warn: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware[16]
+      The WebRootPath was not found: D:\__Files\lessons\_normal\新产品开发与项目管理\项目\ImageGenerator\ImageGenerator\wwwroot. Static files may be unavailable.
+warn: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware[16]
+      The WebRootPath was not found: D:\__Files\lessons\_normal\新产品开发与项目管理\项目\ImageGenerator\ImageGenerator\wwwroot. Static files may be unavailable.
+info: Microsoft.Hosting.Lifetime[14]
+      Now listening on: http://localhost:5192
+info: Microsoft.Hosting.Lifetime[0]
+      Application started. Press Ctrl+C to shut down.
+info: Microsoft.Hosting.Lifetime[0]
+      Hosting environment: Development
+info: Microsoft.Hosting.Lifetime[0]
+      Content root path: D:\__Files\lessons\_normal\新产品开发与项目管理\项目\ImageGenerator\ImageGenerator
+warn: Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionMiddleware[3]
+      Failed to determine the https port for redirect.
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (10ms) [Parameters=[@__invitationCode_0='?' (Size = 31389)], CommandType='Text', CommandTimeout='30']
+      SELECT "i"."Id", "i"."Code", "i"."CreatedAt", "i"."IsDeleted", "i"."IssuerId", "i"."RemainingUses"
+      FROM "Invitations" AS "i"
+      WHERE NOT ("i"."IsDeleted") AND "i"."Code" = @__invitationCode_0 AND "i"."RemainingUses" > 0
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__invitationCode_0='?' (Size = 16)], CommandType='Text', CommandTimeout='30']
+      SELECT "i"."Id", "i"."Code", "i"."CreatedAt", "i"."IsDeleted", "i"."IssuerId", "i"."RemainingUses"
+      FROM "Invitations" AS "i"
+      WHERE NOT ("i"."IsDeleted") AND "i"."Code" = @__invitationCode_0 AND "i"."RemainingUses" > 0
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__invitationCode_0='?' (Size = 16)], CommandType='Text', CommandTimeout='30']
+      SELECT "i"."Id", "i"."Code", "i"."CreatedAt", "i"."IsDeleted", "i"."IssuerId", "i"."RemainingUses"
+      FROM "Invitations" AS "i"
+      WHERE NOT ("i"."IsDeleted") AND "i"."Code" = @__invitationCode_0 AND "i"."RemainingUses" > 0
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[@__invitationCode_0='?' (Size = 16)], CommandType='Text', CommandTimeout='30']
+      SELECT "i"."Id", "i"."Code", "i"."CreatedAt", "i"."IsDeleted", "i"."IssuerId", "i"."RemainingUses"
+      FROM "Invitations" AS "i"
+      WHERE NOT ("i"."IsDeleted") AND "i"."Code" = @__invitationCode_0 AND "i"."RemainingUses" > 0
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__username_0='?' (Size = 6)], CommandType='Text', CommandTimeout='30']
+      SELECT "u"."Id", "u"."CreatedAt", "u"."Credits", "u"."InvitedById", "u"."IsDeleted", "u"."LastCreditClaimedAt", "u"."Password", "u"."Salt", "u"."Username"
+      FROM "Users" AS "u"
+      WHERE NOT ("u"."IsDeleted") AND "u"."Username" = @__username_0
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[@p1='?' (DbType = Guid), @p0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      UPDATE "Invitations" SET "RemainingUses" = @p0
+      WHERE "Id" = @p1
+      RETURNING 1;
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (2ms) [Parameters=[@p0='?' (DbType = Guid), @p1='?' (DbType = DateTime), @p2='?' (DbType = Decimal), @p3='?' (DbType = Guid), @p4='?' (DbType = Boolean), @p5='?' (DbType = DateTime), @p6='?' (Size = 64), @p7='?' (Size = 36), @p8='?' (Size = 6)], CommandType='Text', CommandTimeout='30']
+      INSERT INTO "Users" ("Id", "CreatedAt", "Credits", "InvitedById", "IsDeleted", "LastCreditClaimedAt", "Password", "Salt", "Username")
+      VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8);
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (DbType = Guid)], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Conversations" AS "c"
+      WHERE NOT ("c"."IsDeleted") AND "c"."UserId" = @__userId_0
+warn: Microsoft.EntityFrameworkCore.Query[20504]
+      Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (DbType = Guid), @__p_2='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT "c0"."Id", "c0"."CreatedAt", "c0"."IsDeleted", "c0"."UpdatedAt", "c0"."UserId", "s0"."Id", "s0"."CompletedAt", "s0"."ConversationId", "s0"."CreatedAt", "s0"."GenerationParams", "s0"."GenerationType", "s0"."IsDeleted", "s0"."OutputImagesId", "s0"."Prompt", "s0"."Status", "s0"."Id0", "s0"."GenerationRecordId", "s0"."InputImagesId", "s0"."Id1", "s0"."CreatedAt0", "s0"."ImagePath", "s0"."IsDeleted0", "s0"."IsFavorite", "s0"."Size", "s0"."Type", "s0"."UserId", "s0"."CreatedAt1", "s0"."ImagePath0", "s0"."IsDeleted1", "s0"."IsFavorite0", "s0"."Size0", "s0"."Type0", "s0"."UserId0"
+      FROM (
+          SELECT "c"."Id", "c"."CreatedAt", "c"."IsDeleted", "c"."UpdatedAt", "c"."UserId"
+          FROM "Conversations" AS "c"
+          WHERE NOT ("c"."IsDeleted") AND "c"."UserId" = @__userId_0
+          ORDER BY "c"."UpdatedAt" DESC
+          LIMIT @__p_2 OFFSET @__p_1
+      ) AS "c0"
+      LEFT JOIN (
+          SELECT "g"."Id", "g"."CompletedAt", "g"."ConversationId", "g"."CreatedAt", "g"."GenerationParams", "g"."GenerationType", "g"."IsDeleted", "g"."OutputImagesId", "g"."Prompt", "g"."Status", "i0"."Id" AS "Id0", "s"."GenerationRecordId", "s"."InputImagesId", "s"."Id" AS "Id1", "s"."CreatedAt" AS "CreatedAt0", "s"."ImagePath", "s"."IsDeleted" AS "IsDeleted0", "s"."IsFavorite", "s"."Size", "s"."Type", "s"."UserId", "i0"."CreatedAt" AS "CreatedAt1", "i0"."ImagePath" AS "ImagePath0", "i0"."IsDeleted" AS "IsDeleted1", "i0"."IsFavorite" AS "IsFavorite0", "i0"."Size" AS "Size0", "i0"."Type" AS "Type0", "i0"."UserId" AS "UserId0"
+          FROM "GenerationRecords" AS "g"
+          LEFT JOIN (
+              SELECT "i"."Id", "i"."CreatedAt", "i"."ImagePath", "i"."IsDeleted", "i"."IsFavorite", "i"."Size", "i"."Type", "i"."UserId"
+              FROM "Images" AS "i"
+              WHERE NOT ("i"."IsDeleted")
+          ) AS "i0" ON "g"."OutputImagesId" = "i0"."Id"
+          LEFT JOIN (
+              SELECT "g0"."GenerationRecordId", "g0"."InputImagesId", "i2"."Id", "i2"."CreatedAt", "i2"."ImagePath", "i2"."IsDeleted", "i2"."IsFavorite", "i2"."Size", "i2"."Type", "i2"."UserId"
+              FROM "GenerationRecordImage" AS "g0"
+              INNER JOIN (
+                  SELECT "i1"."Id", "i1"."CreatedAt", "i1"."ImagePath", "i1"."IsDeleted", "i1"."IsFavorite", "i1"."Size", "i1"."Type", "i1"."UserId"
+                  FROM "Images" AS "i1"
+                  WHERE NOT ("i1"."IsDeleted")
+              ) AS "i2" ON "g0"."InputImagesId" = "i2"."Id"
+          ) AS "s" ON "g"."Id" = "s"."GenerationRecordId"
+          WHERE NOT ("g"."IsDeleted")
+      ) AS "s0" ON "c0"."Id" = "s0"."ConversationId"
+      ORDER BY "c0"."UpdatedAt" DESC, "c0"."Id", "s0"."CreatedAt" DESC, "s0"."Id", "s0"."Id0", "s0"."GenerationRecordId", "s0"."InputImagesId"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__username_0='?' (Size = 5)], CommandType='Text', CommandTimeout='30']
+      SELECT "u"."Id", "u"."CreatedAt", "u"."Credits", "u"."InvitedById", "u"."IsDeleted", "u"."LastCreditClaimedAt", "u"."Password", "u"."Salt", "u"."Username"
+      FROM "Users" AS "u"
+      WHERE NOT ("u"."IsDeleted") AND "u"."Username" = @__username_0
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (DbType = Guid)], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Conversations" AS "c"
+      WHERE NOT ("c"."IsDeleted") AND "c"."UserId" = @__userId_0
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (DbType = Guid), @__p_2='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT "c0"."Id", "c0"."CreatedAt", "c0"."IsDeleted", "c0"."UpdatedAt", "c0"."UserId", "s0"."Id", "s0"."CompletedAt", "s0"."ConversationId", "s0"."CreatedAt", "s0"."GenerationParams", "s0"."GenerationType", "s0"."IsDeleted", "s0"."OutputImagesId", "s0"."Prompt", "s0"."Status", "s0"."Id0", "s0"."GenerationRecordId", "s0"."InputImagesId", "s0"."Id1", "s0"."CreatedAt0", "s0"."ImagePath", "s0"."IsDeleted0", "s0"."IsFavorite", "s0"."Size", "s0"."Type", "s0"."UserId", "s0"."CreatedAt1", "s0"."ImagePath0", "s0"."IsDeleted1", "s0"."IsFavorite0", "s0"."Size0", "s0"."Type0", "s0"."UserId0"
+      FROM (
+          SELECT "c"."Id", "c"."CreatedAt", "c"."IsDeleted", "c"."UpdatedAt", "c"."UserId"
+          FROM "Conversations" AS "c"
+          WHERE NOT ("c"."IsDeleted") AND "c"."UserId" = @__userId_0
+          ORDER BY "c"."UpdatedAt" DESC
+          LIMIT @__p_2 OFFSET @__p_1
+      ) AS "c0"
+      LEFT JOIN (
+          SELECT "g"."Id", "g"."CompletedAt", "g"."ConversationId", "g"."CreatedAt", "g"."GenerationParams", "g"."GenerationType", "g"."IsDeleted", "g"."OutputImagesId", "g"."Prompt", "g"."Status", "i0"."Id" AS "Id0", "s"."GenerationRecordId", "s"."InputImagesId", "s"."Id" AS "Id1", "s"."CreatedAt" AS "CreatedAt0", "s"."ImagePath", "s"."IsDeleted" AS "IsDeleted0", "s"."IsFavorite", "s"."Size", "s"."Type", "s"."UserId", "i0"."CreatedAt" AS "CreatedAt1", "i0"."ImagePath" AS "ImagePath0", "i0"."IsDeleted" AS "IsDeleted1", "i0"."IsFavorite" AS "IsFavorite0", "i0"."Size" AS "Size0", "i0"."Type" AS "Type0", "i0"."UserId" AS "UserId0"
+          FROM "GenerationRecords" AS "g"
+          LEFT JOIN (
+              SELECT "i"."Id", "i"."CreatedAt", "i"."ImagePath", "i"."IsDeleted", "i"."IsFavorite", "i"."Size", "i"."Type", "i"."UserId"
+              FROM "Images" AS "i"
+              WHERE NOT ("i"."IsDeleted")
+          ) AS "i0" ON "g"."OutputImagesId" = "i0"."Id"
+          LEFT JOIN (
+              SELECT "g0"."GenerationRecordId", "g0"."InputImagesId", "i2"."Id", "i2"."CreatedAt", "i2"."ImagePath", "i2"."IsDeleted", "i2"."IsFavorite", "i2"."Size", "i2"."Type", "i2"."UserId"
+              FROM "GenerationRecordImage" AS "g0"
+              INNER JOIN (
+                  SELECT "i1"."Id", "i1"."CreatedAt", "i1"."ImagePath", "i1"."IsDeleted", "i1"."IsFavorite", "i1"."Size", "i1"."Type", "i1"."UserId"
+                  FROM "Images" AS "i1"
+                  WHERE NOT ("i1"."IsDeleted")
+              ) AS "i2" ON "g0"."InputImagesId" = "i2"."Id"
+          ) AS "s" ON "g"."Id" = "s"."GenerationRecordId"
+          WHERE NOT ("g"."IsDeleted")
+      ) AS "s0" ON "c0"."Id" = "s0"."ConversationId"
+      ORDER BY "c0"."UpdatedAt" DESC, "c0"."Id", "s0"."CreatedAt" DESC, "s0"."Id", "s0"."Id0", "s0"."GenerationRecordId", "s0"."InputImagesId"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (DbType = Guid)], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Conversations" AS "c"
+      WHERE NOT ("c"."IsDeleted") AND "c"."UserId" = @__userId_0
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[@__userId_0='?' (DbType = Guid), @__p_2='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT "c0"."Id", "c0"."CreatedAt", "c0"."IsDeleted", "c0"."UpdatedAt", "c0"."UserId", "s0"."Id", "s0"."CompletedAt", "s0"."ConversationId", "s0"."CreatedAt", "s0"."GenerationParams", "s0"."GenerationType", "s0"."IsDeleted", "s0"."OutputImagesId", "s0"."Prompt", "s0"."Status", "s0"."Id0", "s0"."GenerationRecordId", "s0"."InputImagesId", "s0"."Id1", "s0"."CreatedAt0", "s0"."ImagePath", "s0"."IsDeleted0", "s0"."IsFavorite", "s0"."Size", "s0"."Type", "s0"."UserId", "s0"."CreatedAt1", "s0"."ImagePath0", "s0"."IsDeleted1", "s0"."IsFavorite0", "s0"."Size0", "s0"."Type0", "s0"."UserId0"
+      FROM (
+          SELECT "c"."Id", "c"."CreatedAt", "c"."IsDeleted", "c"."UpdatedAt", "c"."UserId"
+          FROM "Conversations" AS "c"
+          WHERE NOT ("c"."IsDeleted") AND "c"."UserId" = @__userId_0
+          ORDER BY "c"."UpdatedAt" DESC
+          LIMIT @__p_2 OFFSET @__p_1
+      ) AS "c0"
+      LEFT JOIN (
+          SELECT "g"."Id", "g"."CompletedAt", "g"."ConversationId", "g"."CreatedAt", "g"."GenerationParams", "g"."GenerationType", "g"."IsDeleted", "g"."OutputImagesId", "g"."Prompt", "g"."Status", "i0"."Id" AS "Id0", "s"."GenerationRecordId", "s"."InputImagesId", "s"."Id" AS "Id1", "s"."CreatedAt" AS "CreatedAt0", "s"."ImagePath", "s"."IsDeleted" AS "IsDeleted0", "s"."IsFavorite", "s"."Size", "s"."Type", "s"."UserId", "i0"."CreatedAt" AS "CreatedAt1", "i0"."ImagePath" AS "ImagePath0", "i0"."IsDeleted" AS "IsDeleted1", "i0"."IsFavorite" AS "IsFavorite0", "i0"."Size" AS "Size0", "i0"."Type" AS "Type0", "i0"."UserId" AS "UserId0"
+          FROM "GenerationRecords" AS "g"
+          LEFT JOIN (
+              SELECT "i"."Id", "i"."CreatedAt", "i"."ImagePath", "i"."IsDeleted", "i"."IsFavorite", "i"."Size", "i"."Type", "i"."UserId"
+              FROM "Images" AS "i"
+              WHERE NOT ("i"."IsDeleted")
+          ) AS "i0" ON "g"."OutputImagesId" = "i0"."Id"
+          LEFT JOIN (
+              SELECT "g0"."GenerationRecordId", "g0"."InputImagesId", "i2"."Id", "i2"."CreatedAt", "i2"."ImagePath", "i2"."IsDeleted", "i2"."IsFavorite", "i2"."Size", "i2"."Type", "i2"."UserId"
+              FROM "GenerationRecordImage" AS "g0"
+              INNER JOIN (
+                  SELECT "i1"."Id", "i1"."CreatedAt", "i1"."ImagePath", "i1"."IsDeleted", "i1"."IsFavorite", "i1"."Size", "i1"."Type", "i1"."UserId"
+                  FROM "Images" AS "i1"
+                  WHERE NOT ("i1"."IsDeleted")
+              ) AS "i2" ON "g0"."InputImagesId" = "i2"."Id"
+          ) AS "s" ON "g"."Id" = "s"."GenerationRecordId"
+          WHERE NOT ("g"."IsDeleted")
+      ) AS "s0" ON "c0"."Id" = "s0"."ConversationId"
+      ORDER BY "c0"."UpdatedAt" DESC, "c0"."Id", "s0"."CreatedAt" DESC, "s0"."Id", "s0"."Id0", "s0"."GenerationRecordId", "s0"."InputImagesId"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (DbType = Guid)], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Conversations" AS "c"
+      WHERE NOT ("c"."IsDeleted") AND "c"."UserId" = @__userId_0
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (DbType = Guid), @__p_2='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT "c0"."Id", "c0"."CreatedAt", "c0"."IsDeleted", "c0"."UpdatedAt", "c0"."UserId", "s0"."Id", "s0"."CompletedAt", "s0"."ConversationId", "s0"."CreatedAt", "s0"."GenerationParams", "s0"."GenerationType", "s0"."IsDeleted", "s0"."OutputImagesId", "s0"."Prompt", "s0"."Status", "s0"."Id0", "s0"."GenerationRecordId", "s0"."InputImagesId", "s0"."Id1", "s0"."CreatedAt0", "s0"."ImagePath", "s0"."IsDeleted0", "s0"."IsFavorite", "s0"."Size", "s0"."Type", "s0"."UserId", "s0"."CreatedAt1", "s0"."ImagePath0", "s0"."IsDeleted1", "s0"."IsFavorite0", "s0"."Size0", "s0"."Type0", "s0"."UserId0"
+      FROM (
+          SELECT "c"."Id", "c"."CreatedAt", "c"."IsDeleted", "c"."UpdatedAt", "c"."UserId"
+          FROM "Conversations" AS "c"
+          WHERE NOT ("c"."IsDeleted") AND "c"."UserId" = @__userId_0
+          ORDER BY "c"."UpdatedAt" DESC
+          LIMIT @__p_2 OFFSET @__p_1
+      ) AS "c0"
+      LEFT JOIN (
+          SELECT "g"."Id", "g"."CompletedAt", "g"."ConversationId", "g"."CreatedAt", "g"."GenerationParams", "g"."GenerationType", "g"."IsDeleted", "g"."OutputImagesId", "g"."Prompt", "g"."Status", "i0"."Id" AS "Id0", "s"."GenerationRecordId", "s"."InputImagesId", "s"."Id" AS "Id1", "s"."CreatedAt" AS "CreatedAt0", "s"."ImagePath", "s"."IsDeleted" AS "IsDeleted0", "s"."IsFavorite", "s"."Size", "s"."Type", "s"."UserId", "i0"."CreatedAt" AS "CreatedAt1", "i0"."ImagePath" AS "ImagePath0", "i0"."IsDeleted" AS "IsDeleted1", "i0"."IsFavorite" AS "IsFavorite0", "i0"."Size" AS "Size0", "i0"."Type" AS "Type0", "i0"."UserId" AS "UserId0"
+          FROM "GenerationRecords" AS "g"
+          LEFT JOIN (
+              SELECT "i"."Id", "i"."CreatedAt", "i"."ImagePath", "i"."IsDeleted", "i"."IsFavorite", "i"."Size", "i"."Type", "i"."UserId"
+              FROM "Images" AS "i"
+              WHERE NOT ("i"."IsDeleted")
+          ) AS "i0" ON "g"."OutputImagesId" = "i0"."Id"
+          LEFT JOIN (
+              SELECT "g0"."GenerationRecordId", "g0"."InputImagesId", "i2"."Id", "i2"."CreatedAt", "i2"."ImagePath", "i2"."IsDeleted", "i2"."IsFavorite", "i2"."Size", "i2"."Type", "i2"."UserId"
+              FROM "GenerationRecordImage" AS "g0"
+              INNER JOIN (
+                  SELECT "i1"."Id", "i1"."CreatedAt", "i1"."ImagePath", "i1"."IsDeleted", "i1"."IsFavorite", "i1"."Size", "i1"."Type", "i1"."UserId"
+                  FROM "Images" AS "i1"
+                  WHERE NOT ("i1"."IsDeleted")
+              ) AS "i2" ON "g0"."InputImagesId" = "i2"."Id"
+          ) AS "s" ON "g"."Id" = "s"."GenerationRecordId"
+          WHERE NOT ("g"."IsDeleted")
+      ) AS "s0" ON "c0"."Id" = "s0"."ConversationId"
+      ORDER BY "c0"."UpdatedAt" DESC, "c0"."Id", "s0"."CreatedAt" DESC, "s0"."Id", "s0"."Id0", "s0"."GenerationRecordId", "s0"."InputImagesId"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (DbType = Guid)], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Images" AS "i"
+      WHERE NOT ("i"."IsDeleted") AND "i"."UserId" = @__userId_0 AND "i"."Type" = 0 AND NOT ("i"."IsDeleted")
+warn: Microsoft.EntityFrameworkCore.Query[20504]
+      Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (DbType = Guid), @__p_2='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT "i"."Id", "i"."CreatedAt", "i"."ImagePath", "i"."IsDeleted", "i"."IsFavorite", "i"."Size", "i"."Type", "i"."UserId"
+      FROM "Images" AS "i"
+      WHERE NOT ("i"."IsDeleted") AND "i"."UserId" = @__userId_0 AND "i"."Type" = 0 AND NOT ("i"."IsDeleted")
+      ORDER BY "i"."CreatedAt" DESC
+      LIMIT @__p_2 OFFSET @__p_1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__conversationId_0='?' (DbType = Guid), @__userId_1='?' (DbType = Guid)], CommandType='Text', CommandTimeout='30']
+      SELECT "c0"."Id", "c0"."CreatedAt", "c0"."IsDeleted", "c0"."UpdatedAt", "c0"."UserId", "s0"."Id", "s0"."CompletedAt", "s0"."ConversationId", "s0"."CreatedAt", "s0"."GenerationParams", "s0"."GenerationType", "s0"."IsDeleted", "s0"."OutputImagesId", "s0"."Prompt", "s0"."Status", "s0"."Id0", "s0"."GenerationRecordId", "s0"."InputImagesId", "s0"."Id1", "s0"."CreatedAt0", "s0"."ImagePath", "s0"."IsDeleted0", "s0"."IsFavorite", "s0"."Size", "s0"."Type", "s0"."UserId", "s0"."CreatedAt1", "s0"."ImagePath0", "s0"."IsDeleted1", "s0"."IsFavorite0", "s0"."Size0", "s0"."Type0", "s0"."UserId0"
+      FROM (
+          SELECT "c"."Id", "c"."CreatedAt", "c"."IsDeleted", "c"."UpdatedAt", "c"."UserId"
+          FROM "Conversations" AS "c"
+          WHERE NOT ("c"."IsDeleted") AND "c"."Id" = @__conversationId_0 AND "c"."UserId" = @__userId_1
+          LIMIT 1
+      ) AS "c0"
+      LEFT JOIN (
+          SELECT "g"."Id", "g"."CompletedAt", "g"."ConversationId", "g"."CreatedAt", "g"."GenerationParams", "g"."GenerationType", "g"."IsDeleted", "g"."OutputImagesId", "g"."Prompt", "g"."Status", "i0"."Id" AS "Id0", "s"."GenerationRecordId", "s"."InputImagesId", "s"."Id" AS "Id1", "s"."CreatedAt" AS "CreatedAt0", "s"."ImagePath", "s"."IsDeleted" AS "IsDeleted0", "s"."IsFavorite", "s"."Size", "s"."Type", "s"."UserId", "i0"."CreatedAt" AS "CreatedAt1", "i0"."ImagePath" AS "ImagePath0", "i0"."IsDeleted" AS "IsDeleted1", "i0"."IsFavorite" AS "IsFavorite0", "i0"."Size" AS "Size0", "i0"."Type" AS "Type0", "i0"."UserId" AS "UserId0"
+          FROM "GenerationRecords" AS "g"
+          LEFT JOIN (
+              SELECT "i"."Id", "i"."CreatedAt", "i"."ImagePath", "i"."IsDeleted", "i"."IsFavorite", "i"."Size", "i"."Type", "i"."UserId"
+              FROM "Images" AS "i"
+              WHERE NOT ("i"."IsDeleted")
+          ) AS "i0" ON "g"."OutputImagesId" = "i0"."Id"
+          LEFT JOIN (
+              SELECT "g0"."GenerationRecordId", "g0"."InputImagesId", "i2"."Id", "i2"."CreatedAt", "i2"."ImagePath", "i2"."IsDeleted", "i2"."IsFavorite", "i2"."Size", "i2"."Type", "i2"."UserId"
+              FROM "GenerationRecordImage" AS "g0"
+              INNER JOIN (
+                  SELECT "i1"."Id", "i1"."CreatedAt", "i1"."ImagePath", "i1"."IsDeleted", "i1"."IsFavorite", "i1"."Size", "i1"."Type", "i1"."UserId"
+                  FROM "Images" AS "i1"
+                  WHERE NOT ("i1"."IsDeleted")
+              ) AS "i2" ON "g0"."InputImagesId" = "i2"."Id"
+          ) AS "s" ON "g"."Id" = "s"."GenerationRecordId"
+          WHERE NOT ("g"."IsDeleted")
+      ) AS "s0" ON "c0"."Id" = "s0"."ConversationId"
+      ORDER BY "c0"."Id", "s0"."CreatedAt", "s0"."Id", "s0"."Id0", "s0"."GenerationRecordId", "s0"."InputImagesId"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (DbType = Guid)], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Conversations" AS "c"
+      WHERE NOT ("c"."IsDeleted") AND "c"."UserId" = @__userId_0
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[@__userId_0='?' (DbType = Guid), @__p_2='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT "c0"."Id", "c0"."CreatedAt", "c0"."IsDeleted", "c0"."UpdatedAt", "c0"."UserId", "s0"."Id", "s0"."CompletedAt", "s0"."ConversationId", "s0"."CreatedAt", "s0"."GenerationParams", "s0"."GenerationType", "s0"."IsDeleted", "s0"."OutputImagesId", "s0"."Prompt", "s0"."Status", "s0"."Id0", "s0"."GenerationRecordId", "s0"."InputImagesId", "s0"."Id1", "s0"."CreatedAt0", "s0"."ImagePath", "s0"."IsDeleted0", "s0"."IsFavorite", "s0"."Size", "s0"."Type", "s0"."UserId", "s0"."CreatedAt1", "s0"."ImagePath0", "s0"."IsDeleted1", "s0"."IsFavorite0", "s0"."Size0", "s0"."Type0", "s0"."UserId0"
+      FROM (
+          SELECT "c"."Id", "c"."CreatedAt", "c"."IsDeleted", "c"."UpdatedAt", "c"."UserId"
+          FROM "Conversations" AS "c"
+          WHERE NOT ("c"."IsDeleted") AND "c"."UserId" = @__userId_0
+          ORDER BY "c"."UpdatedAt" DESC
+          LIMIT @__p_2 OFFSET @__p_1
+      ) AS "c0"
+      LEFT JOIN (
+          SELECT "g"."Id", "g"."CompletedAt", "g"."ConversationId", "g"."CreatedAt", "g"."GenerationParams", "g"."GenerationType", "g"."IsDeleted", "g"."OutputImagesId", "g"."Prompt", "g"."Status", "i0"."Id" AS "Id0", "s"."GenerationRecordId", "s"."InputImagesId", "s"."Id" AS "Id1", "s"."CreatedAt" AS "CreatedAt0", "s"."ImagePath", "s"."IsDeleted" AS "IsDeleted0", "s"."IsFavorite", "s"."Size", "s"."Type", "s"."UserId", "i0"."CreatedAt" AS "CreatedAt1", "i0"."ImagePath" AS "ImagePath0", "i0"."IsDeleted" AS "IsDeleted1", "i0"."IsFavorite" AS "IsFavorite0", "i0"."Size" AS "Size0", "i0"."Type" AS "Type0", "i0"."UserId" AS "UserId0"
+          FROM "GenerationRecords" AS "g"
+          LEFT JOIN (
+              SELECT "i"."Id", "i"."CreatedAt", "i"."ImagePath", "i"."IsDeleted", "i"."IsFavorite", "i"."Size", "i"."Type", "i"."UserId"
+              FROM "Images" AS "i"
+              WHERE NOT ("i"."IsDeleted")
+          ) AS "i0" ON "g"."OutputImagesId" = "i0"."Id"
+          LEFT JOIN (
+              SELECT "g0"."GenerationRecordId", "g0"."InputImagesId", "i2"."Id", "i2"."CreatedAt", "i2"."ImagePath", "i2"."IsDeleted", "i2"."IsFavorite", "i2"."Size", "i2"."Type", "i2"."UserId"
+              FROM "GenerationRecordImage" AS "g0"
+              INNER JOIN (
+                  SELECT "i1"."Id", "i1"."CreatedAt", "i1"."ImagePath", "i1"."IsDeleted", "i1"."IsFavorite", "i1"."Size", "i1"."Type", "i1"."UserId"
+                  FROM "Images" AS "i1"
+                  WHERE NOT ("i1"."IsDeleted")
+              ) AS "i2" ON "g0"."InputImagesId" = "i2"."Id"
+          ) AS "s" ON "g"."Id" = "s"."GenerationRecordId"
+          WHERE NOT ("g"."IsDeleted")
+      ) AS "s0" ON "c0"."Id" = "s0"."ConversationId"
+      ORDER BY "c0"."UpdatedAt" DESC, "c0"."Id", "s0"."CreatedAt" DESC, "s0"."Id", "s0"."Id0", "s0"."GenerationRecordId", "s0"."InputImagesId"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (DbType = Guid)], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Images" AS "i"
+      WHERE NOT ("i"."IsDeleted") AND "i"."UserId" = @__userId_0 AND "i"."IsFavorite" AND NOT ("i"."IsDeleted")
+warn: Microsoft.EntityFrameworkCore.Query[10102]
+      The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+warn: Microsoft.EntityFrameworkCore.Query[10102]
+      The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (DbType = Guid), @__p_2='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT "i"."Id", "i"."CreatedAt", "i"."ImagePath", "i"."IsDeleted", "i"."IsFavorite", "i"."Size", "i"."Type", "i"."UserId"
+      FROM "Images" AS "i"
+      WHERE NOT ("i"."IsDeleted") AND "i"."UserId" = @__userId_0 AND "i"."IsFavorite" AND NOT ("i"."IsDeleted")
+      LIMIT @__p_2 OFFSET @__p_1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (DbType = Guid)], CommandType='Text', CommandTimeout='30']
+      SELECT "i"."Id", "i"."Code", "i"."CreatedAt", "i"."IsDeleted", "i"."IssuerId", "i"."RemainingUses"
+      FROM "Invitations" AS "i"
+      WHERE NOT ("i"."IsDeleted") AND "i"."IssuerId" = @__userId_0
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (DbType = Guid)], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Images" AS "i"
+      WHERE NOT ("i"."IsDeleted") AND "i"."UserId" = @__userId_0 AND "i"."IsFavorite" AND NOT ("i"."IsDeleted")
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (DbType = Guid), @__p_2='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT "i"."Id", "i"."CreatedAt", "i"."ImagePath", "i"."IsDeleted", "i"."IsFavorite", "i"."Size", "i"."Type", "i"."UserId"
+      FROM "Images" AS "i"
+      WHERE NOT ("i"."IsDeleted") AND "i"."UserId" = @__userId_0 AND "i"."IsFavorite" AND NOT ("i"."IsDeleted")
+      LIMIT @__p_2 OFFSET @__p_1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (3ms) [Parameters=[@__userId_0='?' (DbType = Guid)], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Conversations" AS "c"
+      WHERE NOT ("c"."IsDeleted") AND "c"."UserId" = @__userId_0
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[@__userId_0='?' (DbType = Guid), @__p_2='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT "c0"."Id", "c0"."CreatedAt", "c0"."IsDeleted", "c0"."UpdatedAt", "c0"."UserId", "s0"."Id", "s0"."CompletedAt", "s0"."ConversationId", "s0"."CreatedAt", "s0"."GenerationParams", "s0"."GenerationType", "s0"."IsDeleted", "s0"."OutputImagesId", "s0"."Prompt", "s0"."Status", "s0"."Id0", "s0"."GenerationRecordId", "s0"."InputImagesId", "s0"."Id1", "s0"."CreatedAt0", "s0"."ImagePath", "s0"."IsDeleted0", "s0"."IsFavorite", "s0"."Size", "s0"."Type", "s0"."UserId", "s0"."CreatedAt1", "s0"."ImagePath0", "s0"."IsDeleted1", "s0"."IsFavorite0", "s0"."Size0", "s0"."Type0", "s0"."UserId0"
+      FROM (
+          SELECT "c"."Id", "c"."CreatedAt", "c"."IsDeleted", "c"."UpdatedAt", "c"."UserId"
+          FROM "Conversations" AS "c"
+          WHERE NOT ("c"."IsDeleted") AND "c"."UserId" = @__userId_0
+          ORDER BY "c"."UpdatedAt" DESC
+          LIMIT @__p_2 OFFSET @__p_1
+      ) AS "c0"
+      LEFT JOIN (
+          SELECT "g"."Id", "g"."CompletedAt", "g"."ConversationId", "g"."CreatedAt", "g"."GenerationParams", "g"."GenerationType", "g"."IsDeleted", "g"."OutputImagesId", "g"."Prompt", "g"."Status", "i0"."Id" AS "Id0", "s"."GenerationRecordId", "s"."InputImagesId", "s"."Id" AS "Id1", "s"."CreatedAt" AS "CreatedAt0", "s"."ImagePath", "s"."IsDeleted" AS "IsDeleted0", "s"."IsFavorite", "s"."Size", "s"."Type", "s"."UserId", "i0"."CreatedAt" AS "CreatedAt1", "i0"."ImagePath" AS "ImagePath0", "i0"."IsDeleted" AS "IsDeleted1", "i0"."IsFavorite" AS "IsFavorite0", "i0"."Size" AS "Size0", "i0"."Type" AS "Type0", "i0"."UserId" AS "UserId0"
+          FROM "GenerationRecords" AS "g"
+          LEFT JOIN (
+              SELECT "i"."Id", "i"."CreatedAt", "i"."ImagePath", "i"."IsDeleted", "i"."IsFavorite", "i"."Size", "i"."Type", "i"."UserId"
+              FROM "Images" AS "i"
+              WHERE NOT ("i"."IsDeleted")
+          ) AS "i0" ON "g"."OutputImagesId" = "i0"."Id"
+          LEFT JOIN (
+              SELECT "g0"."GenerationRecordId", "g0"."InputImagesId", "i2"."Id", "i2"."CreatedAt", "i2"."ImagePath", "i2"."IsDeleted", "i2"."IsFavorite", "i2"."Size", "i2"."Type", "i2"."UserId"
+              FROM "GenerationRecordImage" AS "g0"
+              INNER JOIN (
+                  SELECT "i1"."Id", "i1"."CreatedAt", "i1"."ImagePath", "i1"."IsDeleted", "i1"."IsFavorite", "i1"."Size", "i1"."Type", "i1"."UserId"
+                  FROM "Images" AS "i1"
+                  WHERE NOT ("i1"."IsDeleted")
+              ) AS "i2" ON "g0"."InputImagesId" = "i2"."Id"
+          ) AS "s" ON "g"."Id" = "s"."GenerationRecordId"
+          WHERE NOT ("g"."IsDeleted")
+      ) AS "s0" ON "c0"."Id" = "s0"."ConversationId"
+      ORDER BY "c0"."UpdatedAt" DESC, "c0"."Id", "s0"."CreatedAt" DESC, "s0"."Id", "s0"."Id0", "s0"."GenerationRecordId", "s0"."InputImagesId"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (DbType = Guid)], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Images" AS "i"
+      WHERE NOT ("i"."IsDeleted") AND "i"."UserId" = @__userId_0 AND "i"."IsFavorite" AND NOT ("i"."IsDeleted")
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (DbType = Guid), @__p_2='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT "i"."Id", "i"."CreatedAt", "i"."ImagePath", "i"."IsDeleted", "i"."IsFavorite", "i"."Size", "i"."Type", "i"."UserId"
+      FROM "Images" AS "i"
+      WHERE NOT ("i"."IsDeleted") AND "i"."UserId" = @__userId_0 AND "i"."IsFavorite" AND NOT ("i"."IsDeleted")
+      LIMIT @__p_2 OFFSET @__p_1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (DbType = Guid)], CommandType='Text', CommandTimeout='30']
+      SELECT "i"."Id", "i"."Code", "i"."CreatedAt", "i"."IsDeleted", "i"."IssuerId", "i"."RemainingUses"
+      FROM "Invitations" AS "i"
+      WHERE NOT ("i"."IsDeleted") AND "i"."IssuerId" = @__userId_0
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (DbType = Guid)], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Conversations" AS "c"
+      WHERE NOT ("c"."IsDeleted") AND "c"."UserId" = @__userId_0
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[@__userId_0='?' (DbType = Guid), @__p_2='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT "c0"."Id", "c0"."CreatedAt", "c0"."IsDeleted", "c0"."UpdatedAt", "c0"."UserId", "s0"."Id", "s0"."CompletedAt", "s0"."ConversationId", "s0"."CreatedAt", "s0"."GenerationParams", "s0"."GenerationType", "s0"."IsDeleted", "s0"."OutputImagesId", "s0"."Prompt", "s0"."Status", "s0"."Id0", "s0"."GenerationRecordId", "s0"."InputImagesId", "s0"."Id1", "s0"."CreatedAt0", "s0"."ImagePath", "s0"."IsDeleted0", "s0"."IsFavorite", "s0"."Size", "s0"."Type", "s0"."UserId", "s0"."CreatedAt1", "s0"."ImagePath0", "s0"."IsDeleted1", "s0"."IsFavorite0", "s0"."Size0", "s0"."Type0", "s0"."UserId0"
+      FROM (
+          SELECT "c"."Id", "c"."CreatedAt", "c"."IsDeleted", "c"."UpdatedAt", "c"."UserId"
+          FROM "Conversations" AS "c"
+          WHERE NOT ("c"."IsDeleted") AND "c"."UserId" = @__userId_0
+          ORDER BY "c"."UpdatedAt" DESC
+          LIMIT @__p_2 OFFSET @__p_1
+      ) AS "c0"
+      LEFT JOIN (
+          SELECT "g"."Id", "g"."CompletedAt", "g"."ConversationId", "g"."CreatedAt", "g"."GenerationParams", "g"."GenerationType", "g"."IsDeleted", "g"."OutputImagesId", "g"."Prompt", "g"."Status", "i0"."Id" AS "Id0", "s"."GenerationRecordId", "s"."InputImagesId", "s"."Id" AS "Id1", "s"."CreatedAt" AS "CreatedAt0", "s"."ImagePath", "s"."IsDeleted" AS "IsDeleted0", "s"."IsFavorite", "s"."Size", "s"."Type", "s"."UserId", "i0"."CreatedAt" AS "CreatedAt1", "i0"."ImagePath" AS "ImagePath0", "i0"."IsDeleted" AS "IsDeleted1", "i0"."IsFavorite" AS "IsFavorite0", "i0"."Size" AS "Size0", "i0"."Type" AS "Type0", "i0"."UserId" AS "UserId0"
+          FROM "GenerationRecords" AS "g"
+          LEFT JOIN (
+              SELECT "i"."Id", "i"."CreatedAt", "i"."ImagePath", "i"."IsDeleted", "i"."IsFavorite", "i"."Size", "i"."Type", "i"."UserId"
+              FROM "Images" AS "i"
+              WHERE NOT ("i"."IsDeleted")
+          ) AS "i0" ON "g"."OutputImagesId" = "i0"."Id"
+          LEFT JOIN (
+              SELECT "g0"."GenerationRecordId", "g0"."InputImagesId", "i2"."Id", "i2"."CreatedAt", "i2"."ImagePath", "i2"."IsDeleted", "i2"."IsFavorite", "i2"."Size", "i2"."Type", "i2"."UserId"
+              FROM "GenerationRecordImage" AS "g0"
+              INNER JOIN (
+                  SELECT "i1"."Id", "i1"."CreatedAt", "i1"."ImagePath", "i1"."IsDeleted", "i1"."IsFavorite", "i1"."Size", "i1"."Type", "i1"."UserId"
+                  FROM "Images" AS "i1"
+                  WHERE NOT ("i1"."IsDeleted")
+              ) AS "i2" ON "g0"."InputImagesId" = "i2"."Id"
+          ) AS "s" ON "g"."Id" = "s"."GenerationRecordId"
+          WHERE NOT ("g"."IsDeleted")
+      ) AS "s0" ON "c0"."Id" = "s0"."ConversationId"
+      ORDER BY "c0"."UpdatedAt" DESC, "c0"."Id", "s0"."CreatedAt" DESC, "s0"."Id", "s0"."Id0", "s0"."GenerationRecordId", "s0"."InputImagesId"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (DbType = Guid)], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Conversations" AS "c"
+      WHERE NOT ("c"."IsDeleted") AND "c"."UserId" = @__userId_0
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[@__userId_0='?' (DbType = Guid), @__p_2='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT "c0"."Id", "c0"."CreatedAt", "c0"."IsDeleted", "c0"."UpdatedAt", "c0"."UserId", "s0"."Id", "s0"."CompletedAt", "s0"."ConversationId", "s0"."CreatedAt", "s0"."GenerationParams", "s0"."GenerationType", "s0"."IsDeleted", "s0"."OutputImagesId", "s0"."Prompt", "s0"."Status", "s0"."Id0", "s0"."GenerationRecordId", "s0"."InputImagesId", "s0"."Id1", "s0"."CreatedAt0", "s0"."ImagePath", "s0"."IsDeleted0", "s0"."IsFavorite", "s0"."Size", "s0"."Type", "s0"."UserId", "s0"."CreatedAt1", "s0"."ImagePath0", "s0"."IsDeleted1", "s0"."IsFavorite0", "s0"."Size0", "s0"."Type0", "s0"."UserId0"
+      FROM (
+          SELECT "c"."Id", "c"."CreatedAt", "c"."IsDeleted", "c"."UpdatedAt", "c"."UserId"
+          FROM "Conversations" AS "c"
+          WHERE NOT ("c"."IsDeleted") AND "c"."UserId" = @__userId_0
+          ORDER BY "c"."UpdatedAt" DESC
+          LIMIT @__p_2 OFFSET @__p_1
+      ) AS "c0"
+      LEFT JOIN (
+          SELECT "g"."Id", "g"."CompletedAt", "g"."ConversationId", "g"."CreatedAt", "g"."GenerationParams", "g"."GenerationType", "g"."IsDeleted", "g"."OutputImagesId", "g"."Prompt", "g"."Status", "i0"."Id" AS "Id0", "s"."GenerationRecordId", "s"."InputImagesId", "s"."Id" AS "Id1", "s"."CreatedAt" AS "CreatedAt0", "s"."ImagePath", "s"."IsDeleted" AS "IsDeleted0", "s"."IsFavorite", "s"."Size", "s"."Type", "s"."UserId", "i0"."CreatedAt" AS "CreatedAt1", "i0"."ImagePath" AS "ImagePath0", "i0"."IsDeleted" AS "IsDeleted1", "i0"."IsFavorite" AS "IsFavorite0", "i0"."Size" AS "Size0", "i0"."Type" AS "Type0", "i0"."UserId" AS "UserId0"
+          FROM "GenerationRecords" AS "g"
+          LEFT JOIN (
+              SELECT "i"."Id", "i"."CreatedAt", "i"."ImagePath", "i"."IsDeleted", "i"."IsFavorite", "i"."Size", "i"."Type", "i"."UserId"
+              FROM "Images" AS "i"
+              WHERE NOT ("i"."IsDeleted")
+          ) AS "i0" ON "g"."OutputImagesId" = "i0"."Id"
+          LEFT JOIN (
+              SELECT "g0"."GenerationRecordId", "g0"."InputImagesId", "i2"."Id", "i2"."CreatedAt", "i2"."ImagePath", "i2"."IsDeleted", "i2"."IsFavorite", "i2"."Size", "i2"."Type", "i2"."UserId"
+              FROM "GenerationRecordImage" AS "g0"
+              INNER JOIN (
+                  SELECT "i1"."Id", "i1"."CreatedAt", "i1"."ImagePath", "i1"."IsDeleted", "i1"."IsFavorite", "i1"."Size", "i1"."Type", "i1"."UserId"
+                  FROM "Images" AS "i1"
+                  WHERE NOT ("i1"."IsDeleted")
+              ) AS "i2" ON "g0"."InputImagesId" = "i2"."Id"
+          ) AS "s" ON "g"."Id" = "s"."GenerationRecordId"
+          WHERE NOT ("g"."IsDeleted")
+      ) AS "s0" ON "c0"."Id" = "s0"."ConversationId"
+      ORDER BY "c0"."UpdatedAt" DESC, "c0"."Id", "s0"."CreatedAt" DESC, "s0"."Id", "s0"."Id0", "s0"."GenerationRecordId", "s0"."InputImagesId"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (DbType = Guid)], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Images" AS "i"
+      WHERE NOT ("i"."IsDeleted") AND "i"."UserId" = @__userId_0 AND "i"."IsFavorite" AND NOT ("i"."IsDeleted")
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (DbType = Guid), @__p_2='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT "i"."Id", "i"."CreatedAt", "i"."ImagePath", "i"."IsDeleted", "i"."IsFavorite", "i"."Size", "i"."Type", "i"."UserId"
+      FROM "Images" AS "i"
+      WHERE NOT ("i"."IsDeleted") AND "i"."UserId" = @__userId_0 AND "i"."IsFavorite" AND NOT ("i"."IsDeleted")
+      LIMIT @__p_2 OFFSET @__p_1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (DbType = Guid)], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Conversations" AS "c"
+      WHERE NOT ("c"."IsDeleted") AND "c"."UserId" = @__userId_0
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[@__userId_0='?' (DbType = Guid), @__p_2='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT "c0"."Id", "c0"."CreatedAt", "c0"."IsDeleted", "c0"."UpdatedAt", "c0"."UserId", "s0"."Id", "s0"."CompletedAt", "s0"."ConversationId", "s0"."CreatedAt", "s0"."GenerationParams", "s0"."GenerationType", "s0"."IsDeleted", "s0"."OutputImagesId", "s0"."Prompt", "s0"."Status", "s0"."Id0", "s0"."GenerationRecordId", "s0"."InputImagesId", "s0"."Id1", "s0"."CreatedAt0", "s0"."ImagePath", "s0"."IsDeleted0", "s0"."IsFavorite", "s0"."Size", "s0"."Type", "s0"."UserId", "s0"."CreatedAt1", "s0"."ImagePath0", "s0"."IsDeleted1", "s0"."IsFavorite0", "s0"."Size0", "s0"."Type0", "s0"."UserId0"
+      FROM (
+          SELECT "c"."Id", "c"."CreatedAt", "c"."IsDeleted", "c"."UpdatedAt", "c"."UserId"
+          FROM "Conversations" AS "c"
+          WHERE NOT ("c"."IsDeleted") AND "c"."UserId" = @__userId_0
+          ORDER BY "c"."UpdatedAt" DESC
+          LIMIT @__p_2 OFFSET @__p_1
+      ) AS "c0"
+      LEFT JOIN (
+          SELECT "g"."Id", "g"."CompletedAt", "g"."ConversationId", "g"."CreatedAt", "g"."GenerationParams", "g"."GenerationType", "g"."IsDeleted", "g"."OutputImagesId", "g"."Prompt", "g"."Status", "i0"."Id" AS "Id0", "s"."GenerationRecordId", "s"."InputImagesId", "s"."Id" AS "Id1", "s"."CreatedAt" AS "CreatedAt0", "s"."ImagePath", "s"."IsDeleted" AS "IsDeleted0", "s"."IsFavorite", "s"."Size", "s"."Type", "s"."UserId", "i0"."CreatedAt" AS "CreatedAt1", "i0"."ImagePath" AS "ImagePath0", "i0"."IsDeleted" AS "IsDeleted1", "i0"."IsFavorite" AS "IsFavorite0", "i0"."Size" AS "Size0", "i0"."Type" AS "Type0", "i0"."UserId" AS "UserId0"
+          FROM "GenerationRecords" AS "g"
+          LEFT JOIN (
+              SELECT "i"."Id", "i"."CreatedAt", "i"."ImagePath", "i"."IsDeleted", "i"."IsFavorite", "i"."Size", "i"."Type", "i"."UserId"
+              FROM "Images" AS "i"
+              WHERE NOT ("i"."IsDeleted")
+          ) AS "i0" ON "g"."OutputImagesId" = "i0"."Id"
+          LEFT JOIN (
+              SELECT "g0"."GenerationRecordId", "g0"."InputImagesId", "i2"."Id", "i2"."CreatedAt", "i2"."ImagePath", "i2"."IsDeleted", "i2"."IsFavorite", "i2"."Size", "i2"."Type", "i2"."UserId"
+              FROM "GenerationRecordImage" AS "g0"
+              INNER JOIN (
+                  SELECT "i1"."Id", "i1"."CreatedAt", "i1"."ImagePath", "i1"."IsDeleted", "i1"."IsFavorite", "i1"."Size", "i1"."Type", "i1"."UserId"
+                  FROM "Images" AS "i1"
+                  WHERE NOT ("i1"."IsDeleted")
+              ) AS "i2" ON "g0"."InputImagesId" = "i2"."Id"
+          ) AS "s" ON "g"."Id" = "s"."GenerationRecordId"
+          WHERE NOT ("g"."IsDeleted")
+      ) AS "s0" ON "c0"."Id" = "s0"."ConversationId"
+      ORDER BY "c0"."UpdatedAt" DESC, "c0"."Id", "s0"."CreatedAt" DESC, "s0"."Id", "s0"."Id0", "s0"."GenerationRecordId", "s0"."InputImagesId"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (DbType = Guid)], CommandType='Text', CommandTimeout='30']
+      SELECT "u"."Id", "u"."CreatedAt", "u"."Credits", "u"."InvitedById", "u"."IsDeleted", "u"."LastCreditClaimedAt", "u"."Password", "u"."Salt", "u"."Username"
+      FROM "Users" AS "u"
+      WHERE NOT ("u"."IsDeleted") AND "u"."Id" = @__userId_0
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (DbType = Guid)], CommandType='Text', CommandTimeout='30']
+      SELECT "i"."Id", "i"."Code", "i"."CreatedAt", "i"."IsDeleted", "i"."IssuerId", "i"."RemainingUses"
+      FROM "Invitations" AS "i"
+      WHERE NOT ("i"."IsDeleted") AND "i"."IssuerId" = @__userId_0
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (DbType = Guid)], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Conversations" AS "c"
+      WHERE NOT ("c"."IsDeleted") AND "c"."UserId" = @__userId_0
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (DbType = Guid), @__p_2='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT "c0"."Id", "c0"."CreatedAt", "c0"."IsDeleted", "c0"."UpdatedAt", "c0"."UserId", "s0"."Id", "s0"."CompletedAt", "s0"."ConversationId", "s0"."CreatedAt", "s0"."GenerationParams", "s0"."GenerationType", "s0"."IsDeleted", "s0"."OutputImagesId", "s0"."Prompt", "s0"."Status", "s0"."Id0", "s0"."GenerationRecordId", "s0"."InputImagesId", "s0"."Id1", "s0"."CreatedAt0", "s0"."ImagePath", "s0"."IsDeleted0", "s0"."IsFavorite", "s0"."Size", "s0"."Type", "s0"."UserId", "s0"."CreatedAt1", "s0"."ImagePath0", "s0"."IsDeleted1", "s0"."IsFavorite0", "s0"."Size0", "s0"."Type0", "s0"."UserId0"
+      FROM (
+          SELECT "c"."Id", "c"."CreatedAt", "c"."IsDeleted", "c"."UpdatedAt", "c"."UserId"
+          FROM "Conversations" AS "c"
+          WHERE NOT ("c"."IsDeleted") AND "c"."UserId" = @__userId_0
+          ORDER BY "c"."UpdatedAt" DESC
+          LIMIT @__p_2 OFFSET @__p_1
+      ) AS "c0"
+      LEFT JOIN (
+          SELECT "g"."Id", "g"."CompletedAt", "g"."ConversationId", "g"."CreatedAt", "g"."GenerationParams", "g"."GenerationType", "g"."IsDeleted", "g"."OutputImagesId", "g"."Prompt", "g"."Status", "i0"."Id" AS "Id0", "s"."GenerationRecordId", "s"."InputImagesId", "s"."Id" AS "Id1", "s"."CreatedAt" AS "CreatedAt0", "s"."ImagePath", "s"."IsDeleted" AS "IsDeleted0", "s"."IsFavorite", "s"."Size", "s"."Type", "s"."UserId", "i0"."CreatedAt" AS "CreatedAt1", "i0"."ImagePath" AS "ImagePath0", "i0"."IsDeleted" AS "IsDeleted1", "i0"."IsFavorite" AS "IsFavorite0", "i0"."Size" AS "Size0", "i0"."Type" AS "Type0", "i0"."UserId" AS "UserId0"
+          FROM "GenerationRecords" AS "g"
+          LEFT JOIN (
+              SELECT "i"."Id", "i"."CreatedAt", "i"."ImagePath", "i"."IsDeleted", "i"."IsFavorite", "i"."Size", "i"."Type", "i"."UserId"
+              FROM "Images" AS "i"
+              WHERE NOT ("i"."IsDeleted")
+          ) AS "i0" ON "g"."OutputImagesId" = "i0"."Id"
+          LEFT JOIN (
+              SELECT "g0"."GenerationRecordId", "g0"."InputImagesId", "i2"."Id", "i2"."CreatedAt", "i2"."ImagePath", "i2"."IsDeleted", "i2"."IsFavorite", "i2"."Size", "i2"."Type", "i2"."UserId"
+              FROM "GenerationRecordImage" AS "g0"
+              INNER JOIN (
+                  SELECT "i1"."Id", "i1"."CreatedAt", "i1"."ImagePath", "i1"."IsDeleted", "i1"."IsFavorite", "i1"."Size", "i1"."Type", "i1"."UserId"
+                  FROM "Images" AS "i1"
+                  WHERE NOT ("i1"."IsDeleted")
+              ) AS "i2" ON "g0"."InputImagesId" = "i2"."Id"
+          ) AS "s" ON "g"."Id" = "s"."GenerationRecordId"
+          WHERE NOT ("g"."IsDeleted")
+      ) AS "s0" ON "c0"."Id" = "s0"."ConversationId"
+      ORDER BY "c0"."UpdatedAt" DESC, "c0"."Id", "s0"."CreatedAt" DESC, "s0"."Id", "s0"."Id0", "s0"."GenerationRecordId", "s0"."InputImagesId"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (DbType = Guid)], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Conversations" AS "c"
+      WHERE NOT ("c"."IsDeleted") AND "c"."UserId" = @__userId_0
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[@__userId_0='?' (DbType = Guid), @__p_2='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT "c0"."Id", "c0"."CreatedAt", "c0"."IsDeleted", "c0"."UpdatedAt", "c0"."UserId", "s0"."Id", "s0"."CompletedAt", "s0"."ConversationId", "s0"."CreatedAt", "s0"."GenerationParams", "s0"."GenerationType", "s0"."IsDeleted", "s0"."OutputImagesId", "s0"."Prompt", "s0"."Status", "s0"."Id0", "s0"."GenerationRecordId", "s0"."InputImagesId", "s0"."Id1", "s0"."CreatedAt0", "s0"."ImagePath", "s0"."IsDeleted0", "s0"."IsFavorite", "s0"."Size", "s0"."Type", "s0"."UserId", "s0"."CreatedAt1", "s0"."ImagePath0", "s0"."IsDeleted1", "s0"."IsFavorite0", "s0"."Size0", "s0"."Type0", "s0"."UserId0"
+      FROM (
+          SELECT "c"."Id", "c"."CreatedAt", "c"."IsDeleted", "c"."UpdatedAt", "c"."UserId"
+          FROM "Conversations" AS "c"
+          WHERE NOT ("c"."IsDeleted") AND "c"."UserId" = @__userId_0
+          ORDER BY "c"."UpdatedAt" DESC
+          LIMIT @__p_2 OFFSET @__p_1
+      ) AS "c0"
+      LEFT JOIN (
+          SELECT "g"."Id", "g"."CompletedAt", "g"."ConversationId", "g"."CreatedAt", "g"."GenerationParams", "g"."GenerationType", "g"."IsDeleted", "g"."OutputImagesId", "g"."Prompt", "g"."Status", "i0"."Id" AS "Id0", "s"."GenerationRecordId", "s"."InputImagesId", "s"."Id" AS "Id1", "s"."CreatedAt" AS "CreatedAt0", "s"."ImagePath", "s"."IsDeleted" AS "IsDeleted0", "s"."IsFavorite", "s"."Size", "s"."Type", "s"."UserId", "i0"."CreatedAt" AS "CreatedAt1", "i0"."ImagePath" AS "ImagePath0", "i0"."IsDeleted" AS "IsDeleted1", "i0"."IsFavorite" AS "IsFavorite0", "i0"."Size" AS "Size0", "i0"."Type" AS "Type0", "i0"."UserId" AS "UserId0"
+          FROM "GenerationRecords" AS "g"
+          LEFT JOIN (
+              SELECT "i"."Id", "i"."CreatedAt", "i"."ImagePath", "i"."IsDeleted", "i"."IsFavorite", "i"."Size", "i"."Type", "i"."UserId"
+              FROM "Images" AS "i"
+              WHERE NOT ("i"."IsDeleted")
+          ) AS "i0" ON "g"."OutputImagesId" = "i0"."Id"
+          LEFT JOIN (
+              SELECT "g0"."GenerationRecordId", "g0"."InputImagesId", "i2"."Id", "i2"."CreatedAt", "i2"."ImagePath", "i2"."IsDeleted", "i2"."IsFavorite", "i2"."Size", "i2"."Type", "i2"."UserId"
+              FROM "GenerationRecordImage" AS "g0"
+              INNER JOIN (
+                  SELECT "i1"."Id", "i1"."CreatedAt", "i1"."ImagePath", "i1"."IsDeleted", "i1"."IsFavorite", "i1"."Size", "i1"."Type", "i1"."UserId"
+                  FROM "Images" AS "i1"
+                  WHERE NOT ("i1"."IsDeleted")
+              ) AS "i2" ON "g0"."InputImagesId" = "i2"."Id"
+          ) AS "s" ON "g"."Id" = "s"."GenerationRecordId"
+          WHERE NOT ("g"."IsDeleted")
+      ) AS "s0" ON "c0"."Id" = "s0"."ConversationId"
+      ORDER BY "c0"."UpdatedAt" DESC, "c0"."Id", "s0"."CreatedAt" DESC, "s0"."Id", "s0"."Id0", "s0"."GenerationRecordId", "s0"."InputImagesId"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (DbType = Guid)], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Conversations" AS "c"
+      WHERE NOT ("c"."IsDeleted") AND "c"."UserId" = @__userId_0
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[@__userId_0='?' (DbType = Guid), @__p_2='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT "c0"."Id", "c0"."CreatedAt", "c0"."IsDeleted", "c0"."UpdatedAt", "c0"."UserId", "s0"."Id", "s0"."CompletedAt", "s0"."ConversationId", "s0"."CreatedAt", "s0"."GenerationParams", "s0"."GenerationType", "s0"."IsDeleted", "s0"."OutputImagesId", "s0"."Prompt", "s0"."Status", "s0"."Id0", "s0"."GenerationRecordId", "s0"."InputImagesId", "s0"."Id1", "s0"."CreatedAt0", "s0"."ImagePath", "s0"."IsDeleted0", "s0"."IsFavorite", "s0"."Size", "s0"."Type", "s0"."UserId", "s0"."CreatedAt1", "s0"."ImagePath0", "s0"."IsDeleted1", "s0"."IsFavorite0", "s0"."Size0", "s0"."Type0", "s0"."UserId0"
+      FROM (
+          SELECT "c"."Id", "c"."CreatedAt", "c"."IsDeleted", "c"."UpdatedAt", "c"."UserId"
+          FROM "Conversations" AS "c"
+          WHERE NOT ("c"."IsDeleted") AND "c"."UserId" = @__userId_0
+          ORDER BY "c"."UpdatedAt" DESC
+          LIMIT @__p_2 OFFSET @__p_1
+      ) AS "c0"
+      LEFT JOIN (
+          SELECT "g"."Id", "g"."CompletedAt", "g"."ConversationId", "g"."CreatedAt", "g"."GenerationParams", "g"."GenerationType", "g"."IsDeleted", "g"."OutputImagesId", "g"."Prompt", "g"."Status", "i0"."Id" AS "Id0", "s"."GenerationRecordId", "s"."InputImagesId", "s"."Id" AS "Id1", "s"."CreatedAt" AS "CreatedAt0", "s"."ImagePath", "s"."IsDeleted" AS "IsDeleted0", "s"."IsFavorite", "s"."Size", "s"."Type", "s"."UserId", "i0"."CreatedAt" AS "CreatedAt1", "i0"."ImagePath" AS "ImagePath0", "i0"."IsDeleted" AS "IsDeleted1", "i0"."IsFavorite" AS "IsFavorite0", "i0"."Size" AS "Size0", "i0"."Type" AS "Type0", "i0"."UserId" AS "UserId0"
+          FROM "GenerationRecords" AS "g"
+          LEFT JOIN (
+              SELECT "i"."Id", "i"."CreatedAt", "i"."ImagePath", "i"."IsDeleted", "i"."IsFavorite", "i"."Size", "i"."Type", "i"."UserId"
+              FROM "Images" AS "i"
+              WHERE NOT ("i"."IsDeleted")
+          ) AS "i0" ON "g"."OutputImagesId" = "i0"."Id"
+          LEFT JOIN (
+              SELECT "g0"."GenerationRecordId", "g0"."InputImagesId", "i2"."Id", "i2"."CreatedAt", "i2"."ImagePath", "i2"."IsDeleted", "i2"."IsFavorite", "i2"."Size", "i2"."Type", "i2"."UserId"
+              FROM "GenerationRecordImage" AS "g0"
+              INNER JOIN (
+                  SELECT "i1"."Id", "i1"."CreatedAt", "i1"."ImagePath", "i1"."IsDeleted", "i1"."IsFavorite", "i1"."Size", "i1"."Type", "i1"."UserId"
+                  FROM "Images" AS "i1"
+                  WHERE NOT ("i1"."IsDeleted")
+              ) AS "i2" ON "g0"."InputImagesId" = "i2"."Id"
+          ) AS "s" ON "g"."Id" = "s"."GenerationRecordId"
+          WHERE NOT ("g"."IsDeleted")
+      ) AS "s0" ON "c0"."Id" = "s0"."ConversationId"
+      ORDER BY "c0"."UpdatedAt" DESC, "c0"."Id", "s0"."CreatedAt" DESC, "s0"."Id", "s0"."Id0", "s0"."GenerationRecordId", "s0"."InputImagesId"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (DbType = Guid)], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Images" AS "i"
+      WHERE NOT ("i"."IsDeleted") AND "i"."UserId" = @__userId_0 AND "i"."Type" = 0 AND NOT ("i"."IsDeleted")
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (DbType = Guid), @__p_2='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT "i"."Id", "i"."CreatedAt", "i"."ImagePath", "i"."IsDeleted", "i"."IsFavorite", "i"."Size", "i"."Type", "i"."UserId"
+      FROM "Images" AS "i"
+      WHERE NOT ("i"."IsDeleted") AND "i"."UserId" = @__userId_0 AND "i"."Type" = 0 AND NOT ("i"."IsDeleted")
+      ORDER BY "i"."CreatedAt" DESC
+      LIMIT @__p_2 OFFSET @__p_1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[@__conversationId_0='?' (DbType = Guid), @__userId_1='?' (DbType = Guid)], CommandType='Text', CommandTimeout='30']
+      SELECT "c0"."Id", "c0"."CreatedAt", "c0"."IsDeleted", "c0"."UpdatedAt", "c0"."UserId", "s0"."Id", "s0"."CompletedAt", "s0"."ConversationId", "s0"."CreatedAt", "s0"."GenerationParams", "s0"."GenerationType", "s0"."IsDeleted", "s0"."OutputImagesId", "s0"."Prompt", "s0"."Status", "s0"."Id0", "s0"."GenerationRecordId", "s0"."InputImagesId", "s0"."Id1", "s0"."CreatedAt0", "s0"."ImagePath", "s0"."IsDeleted0", "s0"."IsFavorite", "s0"."Size", "s0"."Type", "s0"."UserId", "s0"."CreatedAt1", "s0"."ImagePath0", "s0"."IsDeleted1", "s0"."IsFavorite0", "s0"."Size0", "s0"."Type0", "s0"."UserId0"
+      FROM (
+          SELECT "c"."Id", "c"."CreatedAt", "c"."IsDeleted", "c"."UpdatedAt", "c"."UserId"
+          FROM "Conversations" AS "c"
+          WHERE NOT ("c"."IsDeleted") AND "c"."Id" = @__conversationId_0 AND "c"."UserId" = @__userId_1
+          LIMIT 1
+      ) AS "c0"
+      LEFT JOIN (
+          SELECT "g"."Id", "g"."CompletedAt", "g"."ConversationId", "g"."CreatedAt", "g"."GenerationParams", "g"."GenerationType", "g"."IsDeleted", "g"."OutputImagesId", "g"."Prompt", "g"."Status", "i0"."Id" AS "Id0", "s"."GenerationRecordId", "s"."InputImagesId", "s"."Id" AS "Id1", "s"."CreatedAt" AS "CreatedAt0", "s"."ImagePath", "s"."IsDeleted" AS "IsDeleted0", "s"."IsFavorite", "s"."Size", "s"."Type", "s"."UserId", "i0"."CreatedAt" AS "CreatedAt1", "i0"."ImagePath" AS "ImagePath0", "i0"."IsDeleted" AS "IsDeleted1", "i0"."IsFavorite" AS "IsFavorite0", "i0"."Size" AS "Size0", "i0"."Type" AS "Type0", "i0"."UserId" AS "UserId0"
+          FROM "GenerationRecords" AS "g"
+          LEFT JOIN (
+              SELECT "i"."Id", "i"."CreatedAt", "i"."ImagePath", "i"."IsDeleted", "i"."IsFavorite", "i"."Size", "i"."Type", "i"."UserId"
+              FROM "Images" AS "i"
+              WHERE NOT ("i"."IsDeleted")
+          ) AS "i0" ON "g"."OutputImagesId" = "i0"."Id"
+          LEFT JOIN (
+              SELECT "g0"."GenerationRecordId", "g0"."InputImagesId", "i2"."Id", "i2"."CreatedAt", "i2"."ImagePath", "i2"."IsDeleted", "i2"."IsFavorite", "i2"."Size", "i2"."Type", "i2"."UserId"
+              FROM "GenerationRecordImage" AS "g0"
+              INNER JOIN (
+                  SELECT "i1"."Id", "i1"."CreatedAt", "i1"."ImagePath", "i1"."IsDeleted", "i1"."IsFavorite", "i1"."Size", "i1"."Type", "i1"."UserId"
+                  FROM "Images" AS "i1"
+                  WHERE NOT ("i1"."IsDeleted")
+              ) AS "i2" ON "g0"."InputImagesId" = "i2"."Id"
+          ) AS "s" ON "g"."Id" = "s"."GenerationRecordId"
+          WHERE NOT ("g"."IsDeleted")
+      ) AS "s0" ON "c0"."Id" = "s0"."ConversationId"
+      ORDER BY "c0"."Id", "s0"."CreatedAt", "s0"."Id", "s0"."Id0", "s0"."GenerationRecordId", "s0"."InputImagesId"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[@__userId_0='?' (DbType = Guid)], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Conversations" AS "c"
+      WHERE NOT ("c"."IsDeleted") AND "c"."UserId" = @__userId_0
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (6ms) [Parameters=[@__userId_0='?' (DbType = Guid), @__p_2='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT "c0"."Id", "c0"."CreatedAt", "c0"."IsDeleted", "c0"."UpdatedAt", "c0"."UserId", "s0"."Id", "s0"."CompletedAt", "s0"."ConversationId", "s0"."CreatedAt", "s0"."GenerationParams", "s0"."GenerationType", "s0"."IsDeleted", "s0"."OutputImagesId", "s0"."Prompt", "s0"."Status", "s0"."Id0", "s0"."GenerationRecordId", "s0"."InputImagesId", "s0"."Id1", "s0"."CreatedAt0", "s0"."ImagePath", "s0"."IsDeleted0", "s0"."IsFavorite", "s0"."Size", "s0"."Type", "s0"."UserId", "s0"."CreatedAt1", "s0"."ImagePath0", "s0"."IsDeleted1", "s0"."IsFavorite0", "s0"."Size0", "s0"."Type0", "s0"."UserId0"
+      FROM (
+          SELECT "c"."Id", "c"."CreatedAt", "c"."IsDeleted", "c"."UpdatedAt", "c"."UserId"
+          FROM "Conversations" AS "c"
+          WHERE NOT ("c"."IsDeleted") AND "c"."UserId" = @__userId_0
+          ORDER BY "c"."UpdatedAt" DESC
+          LIMIT @__p_2 OFFSET @__p_1
+      ) AS "c0"
+      LEFT JOIN (
+          SELECT "g"."Id", "g"."CompletedAt", "g"."ConversationId", "g"."CreatedAt", "g"."GenerationParams", "g"."GenerationType", "g"."IsDeleted", "g"."OutputImagesId", "g"."Prompt", "g"."Status", "i0"."Id" AS "Id0", "s"."GenerationRecordId", "s"."InputImagesId", "s"."Id" AS "Id1", "s"."CreatedAt" AS "CreatedAt0", "s"."ImagePath", "s"."IsDeleted" AS "IsDeleted0", "s"."IsFavorite", "s"."Size", "s"."Type", "s"."UserId", "i0"."CreatedAt" AS "CreatedAt1", "i0"."ImagePath" AS "ImagePath0", "i0"."IsDeleted" AS "IsDeleted1", "i0"."IsFavorite" AS "IsFavorite0", "i0"."Size" AS "Size0", "i0"."Type" AS "Type0", "i0"."UserId" AS "UserId0"
+          FROM "GenerationRecords" AS "g"
+          LEFT JOIN (
+              SELECT "i"."Id", "i"."CreatedAt", "i"."ImagePath", "i"."IsDeleted", "i"."IsFavorite", "i"."Size", "i"."Type", "i"."UserId"
+              FROM "Images" AS "i"
+              WHERE NOT ("i"."IsDeleted")
+          ) AS "i0" ON "g"."OutputImagesId" = "i0"."Id"
+          LEFT JOIN (
+              SELECT "g0"."GenerationRecordId", "g0"."InputImagesId", "i2"."Id", "i2"."CreatedAt", "i2"."ImagePath", "i2"."IsDeleted", "i2"."IsFavorite", "i2"."Size", "i2"."Type", "i2"."UserId"
+              FROM "GenerationRecordImage" AS "g0"
+              INNER JOIN (
+                  SELECT "i1"."Id", "i1"."CreatedAt", "i1"."ImagePath", "i1"."IsDeleted", "i1"."IsFavorite", "i1"."Size", "i1"."Type", "i1"."UserId"
+                  FROM "Images" AS "i1"
+                  WHERE NOT ("i1"."IsDeleted")
+              ) AS "i2" ON "g0"."InputImagesId" = "i2"."Id"
+          ) AS "s" ON "g"."Id" = "s"."GenerationRecordId"
+          WHERE NOT ("g"."IsDeleted")
+      ) AS "s0" ON "c0"."Id" = "s0"."ConversationId"
+      ORDER BY "c0"."UpdatedAt" DESC, "c0"."Id", "s0"."CreatedAt" DESC, "s0"."Id", "s0"."Id0", "s0"."GenerationRecordId", "s0"."InputImagesId"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__conversationId_0='?' (DbType = Guid), @__userId_1='?' (DbType = Guid)], CommandType='Text', CommandTimeout='30']
+      SELECT "c0"."Id", "c0"."CreatedAt", "c0"."IsDeleted", "c0"."UpdatedAt", "c0"."UserId", "s0"."Id", "s0"."CompletedAt", "s0"."ConversationId", "s0"."CreatedAt", "s0"."GenerationParams", "s0"."GenerationType", "s0"."IsDeleted", "s0"."OutputImagesId", "s0"."Prompt", "s0"."Status", "s0"."Id0", "s0"."GenerationRecordId", "s0"."InputImagesId", "s0"."Id1", "s0"."CreatedAt0", "s0"."ImagePath", "s0"."IsDeleted0", "s0"."IsFavorite", "s0"."Size", "s0"."Type", "s0"."UserId", "s0"."CreatedAt1", "s0"."ImagePath0", "s0"."IsDeleted1", "s0"."IsFavorite0", "s0"."Size0", "s0"."Type0", "s0"."UserId0"
+      FROM (
+          SELECT "c"."Id", "c"."CreatedAt", "c"."IsDeleted", "c"."UpdatedAt", "c"."UserId"
+          FROM "Conversations" AS "c"
+          WHERE NOT ("c"."IsDeleted") AND "c"."Id" = @__conversationId_0 AND "c"."UserId" = @__userId_1
+          LIMIT 1
+      ) AS "c0"
+      LEFT JOIN (
+          SELECT "g"."Id", "g"."CompletedAt", "g"."ConversationId", "g"."CreatedAt", "g"."GenerationParams", "g"."GenerationType", "g"."IsDeleted", "g"."OutputImagesId", "g"."Prompt", "g"."Status", "i0"."Id" AS "Id0", "s"."GenerationRecordId", "s"."InputImagesId", "s"."Id" AS "Id1", "s"."CreatedAt" AS "CreatedAt0", "s"."ImagePath", "s"."IsDeleted" AS "IsDeleted0", "s"."IsFavorite", "s"."Size", "s"."Type", "s"."UserId", "i0"."CreatedAt" AS "CreatedAt1", "i0"."ImagePath" AS "ImagePath0", "i0"."IsDeleted" AS "IsDeleted1", "i0"."IsFavorite" AS "IsFavorite0", "i0"."Size" AS "Size0", "i0"."Type" AS "Type0", "i0"."UserId" AS "UserId0"
+          FROM "GenerationRecords" AS "g"
+          LEFT JOIN (
+              SELECT "i"."Id", "i"."CreatedAt", "i"."ImagePath", "i"."IsDeleted", "i"."IsFavorite", "i"."Size", "i"."Type", "i"."UserId"
+              FROM "Images" AS "i"
+              WHERE NOT ("i"."IsDeleted")
+          ) AS "i0" ON "g"."OutputImagesId" = "i0"."Id"
+          LEFT JOIN (
+              SELECT "g0"."GenerationRecordId", "g0"."InputImagesId", "i2"."Id", "i2"."CreatedAt", "i2"."ImagePath", "i2"."IsDeleted", "i2"."IsFavorite", "i2"."Size", "i2"."Type", "i2"."UserId"
+              FROM "GenerationRecordImage" AS "g0"
+              INNER JOIN (
+                  SELECT "i1"."Id", "i1"."CreatedAt", "i1"."ImagePath", "i1"."IsDeleted", "i1"."IsFavorite", "i1"."Size", "i1"."Type", "i1"."UserId"
+                  FROM "Images" AS "i1"
+                  WHERE NOT ("i1"."IsDeleted")
+              ) AS "i2" ON "g0"."InputImagesId" = "i2"."Id"
+          ) AS "s" ON "g"."Id" = "s"."GenerationRecordId"
+          WHERE NOT ("g"."IsDeleted")
+      ) AS "s0" ON "c0"."Id" = "s0"."ConversationId"
+      ORDER BY "c0"."Id", "s0"."CreatedAt", "s0"."Id", "s0"."Id0", "s0"."GenerationRecordId", "s0"."InputImagesId"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (DbType = Guid)], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Images" AS "i"
+      WHERE NOT ("i"."IsDeleted") AND "i"."UserId" = @__userId_0 AND "i"."Type" = 0 AND NOT ("i"."IsDeleted")
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (DbType = Guid), @__p_2='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT "i"."Id", "i"."CreatedAt", "i"."ImagePath", "i"."IsDeleted", "i"."IsFavorite", "i"."Size", "i"."Type", "i"."UserId"
+      FROM "Images" AS "i"
+      WHERE NOT ("i"."IsDeleted") AND "i"."UserId" = @__userId_0 AND "i"."Type" = 0 AND NOT ("i"."IsDeleted")
+      ORDER BY "i"."CreatedAt" DESC
+      LIMIT @__p_2 OFFSET @__p_1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (DbType = Guid)], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Conversations" AS "c"
+      WHERE NOT ("c"."IsDeleted") AND "c"."UserId" = @__userId_0
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (DbType = Guid), @__p_2='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT "c0"."Id", "c0"."CreatedAt", "c0"."IsDeleted", "c0"."UpdatedAt", "c0"."UserId", "s0"."Id", "s0"."CompletedAt", "s0"."ConversationId", "s0"."CreatedAt", "s0"."GenerationParams", "s0"."GenerationType", "s0"."IsDeleted", "s0"."OutputImagesId", "s0"."Prompt", "s0"."Status", "s0"."Id0", "s0"."GenerationRecordId", "s0"."InputImagesId", "s0"."Id1", "s0"."CreatedAt0", "s0"."ImagePath", "s0"."IsDeleted0", "s0"."IsFavorite", "s0"."Size", "s0"."Type", "s0"."UserId", "s0"."CreatedAt1", "s0"."ImagePath0", "s0"."IsDeleted1", "s0"."IsFavorite0", "s0"."Size0", "s0"."Type0", "s0"."UserId0"
+      FROM (
+          SELECT "c"."Id", "c"."CreatedAt", "c"."IsDeleted", "c"."UpdatedAt", "c"."UserId"
+          FROM "Conversations" AS "c"
+          WHERE NOT ("c"."IsDeleted") AND "c"."UserId" = @__userId_0
+          ORDER BY "c"."UpdatedAt" DESC
+          LIMIT @__p_2 OFFSET @__p_1
+      ) AS "c0"
+      LEFT JOIN (
+          SELECT "g"."Id", "g"."CompletedAt", "g"."ConversationId", "g"."CreatedAt", "g"."GenerationParams", "g"."GenerationType", "g"."IsDeleted", "g"."OutputImagesId", "g"."Prompt", "g"."Status", "i0"."Id" AS "Id0", "s"."GenerationRecordId", "s"."InputImagesId", "s"."Id" AS "Id1", "s"."CreatedAt" AS "CreatedAt0", "s"."ImagePath", "s"."IsDeleted" AS "IsDeleted0", "s"."IsFavorite", "s"."Size", "s"."Type", "s"."UserId", "i0"."CreatedAt" AS "CreatedAt1", "i0"."ImagePath" AS "ImagePath0", "i0"."IsDeleted" AS "IsDeleted1", "i0"."IsFavorite" AS "IsFavorite0", "i0"."Size" AS "Size0", "i0"."Type" AS "Type0", "i0"."UserId" AS "UserId0"
+          FROM "GenerationRecords" AS "g"
+          LEFT JOIN (
+              SELECT "i"."Id", "i"."CreatedAt", "i"."ImagePath", "i"."IsDeleted", "i"."IsFavorite", "i"."Size", "i"."Type", "i"."UserId"
+              FROM "Images" AS "i"
+              WHERE NOT ("i"."IsDeleted")
+          ) AS "i0" ON "g"."OutputImagesId" = "i0"."Id"
+          LEFT JOIN (
+              SELECT "g0"."GenerationRecordId", "g0"."InputImagesId", "i2"."Id", "i2"."CreatedAt", "i2"."ImagePath", "i2"."IsDeleted", "i2"."IsFavorite", "i2"."Size", "i2"."Type", "i2"."UserId"
+              FROM "GenerationRecordImage" AS "g0"
+              INNER JOIN (
+                  SELECT "i1"."Id", "i1"."CreatedAt", "i1"."ImagePath", "i1"."IsDeleted", "i1"."IsFavorite", "i1"."Size", "i1"."Type", "i1"."UserId"
+                  FROM "Images" AS "i1"
+                  WHERE NOT ("i1"."IsDeleted")
+              ) AS "i2" ON "g0"."InputImagesId" = "i2"."Id"
+          ) AS "s" ON "g"."Id" = "s"."GenerationRecordId"
+          WHERE NOT ("g"."IsDeleted")
+      ) AS "s0" ON "c0"."Id" = "s0"."ConversationId"
+      ORDER BY "c0"."UpdatedAt" DESC, "c0"."Id", "s0"."CreatedAt" DESC, "s0"."Id", "s0"."Id0", "s0"."GenerationRecordId", "s0"."InputImagesId"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (3ms) [Parameters=[@__userId_0='?' (DbType = Guid)], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Images" AS "i"
+      WHERE NOT ("i"."IsDeleted") AND "i"."UserId" = @__userId_0 AND "i"."IsFavorite" AND NOT ("i"."IsDeleted")
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (DbType = Guid), @__p_2='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT "i"."Id", "i"."CreatedAt", "i"."ImagePath", "i"."IsDeleted", "i"."IsFavorite", "i"."Size", "i"."Type", "i"."UserId"
+      FROM "Images" AS "i"
+      WHERE NOT ("i"."IsDeleted") AND "i"."UserId" = @__userId_0 AND "i"."IsFavorite" AND NOT ("i"."IsDeleted")
+      LIMIT @__p_2 OFFSET @__p_1
+^C
