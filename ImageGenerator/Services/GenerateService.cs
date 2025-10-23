@@ -120,7 +120,15 @@ public class GenerateService(
         }
 
         // 异步处理图片生成 —— 使用独立的 DI scope 以避免使用已释放的 DbContext
-        _ = Task.Run(() => ProcessGenerationAsync(taskId, request.Provider, userId));
+        _ = Task.Run(() => ProcessGenerationAsync(taskId, request.Provider, userId))
+            .ContinueWith(t =>
+            {
+                if (t.Exception != null)
+                {
+                    // TODO: Replace with proper logging if available
+                    Console.Error.WriteLine($"Exception in ProcessGenerationAsync: {t.Exception}");
+                }
+            }, TaskContinuationOptions.OnlyOnFaulted);
 
         return new GenerateResponseDto
         {
