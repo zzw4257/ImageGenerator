@@ -3,13 +3,14 @@ import axios from '@/helpers/RequestHelper'
 
 export interface PresetDto {
   id: string
-  title: string
+  name: string
   description?: string
-  cover?: string
-  cost?: number
-  prompt?: string
+  coverUrl?: string
+  priceCredits?: number
+  prompt: string
   provider?: string
-  params?: Record<string, any>
+  defaultParams?: string // JSON string from backend
+  tags?: string[]
 }
 
 function parsePagination(headers: any) {

@@ -19,7 +19,7 @@
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue'
 import PresetCard from '@/components/PresetCard.vue'
-import { listPresets, PresetDto } from '@/services/presets'
+import { listPresets, type PresetDto } from '@/services/presets'
 
 const presets = ref<PresetDto[]>([])
 const pagination = ref({ TotalPages: 1, PageNumber: 0, PageSize: 12, TotalCount: 0 })

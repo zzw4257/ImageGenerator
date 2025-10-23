@@ -1,29 +1,41 @@
 import axios from '@/helpers/RequestHelper'
+import { ErrorHandler } from '@/utils/errorHandler'
 
 export interface PresetDto {
   id: string
-  title: string
+  name: string
   description?: string
-  cover?: string
-  cost?: number
+  coverUrl?: string
+  priceCredits?: number
   prompt: string
   provider?: string
-  params?: Record<string, any>
+  defaultParams?: string // JSON string from backend
+  tags?: string[]
 }
 
 /**
  * 列出预设，返回 items + pagination（遵循 X-Pagination header）
  */
 export const listPresets = async (page = 0, pageSize = 12): Promise<{ items: PresetDto[]; pagination: any }> => {
-  const { data, headers } = await axios.get<PresetDto[]>('/presets', { params: { pageNumber: page, pageSize } })
-  const pagination = headers['x-pagination'] ? JSON.parse(headers['x-pagination']) : { TotalCount: data.length, PageSize: pageSize, PageNumber: page, TotalPages: 1 }
-  return { items: data, pagination }
+  try {
+    const { data, headers } = await axios.get<PresetDto[]>('/presets', { params: { pageNumber: page, pageSize } })
+    const pagination = headers['x-pagination'] ? JSON.parse(headers['x-pagination']) : { TotalCount: data.length, PageSize: pageSize, PageNumber: page, TotalPages: 1 }
+    return { items: data, pagination }
+  } catch (error) {
+    ErrorHandler.handle(error, '获取预设列表')
+    throw error
+  }
 }
 
 /**
  * （可选）按 id 获取单个预设
  */
 export const getPreset = async (id: string): Promise<PresetDto> => {
-  const { data } = await axios.get<PresetDto>(`/presets/${encodeURIComponent(id)}`)
-  return data
+  try {
+    const { data } = await axios.get<PresetDto>(`/presets/${encodeURIComponent(id)}`)
+    return data
+  } catch (error) {
+    ErrorHandler.handle(error, '获取预设详情')
+    throw error
+  }
 }
