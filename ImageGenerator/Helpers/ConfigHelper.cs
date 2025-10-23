@@ -37,10 +37,10 @@ public static class ConfigHelper
         services.AddScoped<IGenerateService, GenerateService>();
         
         // Register Providers as Singleton (stateless, can be reused)
-        services.AddSingleton<Provider.StubProvider>();
-        services.AddSingleton<Provider.OpenAIProvider>();
-        services.AddSingleton<Provider.GeminiProvider>();
-        services.AddSingleton<Provider.ImageProvider>();
+        services.AddSingleton<StubProvider>();
+        services.AddSingleton<OpenAIProvider>();
+        services.AddSingleton<GeminiProvider>();
+        services.AddSingleton<ImageProvider>();
 
         services.AddSingleton(jwtHelper);
 

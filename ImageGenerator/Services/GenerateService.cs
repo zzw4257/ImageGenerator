@@ -17,12 +17,14 @@ public class GenerateService(
     IgDbContext context,
     IHttpContextAccessor httpContextAccessor,
     IConfiguration configuration,
-    ImageProvider provider) : IGenerateService
+    ImageProvider provider,
+    IServiceScopeFactory scopeFactory) : IGenerateService
 {
     private readonly IgDbContext _context = context;
     private readonly IHttpContextAccessor _http = httpContextAccessor;
     private readonly IConfiguration _configuration = configuration;
     private readonly ImageProvider _provider = provider;
+    private readonly IServiceScopeFactory _scopeFactory = scopeFactory;
 
     /// <summary>
     /// Submits a new image generation task.
@@ -117,8 +119,8 @@ public class GenerateService(
             throw;
         }
 
-        // 异步处理图片生成
-        _ = Task.Run(async () => await ProcessGenerationAsync(taskId, request.Provider, userId));
+        // 异步处理图片生成 —— 使用独立的 DI scope 以避免使用已释放的 DbContext
+        _ = Task.Run(() => ProcessGenerationAsync(taskId, request.Provider, userId));
 
         return new GenerateResponseDto
         {
@@ -188,13 +190,17 @@ public class GenerateService(
     }
 
     /// <summary>
-    /// 处理图片生成（真实的 Provider 调用）
+    /// 处理图片生成（真实的 Provider 调用）—— 在独立的 DI scope 中运行
     /// </summary>
     private async Task ProcessGenerationAsync(Guid taskId, string provider, Guid userId)
     {
+        // 创建新的 DI scope 以获取独立的 DbContext 实例
+        using var scope = _scopeFactory.CreateScope();
+        var scopedContext = scope.ServiceProvider.GetRequiredService<IgDbContext>();
+
         try
         {
-            var record = await _context.GenerationRecords
+            var record = await scopedContext.GenerationRecords
                 .Include(r => r.InputImages)
                 .FirstOrDefaultAsync(r => r.Id == taskId);
             
@@ -202,7 +208,7 @@ public class GenerateService(
 
             // 更新状态为处理中
             record.Status = GenerationStatus.Processing;
-            await _context.SaveChangesAsync();
+            await scopedContext.SaveChangesAsync();
 
             Console.WriteLine($"开始生成图片: {record.Prompt} (记录ID: {taskId}, Provider: {provider})");
 
@@ -254,11 +260,11 @@ public class GenerateService(
                 IsDeleted = false
             };
 
-            _context.Images.Add(outputImage);
+            scopedContext.Images.Add(outputImage);
             record.OutputImages = outputImage;
             record.Status = GenerationStatus.Completed;
             record.CompletedAt = DateTime.UtcNow;
-            await _context.SaveChangesAsync();
+            await scopedContext.SaveChangesAsync();
 
             Console.WriteLine($"图片生成成功: {imagePath}");
         }
@@ -266,15 +272,15 @@ public class GenerateService(
         {
             Console.WriteLine($"图片生成失败: {ex.Message}");
             
-            var record = await _context.GenerationRecords.FindAsync(taskId);
+            var record = await scopedContext.GenerationRecords.FindAsync(taskId);
             if (record != null)
             {
                 record.Status = GenerationStatus.Failed;
                 record.CompletedAt = DateTime.UtcNow;
-                await _context.SaveChangesAsync();
+                await scopedContext.SaveChangesAsync();
 
                 // 失败时退款
-                await RefundCreditsAsync(taskId, ex.Message);
+                await RefundCreditsAsync(taskId, ex.Message, scopedContext);
             }
         }
     }
@@ -302,22 +308,22 @@ public class GenerateService(
     }
 
     /// <summary>
-    /// 失败时退款
+    /// 失败时退款 —— 使用传入的 scoped DbContext
     /// </summary>
-    private async Task RefundCreditsAsync(Guid taskId, string reason)
+    private static async Task RefundCreditsAsync(Guid taskId, string reason, IgDbContext scopedContext)
     {
         try
         {
             // 找到原始扣款交易
-            var consumeTransaction = await _context.Transactions
+            var consumeTransaction = await scopedContext.Transactions
                 .Where(t => t.Type == TransactionType.Consume && t.Description.Contains(taskId.ToString()))
                 .OrderByDescending(t => t.CreatedAt)
                 .FirstOrDefaultAsync();
 
             if (consumeTransaction == null) return;
 
-            var userId = consumeTransaction.CreatorId;
-            var user = await _context.Users!.FirstOrDefaultAsync(u => u.Id == userId);
+            var refundUserId = consumeTransaction.CreatorId;
+            var user = await scopedContext.Users!.FirstOrDefaultAsync(u => u.Id == refundUserId);
             if (user == null) return;
 
             var refundAmount = Math.Abs(consumeTransaction.Amount);
@@ -330,13 +336,13 @@ public class GenerateService(
                 Amount = refundAmount,
                 BalanceAfter = user.Credits,
                 Description = $"生成失败退款 (TaskId: {taskId}, 原因: {reason})",
-                CreatorId = userId,
+                CreatorId = refundUserId,
                 CreatedAt = DateTime.UtcNow,
                 IsDeleted = false
             };
 
-            _context.Transactions.Add(refundTransaction);
-            await _context.SaveChangesAsync();
+            scopedContext.Transactions.Add(refundTransaction);
+            await scopedContext.SaveChangesAsync();
         }
         catch
         {
@@ -347,7 +353,7 @@ public class GenerateService(
     /// <summary>
     /// 从参数中提取 provider
     /// </summary>
-    private string ExtractProvider(string paramsJson)
+    private static string ExtractProvider(string paramsJson)
     {
         try
         {
