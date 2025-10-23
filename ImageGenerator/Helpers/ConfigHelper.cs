@@ -36,10 +36,11 @@ public static class ConfigHelper
         services.AddScoped<IWalletService, WalletService>();
         services.AddScoped<IGenerateService, GenerateService>();
         
-        services.AddScoped<StubProvider>();
-        services.AddScoped<OpenAIProvider>();
-        services.AddScoped<GeminiProvider>();
-        services.AddScoped<ImageProvider>();
+        // Register Providers as Singleton (stateless, can be reused)
+        services.AddSingleton<Provider.StubProvider>();
+        services.AddSingleton<Provider.OpenAIProvider>();
+        services.AddSingleton<Provider.GeminiProvider>();
+        services.AddSingleton<Provider.ImageProvider>();
 
         services.AddSingleton(jwtHelper);
 
