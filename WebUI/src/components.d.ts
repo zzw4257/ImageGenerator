@@ -17,6 +17,7 @@ declare module 'vue' {
     InputPanel: typeof import('./components/conversation/InputPanel.vue')['default']
     LibraryDialog: typeof import('./components/conversation/LibraryDialog.vue')['default']
     LoginForm: typeof import('./components/LoginForm.vue')['default']
+    PresetCard: typeof import('./components/PresetCard.vue')['default']
     PromptTemplateDialog: typeof import('./components/conversation/PromptTemplateDialog.vue')['default']
     RegisterForm: typeof import('./components/RegisterForm.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']

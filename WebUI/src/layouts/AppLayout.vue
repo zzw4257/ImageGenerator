@@ -197,41 +197,34 @@
   )
 
   const navigationItems: NavigationItem[] = [
-    // 之前的页面
-    // {
-    //   title: 'Home',
-    //   subtitle: 'All conversations',
-    //   icon: 'mdi-home',
-    //   to: '/',
-    //   badge: {
-    //     text: '5',
-    //     color: 'primary',
-    //   },
-    // },
-    // {
-    //   title: 'Favorites',
-    //   subtitle: 'Starred images',
-    //   icon: 'mdi-heart',
-    //   to: '/favorites',
-    // },
-    // {
-    //   title: 'Invitations',
-    //   subtitle: 'Manage codes',
-    //   icon: 'mdi-ticket',
-    //   to: '/invitation',
-    // },
     {
       title: 'Home',
-      subtitle: 'AI Applications',
+      subtitle: 'All conversations',
       icon: 'mdi-home',
-      to: '/home',
+      to: '/',
+      badge: {
+        text: '5',
+        color: 'primary'
+      }
     },
     {
-      title: 'Account',
-      subtitle: 'User Profile',
-      icon: 'mdi-account',
-      to: '/account',
+      title: 'Presets',
+      subtitle: 'Use ready-made prompts',
+      icon: 'mdi-format-paint',
+      to: '/presets'
     },
+    {
+      title: 'Favorites',
+      subtitle: 'Starred images',
+      icon: 'mdi-heart',
+      to: '/favorites'
+    },
+    {
+      title: 'Invitations',
+      subtitle: 'Manage codes',
+      icon: 'mdi-ticket',
+      to: '/invitation'
+    }
   ]
 
   const userMenuItems: UserMenuItem[] = [

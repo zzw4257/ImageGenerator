@@ -465,16 +465,58 @@
   }
 
   onMounted(() => {
-    loadRecentTasks()
-
-    // 处理预设参数
-    if (route.query.preset) {
-      form.value.prompt = route.query.prompt as string || ''
-      form.value.model = route.query.model as string || 'Flux'
-      form.value.resolution = route.query.resolution as string || '1024x1024'
-      form.value.style = route.query.style as string || ''
-    }
-  })
+     loadRecentTasks()
+ 
+     const presetStore = usePresetStore()
+     // 优先从 store/session 恢复已选择的 preset
+     presetStore.restoreSelectedFromSession()
+     const selected = presetStore.selectedPreset
+ 
+     const q = route.query
+     const safeDecode = (v?: unknown) => {
+       if (!v) return undefined
+       try { return decodeURIComponent(String(v)) } catch { return String(v) }
+     }
+     const safeParseJson = (s?: string) => {
+       if (!s) return undefined
+       try { return JSON.parse(s) } catch { return undefined }
+     }
+ 
+     if (selected) {
+       form.value.prompt = selected.prompt || form.value.prompt
+       form.value.model = selected.provider || selected.model || form.value.model
+       form.value.resolution = selected.params?.resolution || selected.resolution || form.value.resolution
+       form.value.style = selected.params?.style || selected.style || form.value.style
+       return
+     }
+ 
+     // 若 store 没有 preset，则继续解析 query（兼容多种格式）
+     if (q.params) {
+       const decoded = safeDecode(q.params)
+       const params = safeParseJson(decoded)
+       if (params) {
+         form.value.prompt = params.prompt || form.value.prompt
+         form.value.model = params.provider || params.model || form.value.model
+         form.value.resolution = params.resolution || form.value.resolution
+         form.value.style = params.style || form.value.style
+       }
+     } else if (q.preset) {
+       let presetObj: any = undefined
+       const decoded = safeDecode(q.preset)
+       presetObj = safeParseJson(decoded) || (typeof q.preset === 'object' ? q.preset : undefined)
+       if (presetObj) {
+         form.value.prompt = presetObj.prompt || form.value.prompt
+         form.value.model = presetObj.provider || presetObj.model || form.value.model
+         form.value.resolution = presetObj.params?.resolution || presetObj.resolution || form.value.resolution
+         form.value.style = presetObj.params?.style || presetObj.style || form.value.style
+       }
+     } else {
+       if (q.prompt) form.value.prompt = safeDecode(q.prompt) || form.value.prompt
+       if (q.model) form.value.model = safeDecode(q.model) || form.value.model
+       if (q.resolution) form.value.resolution = safeDecode(q.resolution) || form.value.resolution
+       if (q.style) form.value.style = safeDecode(q.style) || form.value.style
+     }
+   })
 </script>
 
 <route lang="yaml">
