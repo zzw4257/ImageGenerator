@@ -1,23 +1,23 @@
 <template>
   <v-snackbar
     v-model="notificationStore.isShowing"
-    :color="currentMessage?.type"
-    :timeout="-1"
-    location="bottom center"
     class="notification-snackbar"
-    rounded="xl"
+    :color="currentMessage?.type"
     elevation="8"
+    location="bottom center"
+    rounded="xl"
+    :timeout="-1"
   >
     <div v-if="currentMessage" class="d-flex align-center">
       <v-icon v-if="currentMessage.icon" class="mr-3" size="20">
         {{ currentMessage.icon }}
       </v-icon>
-      
+
       <div class="flex-grow-1">
         <div class="text-body-1 font-weight-medium">
           {{ currentMessage.message }}
         </div>
-        
+
         <!-- Queue indicator -->
         <div v-if="notificationStore.messages.length > 1" class="text-caption mt-1 opacity-75">
           {{ notificationStore.messages.length - 1 }} more message{{ notificationStore.messages.length > 2 ? 's' : '' }}
@@ -27,9 +27,9 @@
       <!-- Action button -->
       <v-btn
         v-if="currentMessage.action"
-        variant="text"
-        size="small"
         class="ml-3"
+        size="small"
+        variant="text"
         @click="handleAction"
       >
         {{ currentMessage.action.text }}
@@ -37,10 +37,10 @@
 
       <!-- Close button -->
       <v-btn
-        icon="mdi-close"
-        variant="text"
-        size="small"
         class="ml-2"
+        icon="mdi-close"
+        size="small"
+        variant="text"
         @click="notificationStore.dismiss()"
       />
     </div>
@@ -52,7 +52,7 @@
     >
       <div
         class="notification-progress-bar"
-        :style="{ 
+        :style="{
           animation: `progress ${currentMessage.timeout}ms linear`,
           backgroundColor: 'rgba(255, 255, 255, 0.3)'
         }"
@@ -62,24 +62,24 @@
 </template>
 
 <script lang="ts" setup>
-import { computed } from 'vue'
-import { useNotificationStore } from '@/stores/notification'
+  import { computed } from 'vue'
+  import { useNotificationStore } from '@/stores/notification'
 
-/**
- * A component that displays a queue of snackbar notifications.
- * This component is controlled by the `notification` store.
- */
+  /**
+   * A component that displays a queue of snackbar notifications.
+   * This component is controlled by the `notification` store.
+   */
 
-const notificationStore = useNotificationStore()
+  const notificationStore = useNotificationStore()
 
-const currentMessage = computed(() => notificationStore.currentMessage)
+  const currentMessage = computed(() => notificationStore.currentMessage)
 
-const handleAction = () => {
-  if (currentMessage.value?.action) {
-    currentMessage.value.action.handler()
-    notificationStore.dismiss()
+  function handleAction () {
+    if (currentMessage.value?.action) {
+      currentMessage.value.action.handler()
+      notificationStore.dismiss()
+    }
   }
-}
 </script>
 
 <style scoped>
