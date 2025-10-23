@@ -60,6 +60,13 @@ public static class ModelConfigurationHelper
             .WithMany()
             .HasForeignKey(t => t.CreatorId)
             .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<Preset>()
+            .HasQueryFilter(e => !e.IsDeleted) 
+            .HasMany(p => p.GenerationRecords) // 一个 Preset 有多条 GenerationRecords
+            .WithOne(gr => gr.Preset) // 每条 GenerationRecord 对应一个 Preset
+            .HasForeignKey(gr => gr.PresetId) 
+            .OnDelete(DeleteBehavior.SetNull); // 如果删除了一个 Preset，历史记录(Record)不应被删除，只是把 PresetId 设为 null
     }
 
     /// <summary>
@@ -120,6 +127,87 @@ public static class ModelConfigurationHelper
                 UserId = adminUserId,
                 CreatedAt = seedDate,
                 UpdatedAt = seedDate,
+                IsDeleted = false
+            }
+        );
+
+        modelBuilder.Entity<Preset>().HasData(
+            new Preset
+            {
+                Id = Guid.Parse("00000000-0000-0000-0000-00000000000A"),
+                Name = "产品商业摄影 (Qwen)",
+                CoverUrl = "/images/presets/product-shot.png",
+                Prompt = "A high-resolution, studio-lit product photograph of a [product description] on a [background surface]. The lighting is a [lighting setup] to emphasize subtle curves. Ultra-realistic, 4k.",
+                Provider = "Qwen",
+                PriceCredits = 2, // 规格 E 节
+                DefaultParams = "{\"style\": \"cinematic\", \"width\": 1024, \"height\": 1024}", // JSON 字符串
+                Tags = new List<string> { "product", "cinematic", "qwen" },
+                CreatedAt = seedDate, // 重用已定义的 seedDate
+                IsDeleted = false
+            },
+            new Preset
+            {
+                Id = Guid.Parse("00000000-0000-0000-0000-00000000000B"),
+                Name = "霓虹风格 (Flux)",
+                CoverUrl = "/images/presets/neon-shoe.png",
+                Prompt = "a neon-lit product photograph of a sneaker on glossy floor, cinematic lighting, high contrast, 4k, [subject]",
+                Provider = "Flux",
+                PriceCredits = 1, // 规格 E 节
+                DefaultParams = "{\"aspectRatio\": \"3:2\", \"width\": 768, \"height\": 512}", // JSON 字符串
+                Tags = new List<string> { "product", "neon", "flux" },
+                CreatedAt = seedDate,
+                IsDeleted = false
+            },
+            new Preset
+            {
+                Id = Guid.Parse("00000000-0000-0000-0000-00000000000C"),
+                Name = "风格化贴纸 (Stub)",
+                CoverUrl = "/images/presets/sticker.png",
+                Prompt = "A kawaii chibi sticker of a [subject], clean bold outline, soft cell shading, transparent background.",
+                Provider = "Stub",
+                PriceCredits = 0, // 规格 E 节
+                DefaultParams = "{\"style\": \"sticker\", \"width\": 512, \"height\": 512}", // JSON 字符串
+                Tags = new List<string> { "sticker", "chibi", "stub" },
+                CreatedAt = seedDate,
+                IsDeleted = false
+            },
+            new Preset
+            {
+                Id = Guid.Parse("00000000-0000-0000-0000-00000000000D"),
+                Name = "逼真摄影 (Qwen)",
+                CoverUrl = "/images/presets/photorealistic.png",
+                Prompt = "A photorealistic close-up of [subject], set in [environment]. The scene is illuminated by [lighting description], creating a serene atmosphere. Captured with a Canon EOS R5.",
+                Provider = "Qwen",
+                PriceCredits = 2,
+                DefaultParams = "{\"aspectRatio\": \"16:9\", \"width\": 1024, \"height\": 576}",
+                Tags = new List<string> { "photo", "realistic", "qwen" },
+                CreatedAt = seedDate,
+                IsDeleted = false
+            },
+            new Preset
+            {
+                Id = Guid.Parse("00000000-0000-0000-0000-00000000000E"),
+                Name = "极简负空间 (Flux)",
+                CoverUrl = "/images/presets/minimal.png",
+                Prompt = "A minimalist composition featuring a single [subject] positioned in the lower right. The background is a vast, empty off-white canvas, creating significant negative space.",
+                Provider = "Flux",
+                PriceCredits = 1,
+                DefaultParams = "{\"aspectRatio\": \"3:2\", \"width\": 768, \"height\": 512}",
+                Tags = new List<string> { "minimalist", "art", "flux" },
+                CreatedAt = seedDate,
+                IsDeleted = false
+            },
+            new Preset
+            {
+                Id = Guid.Parse("00000000-0000-0000-0000-00000000000F"),
+                Name = "漫画单格 (Stub)",
+                CoverUrl = "/images/presets/comic.png",
+                Prompt = "A single comic book panel in a neo-noir ink wash style. In the foreground, [character description]. In the background, [setting details].",
+                Provider = "Stub",
+                PriceCredits = 0,
+                DefaultParams = "{\"style\": \"comic\", \"width\": 512, \"height\": 768}",
+                Tags = new List<string> { "comic", "noir", "stub" },
+                CreatedAt = seedDate,
                 IsDeleted = false
             }
         );

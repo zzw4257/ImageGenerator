@@ -3,6 +3,7 @@ using System;
 using ImageGenerator.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ImageGenerator.Migrations
 {
     [DbContext(typeof(IgDbContext))]
-    partial class IgDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251023094626_AddPresetTable")]
+    partial class AddPresetTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.8");
@@ -245,86 +248,6 @@ namespace ImageGenerator.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Presets");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("00000000-0000-0000-0000-00000000000a"),
-                            CoverUrl = "/images/presets/product-shot.png",
-                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            DefaultParams = "{\"style\": \"cinematic\", \"width\": 1024, \"height\": 1024}",
-                            IsDeleted = false,
-                            Name = "产品商业摄影 (Qwen)",
-                            PriceCredits = 2,
-                            Prompt = "A high-resolution, studio-lit product photograph of a [product description] on a [background surface]. The lighting is a [lighting setup] to emphasize subtle curves. Ultra-realistic, 4k.",
-                            Provider = "Qwen",
-                            Tags = "[\"product\",\"cinematic\",\"qwen\"]"
-                        },
-                        new
-                        {
-                            Id = new Guid("00000000-0000-0000-0000-00000000000b"),
-                            CoverUrl = "/images/presets/neon-shoe.png",
-                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            DefaultParams = "{\"aspectRatio\": \"3:2\", \"width\": 768, \"height\": 512}",
-                            IsDeleted = false,
-                            Name = "霓虹风格 (Flux)",
-                            PriceCredits = 1,
-                            Prompt = "a neon-lit product photograph of a sneaker on glossy floor, cinematic lighting, high contrast, 4k, [subject]",
-                            Provider = "Flux",
-                            Tags = "[\"product\",\"neon\",\"flux\"]"
-                        },
-                        new
-                        {
-                            Id = new Guid("00000000-0000-0000-0000-00000000000c"),
-                            CoverUrl = "/images/presets/sticker.png",
-                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            DefaultParams = "{\"style\": \"sticker\", \"width\": 512, \"height\": 512}",
-                            IsDeleted = false,
-                            Name = "风格化贴纸 (Stub)",
-                            PriceCredits = 0,
-                            Prompt = "A kawaii chibi sticker of a [subject], clean bold outline, soft cell shading, transparent background.",
-                            Provider = "Stub",
-                            Tags = "[\"sticker\",\"chibi\",\"stub\"]"
-                        },
-                        new
-                        {
-                            Id = new Guid("00000000-0000-0000-0000-00000000000d"),
-                            CoverUrl = "/images/presets/photorealistic.png",
-                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            DefaultParams = "{\"aspectRatio\": \"16:9\", \"width\": 1024, \"height\": 576}",
-                            IsDeleted = false,
-                            Name = "逼真摄影 (Qwen)",
-                            PriceCredits = 2,
-                            Prompt = "A photorealistic close-up of [subject], set in [environment]. The scene is illuminated by [lighting description], creating a serene atmosphere. Captured with a Canon EOS R5.",
-                            Provider = "Qwen",
-                            Tags = "[\"photo\",\"realistic\",\"qwen\"]"
-                        },
-                        new
-                        {
-                            Id = new Guid("00000000-0000-0000-0000-00000000000e"),
-                            CoverUrl = "/images/presets/minimal.png",
-                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            DefaultParams = "{\"aspectRatio\": \"3:2\", \"width\": 768, \"height\": 512}",
-                            IsDeleted = false,
-                            Name = "极简负空间 (Flux)",
-                            PriceCredits = 1,
-                            Prompt = "A minimalist composition featuring a single [subject] positioned in the lower right. The background is a vast, empty off-white canvas, creating significant negative space.",
-                            Provider = "Flux",
-                            Tags = "[\"minimalist\",\"art\",\"flux\"]"
-                        },
-                        new
-                        {
-                            Id = new Guid("00000000-0000-0000-0000-00000000000f"),
-                            CoverUrl = "/images/presets/comic.png",
-                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            DefaultParams = "{\"style\": \"comic\", \"width\": 512, \"height\": 768}",
-                            IsDeleted = false,
-                            Name = "漫画单格 (Stub)",
-                            PriceCredits = 0,
-                            Prompt = "A single comic book panel in a neo-noir ink wash style. In the foreground, [character description]. In the background, [setting details].",
-                            Provider = "Stub",
-                            Tags = "[\"comic\",\"noir\",\"stub\"]"
-                        });
                 });
 
             modelBuilder.Entity("ImageGenerator.Models.Transaction", b =>
@@ -453,16 +376,13 @@ namespace ImageGenerator.Migrations
                         .HasForeignKey("OutputImagesId")
                         .OnDelete(DeleteBehavior.SetNull);
 
-                    b.HasOne("ImageGenerator.Models.Preset", "Preset")
+                    b.HasOne("ImageGenerator.Models.Preset", null)
                         .WithMany("GenerationRecords")
-                        .HasForeignKey("PresetId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .HasForeignKey("PresetId");
 
                     b.Navigation("Conversation");
 
                     b.Navigation("OutputImages");
-
-                    b.Navigation("Preset");
                 });
 
             modelBuilder.Entity("ImageGenerator.Models.Image", b =>
