@@ -1,45 +1,74 @@
 <template>
   <!-- Navigation Drawer -->
-  <v-navigation-drawer v-model="drawer" :rail="rail" :temporary="!isExpanded" :permanent="isExpanded" class="app-drawer"
-    elevation="2">
-    <template v-slot:prepend>
+  <v-navigation-drawer
+    v-model="drawer"
+    class="app-drawer"
+    elevation="2"
+    :permanent="isExpanded"
+    :rail="rail"
+    :temporary="!isExpanded"
+  >
+    <template #prepend>
       <div class="pa-3 pt-6 d-flex align-center">
         <!-- Logo/Brand -->
-        <v-avatar :size="rail ? 32 : 40" rounded="lg" color="primary" class="mr-3" :class="{ 'mr-0': rail }">
+        <v-avatar
+          class="mr-3"
+          :class="{ 'mr-0': rail }"
+          color="primary"
+          rounded="lg"
+          :size="rail ? 32 : 40"
+        >
           <v-icon color="white" :size="rail ? 20 : 24">
             mdi-image-multiple
           </v-icon>
         </v-avatar>
 
         <div v-if="!rail" class="flex-grow-1">
-          <div class="text-h6 font-weight-bold">ImageGen</div>
-          <div class="text-caption text-grey-darken-1">AI Studio</div>
+          <div class="text-h6 font-weight-bold">Aetherflow</div>
+          <div class="text-caption text-grey-darken-1">凝滞之处，价值新生</div>
         </div>
       </div>
     </template>
 
     <!-- Navigation Items -->
-    <v-list nav class="pa-2">
-      <v-list-item v-for="item in navigationItems" :key="item.to" :to="item.to" :prepend-icon="item.icon"
-        :title="item.title" :subtitle="item.subtitle" rounded="xl" class="mb-1">
-        <template v-if="item.badge" v-slot:append>
-          <v-chip size="x-small" :color="item.badge.color" :text="item.badge.text" />
+    <v-list class="pa-2" nav>
+      <v-list-item
+        v-for="item in navigationItems"
+        :key="item.to"
+        class="mb-1"
+        :prepend-icon="item.icon"
+        rounded="xl"
+        :subtitle="item.subtitle"
+        :title="item.title"
+        :to="item.to"
+      >
+        <template v-if="item.badge" #append>
+          <v-chip
+            :color="item.badge.color"
+            size="x-small"
+            :text="item.badge.text"
+          />
         </template>
       </v-list-item>
       <template v-if="isExpanded">
-        <v-divider class="mb-2"></v-divider>
+        <v-divider class="mb-2" />
 
         <!-- Rail Toggle -->
-        <v-list-item class="pa-2" :prepend-icon="rail ? 'mdi-menu-close' : 'mdi-menu-open'"
-          :title="rail ? '' : 'Collapse'" rounded="xl" @click="rail = !rail" />
+        <v-list-item
+          class="pa-2"
+          :prepend-icon="rail ? 'mdi-menu-close' : 'mdi-menu-open'"
+          rounded="xl"
+          :title="rail ? '' : 'Collapse'"
+          @click="rail = !rail"
+        />
       </template>
     </v-list>
   </v-navigation-drawer>
 
   <!-- App Bar -->
-  <v-app-bar elevation="0" class="app-bar">
-    <template v-slot:prepend>
-      <v-btn icon @click="drawer = !drawer" v-if="!isExpanded">
+  <v-app-bar class="app-bar" elevation="0">
+    <template #prepend>
+      <v-btn v-if="!isExpanded" icon @click="drawer = !drawer">
         <v-icon>mdi-menu</v-icon>
       </v-btn>
     </template>
@@ -48,28 +77,33 @@
       {{ pageTitle }}
     </v-app-bar-title>
 
-    <template v-slot:append>
+    <template #append>
       <!-- Search -->
       <v-btn icon variant="text" @click="showSearch = !showSearch">
         <v-icon>mdi-magnify</v-icon>
       </v-btn>
 
       <!-- Notifications -->
-      <v-btn icon variant="text" class="mr-2" @click="router.push('/settings')">
+      <v-btn class="mr-2" icon variant="text" @click="router.push('/settings')">
         <v-icon>mdi-cog</v-icon>
       </v-btn>
 
       <!-- User Menu -->
       <v-menu>
-        <template v-slot:activator="{ props }">
+        <template #activator="{ props }">
           <v-btn icon v-bind="props">
             <v-icon> mdi-account </v-icon>
           </v-btn>
         </template>
 
         <v-list>
-          <v-list-item v-for="action in userMenuItems" :key="action.title" :prepend-icon="action.icon"
-            :title="action.title" @click="action.action" />
+          <v-list-item
+            v-for="action in userMenuItems"
+            :key="action.title"
+            :prepend-icon="action.icon"
+            :title="action.title"
+            @click="action.action"
+          />
         </v-list>
       </v-menu>
     </template>
@@ -77,10 +111,17 @@
 
   <!-- Search Overlay -->
   <v-overlay v-model="showSearch" class="align-center justify-center">
-    <v-card width="600" rounded="xl" class="pa-4">
-      <v-text-field v-model="searchQuery" placeholder="Search conversations, images, or prompts..."
-        prepend-inner-icon="mdi-magnify" variant="outlined" rounded="xl" autofocus hide-details
-        @keyup.esc="showSearch = false" />
+    <v-card class="pa-4" rounded="xl" width="600">
+      <v-text-field
+        v-model="searchQuery"
+        autofocus
+        hide-details
+        placeholder="Search conversations, images, or prompts..."
+        prepend-inner-icon="mdi-magnify"
+        rounded="xl"
+        variant="outlined"
+        @keyup.esc="showSearch = false"
+      />
 
       <div class="mt-4 text-center">
         <v-btn variant="text" @click="showSearch = false">
@@ -94,7 +135,10 @@
   <v-main class="app-main">
     <div class="main-content" :class="{ 'content-expanded': !rail }">
       <router-view v-slot="{ Component, route }">
-        <transition :name="(route.meta?.transition as string) || 'fade'" mode="out-in">
+        <transition
+          mode="out-in"
+          :name="(route.meta?.transition as string) || 'fade'"
+        >
           <component :is="Component" :key="route.path" />
         </transition>
       </router-view>
@@ -103,124 +147,148 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, watch } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import { useDisplay } from 'vuetify'
-import { useAppStore } from '@/stores/app'
-import { useNotificationStore } from '@/stores/notification'
+  import { computed, ref, watch } from 'vue'
+  import { useRoute, useRouter } from 'vue-router'
+  import { useDisplay } from 'vuetify'
+  import { useAppStore } from '@/stores/app'
+  import { useNotificationStore } from '@/stores/notification'
 
-interface NavigationItem {
-  title: string
-  subtitle?: string
-  icon: string
-  to: string
-  badge?: {
-    text: string
-    color: string
-  }
-}
-
-interface UserMenuItem {
-  title: string
-  icon: string
-  action: () => void
-}
-
-const { mdAndUp } = useDisplay()
-
-const isExpanded = computed(() => {
-  return mdAndUp.value
-})
-
-const route = useRoute()
-const router = useRouter()
-const appStore = useAppStore()
-const notificationStore = useNotificationStore()
-
-const rail = ref(true)
-const drawer = ref(isExpanded.value)
-const showSearch = ref(false)
-const searchQuery = ref('')
-
-// Add this watch after the ref declarations
-watch(isExpanded, (newVal) => {
-  drawer.value = newVal
-  rail.value = newVal
-}, { immediate: true })
-
-const navigationItems: NavigationItem[] = [
-  {
-    title: 'Home',
-    subtitle: 'All conversations',
-    icon: 'mdi-home',
-    to: '/',
-    badge: {
-      text: '5',
-      color: 'primary'
-    }
-  },
-  {
-    title: 'Favorites',
-    subtitle: 'Starred images',
-    icon: 'mdi-heart',
-    to: '/favorites'
-  },
-  {
-    title: 'Invitations',
-    subtitle: 'Manage codes',
-    icon: 'mdi-ticket',
-    to: '/invitation'
-  }
-]
-
-const userMenuItems: UserMenuItem[] = [
-  {
-    title: 'Profile',
-    icon: 'mdi-account',
-    action: () => router.push('/profile')
-  },
-  {
-    title: 'Help',
-    icon: 'mdi-help-circle',
-    action: () => router.push('/help')
-  },
-  {
-    title: 'Sign Out',
-    icon: 'mdi-logout',
-    action: () => {
-      // Handle logout
-      appStore.clearAuthInfo()
-      router.push('/login')
-      notificationStore.info('Logged out')
+  interface NavigationItem {
+    title: string
+    subtitle?: string
+    icon: string
+    to: string
+    badge?: {
+      text: string
+      color: string
     }
   }
-]
 
-const pageTitle = computed(() => {
-  const routeTitle = route.meta?.title as string
-  if (routeTitle) return routeTitle
+  interface UserMenuItem {
+    title: string
+    icon: string
+    action: () => void
+  }
 
-  // Fallback to route-based titles
-  switch (route.path) {
-    case '/':
-      return 'Image Library'
-    case '/gallery':
-      return 'Gallery'
-    case '/favorites':
-      return 'Favorites'
-    case '/collections':
-      return 'Collections'
-    case '/recent':
-      return 'Recent Activity'
-    case '/invitation':
-      return 'Invitation Codes'
-    default:
-      if (route.path.startsWith('/conversation/')) {
-        return 'Conversation'
+  const { mdAndUp } = useDisplay()
+
+  const isExpanded = computed(() => {
+    return mdAndUp.value
+  })
+
+  const route = useRoute()
+  const router = useRouter()
+  const appStore = useAppStore()
+  const notificationStore = useNotificationStore()
+
+  const rail = ref(true)
+  const drawer = ref(isExpanded.value)
+  const showSearch = ref(false)
+  const searchQuery = ref('')
+
+  // Add this watch after the ref declarations
+  watch(
+    isExpanded,
+    newVal => {
+      drawer.value = newVal
+      rail.value = newVal
+    },
+    { immediate: true },
+  )
+
+  const navigationItems: NavigationItem[] = [
+    // 之前的页面
+    // {
+    //   title: 'Home',
+    //   subtitle: 'All conversations',
+    //   icon: 'mdi-home',
+    //   to: '/',
+    //   badge: {
+    //     text: '5',
+    //     color: 'primary',
+    //   },
+    // },
+    // {
+    //   title: 'Favorites',
+    //   subtitle: 'Starred images',
+    //   icon: 'mdi-heart',
+    //   to: '/favorites',
+    // },
+    // {
+    //   title: 'Invitations',
+    //   subtitle: 'Manage codes',
+    //   icon: 'mdi-ticket',
+    //   to: '/invitation',
+    // },
+    {
+      title: 'Home',
+      subtitle: 'AI Applications',
+      icon: 'mdi-home',
+      to: '/home',
+    },
+    {
+      title: 'Account',
+      subtitle: 'User Profile',
+      icon: 'mdi-account',
+      to: '/account',
+    },
+  ]
+
+  const userMenuItems: UserMenuItem[] = [
+    {
+      title: 'Profile',
+      icon: 'mdi-account',
+      action: () => router.push('/profile'),
+    },
+    {
+      title: 'Help',
+      icon: 'mdi-help-circle',
+      action: () => router.push('/help'),
+    },
+    {
+      title: 'Sign Out',
+      icon: 'mdi-logout',
+      action: () => {
+        // Handle logout
+        appStore.clearAuthInfo()
+        router.push('/login')
+        notificationStore.info('Logged out')
+      },
+    },
+  ]
+
+  const pageTitle = computed(() => {
+    const routeTitle = route.meta?.title as string
+    if (routeTitle) return routeTitle
+
+    // Fallback to route-based titles
+    switch (route.path) {
+      case '/': {
+        return 'Image Library'
       }
-      return 'ImageGen Studio'
-  }
-})
+      case '/gallery': {
+        return 'Gallery'
+      }
+      case '/favorites': {
+        return 'Favorites'
+      }
+      case '/collections': {
+        return 'Collections'
+      }
+      case '/recent': {
+        return 'Recent Activity'
+      }
+      case '/invitation': {
+        return 'Invitation Codes'
+      }
+      default: {
+        if (route.path.startsWith('/conversation/')) {
+          return 'Conversation'
+        }
+        return 'Aetherflow'
+      }
+    }
+  })
 </script>
 
 <style scoped>

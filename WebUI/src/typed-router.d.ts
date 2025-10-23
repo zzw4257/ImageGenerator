@@ -19,9 +19,12 @@ declare module 'vue-router/auto-routes' {
    */
   export interface RouteNamedMap {
     '/': RouteRecordInfo<'/', '/', Record<never, never>, Record<never, never>>,
+    '/account': RouteRecordInfo<'/account', '/account', Record<never, never>, Record<never, never>>,
     '/conversation/[id]': RouteRecordInfo<'/conversation/[id]', '/conversation/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,
     '/favorites': RouteRecordInfo<'/favorites', '/favorites', Record<never, never>, Record<never, never>>,
+    '/generate': RouteRecordInfo<'/generate', '/generate', Record<never, never>, Record<never, never>>,
     '/help': RouteRecordInfo<'/help', '/help', Record<never, never>, Record<never, never>>,
+    '/home': RouteRecordInfo<'/home', '/home', Record<never, never>, Record<never, never>>,
     '/invitation': RouteRecordInfo<'/invitation', '/invitation', Record<never, never>, Record<never, never>>,
     '/login': RouteRecordInfo<'/login', '/login', Record<never, never>, Record<never, never>>,
     '/profile': RouteRecordInfo<'/profile', '/profile', Record<never, never>, Record<never, never>>,
@@ -44,6 +47,10 @@ declare module 'vue-router/auto-routes' {
       routes: '/'
       views: never
     }
+    'src/pages/account.vue': {
+      routes: '/account'
+      views: never
+    }
     'src/pages/conversation/[id].vue': {
       routes: '/conversation/[id]'
       views: never
@@ -52,8 +59,16 @@ declare module 'vue-router/auto-routes' {
       routes: '/favorites'
       views: never
     }
+    'src/pages/generate.vue': {
+      routes: '/generate'
+      views: never
+    }
     'src/pages/help.vue': {
       routes: '/help'
+      views: never
+    }
+    'src/pages/home.vue': {
+      routes: '/home'
       views: never
     }
     'src/pages/invitation.vue': {
