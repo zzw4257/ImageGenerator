@@ -1,6 +1,7 @@
 using ImageGenerator.Database;
 using ImageGenerator.Interface;
 using ImageGenerator.Services;
+using ImageGenerator.Provider;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 
@@ -32,10 +33,13 @@ public static class ConfigHelper
         services.AddScoped<IImageStorageService, ImageStorageService>();
         services.AddScoped<IProfileService, ProfileService>();
         services.AddScoped<IFavoriteService, FavoriteService>();
+        services.AddScoped<IWalletService, WalletService>();
+        services.AddScoped<IGenerateService, GenerateService>();
         
-        services.AddScoped<OpenAIClient>();
-        services.AddScoped<GeminiClient>();
-        services.AddScoped<ImageGenerationClientFactory>();
+        services.AddScoped<StubProvider>();
+        services.AddScoped<OpenAIProvider>();
+        services.AddScoped<GeminiProvider>();
+        services.AddScoped<ImageProvider>();
 
         services.AddSingleton(jwtHelper);
 

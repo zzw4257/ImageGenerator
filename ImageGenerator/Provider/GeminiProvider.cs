@@ -4,9 +4,9 @@ using ImageGenerator.Models;
 using System.Text;
 using System.Text.Json;
 
-namespace ImageGenerator.Services
+namespace ImageGenerator.Provider
 {
-    public class GeminiClient(HttpClient httpClient, IConfiguration configuration) : IImageGenerationClient
+    public class GeminiProvider(HttpClient httpClient, IConfiguration configuration) : IImageGenerationClient
     {
         private readonly HttpClient _httpClient = httpClient;
         private readonly string _apiKey = configuration["Gemini:ApiKey"] ?? throw new InvalidOperationException("Gemini API key not configured");

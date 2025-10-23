@@ -13,7 +13,7 @@ public class ProfileDto: ActionBaseDto
     /// <summary>
     /// The user's credit balance.
     /// </summary>
-    public int Credits { get; set; }
+    public decimal Credits { get; set; }
 
     /// <summary>
     /// The timestamp of the last credit claim.

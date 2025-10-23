@@ -53,6 +53,13 @@ public static class ModelConfigurationHelper
 
         modelBuilder.Entity<Image>()
             .HasQueryFilter(e => !e.IsDeleted);
+
+        modelBuilder.Entity<Transaction>()
+            .HasQueryFilter(e => !e.IsDeleted)
+            .HasOne(t => t.Creator)
+            .WithMany()
+            .HasForeignKey(t => t.CreatorId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 
     /// <summary>
