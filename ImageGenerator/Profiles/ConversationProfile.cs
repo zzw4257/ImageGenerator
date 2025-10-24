@@ -16,6 +16,8 @@ public class ConversationProfile : Profile
         
         CreateMap<Image, ImageDto>();
         
+        CreateMap<Transaction, TransactionDto>();
+        
         CreateMap<GenerateImageDto, GenerationRecord>()
             .ForMember(dest => dest.GenerationParams, opt => opt.Ignore())
             .ForMember(dest => dest.Status, opt => opt.MapFrom(src => GenerationStatus.Pending));

@@ -39,6 +39,11 @@ public class IgDbContext(DbContextOptions<IgDbContext> options) : DbContext(opti
     public DbSet<Transaction> Transactions { get; set; }
 
     /// <summary>
+    /// The Presets table.
+    /// </summary>
+    public DbSet<Preset> Presets { get; set; }
+
+    /// <summary>
     /// Configures the model for the database context.
     /// </summary>
     /// <param name="modelBuilder">The model builder.</param>

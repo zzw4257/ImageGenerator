@@ -220,6 +220,16 @@
                 <v-icon start>mdi-plus</v-icon>
                 获取 Credits
               </v-btn>
+              <v-btn
+                block
+                class="mt-2"
+                size="small"
+                variant="text"
+                @click="$router.push('/recharge')"
+              >
+                <v-icon start>mdi-credit-card-plus</v-icon>
+                充值
+              </v-btn>
             </v-card-text>
           </v-card>
 
@@ -272,6 +282,11 @@
 <script lang="ts" setup>
   import { computed, onMounted, ref } from 'vue'
   import { useRoute } from 'vue-router'
+  import { usePresetStore } from '@/stores/presets'
+import { generateImage as generateImageApi, pollTaskStatus, type GenerateRequestDto, type GenerateTaskStatusDto } from '@/services/generate'
+import { getBalance, grantCredits as grantCreditsApi } from '@/services/wallet'
+import { createConversation } from '@/services/conversation'
+import { useNotificationStore } from '@/stores/notification'
 
   interface GenerationForm {
     prompt: string
@@ -298,10 +313,12 @@
   }
 
   const route = useRoute()
+  const presetStore = usePresetStore()
+  const notificationStore = useNotificationStore()
 
   const form = ref<GenerationForm>({
     prompt: '',
-    model: 'Flux',
+    model: 'Stub',
     resolution: '1024x1024',
     quantity: 1,
     style: '',
@@ -309,8 +326,9 @@
 
   const generating = ref(false)
   const currentResult = ref<GenerationResult | null>(null)
-  const walletBalance = ref(10)
+  const walletBalance = ref(0)
   const recentTasks = ref<Task[]>([])
+  const currentTaskId = ref<string | null>(null)
 
   const modelOptions = [
     { title: 'Stub', value: 'Stub' },
@@ -392,39 +410,80 @@
     if (!form.value.prompt) return
 
     generating.value = true
-    steps.value[1].active = true
+    if (steps.value[1]) steps.value[1].active = true
+    currentTaskId.value = null
 
     try {
-      // 模拟 API 调用
-      await new Promise(resolve => setTimeout(resolve, 3000))
-
-      currentResult.value = {
-        id: Date.now().toString(),
-        prompt: form.value.prompt,
-        imageUrl: '/images/generated/sample.jpg',
-        isFavorite: false,
-        createdAt: new Date(),
+      // 先创建conversation
+      const conversation = await createConversation()
+      
+      // 构建生成参数
+      const params = {
+        resolution: form.value.resolution,
+        style: form.value.style,
+        quantity: form.value.quantity
       }
 
-      // 添加到最近任务
-      recentTasks.value.unshift({
-        id: Date.now().toString(),
+      const request: GenerateRequestDto = {
+        conversationId: conversation.id,
         prompt: form.value.prompt,
-        thumbnail: '/images/generated/sample-thumb.jpg',
-        status: 'completed',
-        createdAt: new Date(),
-      })
+        provider: form.value.model.toLowerCase(), // 转换为小写以匹配后端期望
+        params: JSON.stringify(params),
+        quality: 'standard',
+        style: 'vivid'
+      }
 
-      steps.value[2].active = true
-    } catch (error) {
+      // 提交生成任务
+      const response = await generateImageApi(request)
+      currentTaskId.value = response.taskId
+
+      // 轮询任务状态
+      await pollTaskStatus(
+        response.taskId,
+        (status: GenerateTaskStatusDto) => {
+          console.log('Task status update:', status)
+        }
+      )
+
+      // 任务完成
+      const finalStatus = await pollTaskStatus(response.taskId)
+      
+      if (finalStatus.status === 2 && finalStatus.imageUrl) {
+        currentResult.value = {
+          id: finalStatus.taskId,
+          prompt: finalStatus.prompt || form.value.prompt,
+          imageUrl: finalStatus.imageUrl,
+          isFavorite: false,
+          createdAt: new Date(finalStatus.createdAt),
+        }
+
+        // 添加到最近任务
+        recentTasks.value.unshift({
+          id: finalStatus.taskId,
+          prompt: finalStatus.prompt || form.value.prompt,
+          thumbnail: finalStatus.imageUrl,
+          status: 'completed',
+          createdAt: new Date(finalStatus.createdAt),
+        })
+
+        if (steps.value[2]) steps.value[2].active = true
+        notificationStore.success('图像生成成功！')
+        
+        // 刷新余额
+        await loadWalletBalance()
+      } else {
+        throw new Error(finalStatus.error || '生成失败')
+      }
+    } catch (error: any) {
       console.error('生成失败:', error)
+      notificationStore.error(error?.message || '图像生成失败')
     } finally {
       generating.value = false
+      currentTaskId.value = null
     }
   }
 
   function downloadImage (result: GenerationResult) {
-    // 模拟下载
     const link = document.createElement('a')
     link.href = result.imageUrl
     link.download = `ai-image-${result.id}.jpg`
@@ -437,42 +496,105 @@
 
   async function grantCredits () {
     try {
-      // 调用发放 Credits API
-      walletBalance.value += 10
-    } catch (error) {
+      await grantCreditsApi(10, '开发测试发放')
+      await loadWalletBalance()
+      notificationStore.success('Credits 发放成功！')
+    } catch (error: any) {
       console.error('发放 Credits 失败:', error)
+      notificationStore.error(error?.message || '发放 Credits 失败')
+    }
+  }
+
+  async function loadWalletBalance() {
+    try {
+      const balance = await getBalance()
+      walletBalance.value = balance.balance
+    } catch (error) {
+      console.error('加载余额失败:', error)
     }
   }
 
   function loadRecentTasks () {
-    // 模拟加载最近任务
+    // 模拟加载最近任务 - 后续可以从API获取
     recentTasks.value = [
       {
         id: '1',
         prompt: 'A beautiful sunset over mountains',
-        thumbnail: '/images/generated/thumb1.jpg',
+        thumbnail: '/images/placeholder.svg',
         status: 'completed',
         createdAt: new Date(Date.now() - 1000 * 60 * 5),
       },
       {
         id: '2',
         prompt: 'Abstract geometric patterns in blue',
-        thumbnail: '/images/generated/thumb2.jpg',
+        thumbnail: '/images/placeholder.svg',
         status: 'completed',
         createdAt: new Date(Date.now() - 1000 * 60 * 30),
       },
     ]
   }
 
-  onMounted(() => {
+  onMounted(async () => {
     loadRecentTasks()
+    await loadWalletBalance()
 
-    // 处理预设参数
-    if (route.query.preset) {
-      form.value.prompt = route.query.prompt as string || ''
-      form.value.model = route.query.model as string || 'Flux'
-      form.value.resolution = route.query.resolution as string || '1024x1024'
-      form.value.style = route.query.style as string || ''
+    const presetStore = usePresetStore()
+    // 优先从 store/session 恢复已选择的 preset
+    presetStore.restoreSelectedFromSession()
+    const selected = presetStore.selectedPreset
+
+    const q = route.query
+    const safeDecode = (v?: unknown) => {
+      if (!v) return undefined
+      try { return decodeURIComponent(String(v)) } catch { return String(v) }
+    }
+    const safeParseJson = (s?: string) => {
+      if (!s) return undefined
+      try { return JSON.parse(s) } catch { return undefined }
+    }
+
+    if (selected) {
+      form.value.prompt = selected.prompt || form.value.prompt
+      form.value.model = selected.provider || form.value.model
+      
+      // 解析 defaultParams
+      if (selected.defaultParams) {
+        try {
+          const params = JSON.parse(selected.defaultParams)
+          form.value.resolution = params.resolution || form.value.resolution
+          form.value.style = params.style || form.value.style
+        } catch (e) {
+          console.warn('Failed to parse defaultParams:', selected.defaultParams)
+        }
+      }
+      return
+    }
+
+    // 若 store 没有 preset，则继续解析 query（兼容多种格式）
+    if (q.params) {
+      const decoded = safeDecode(q.params)
+      const params = safeParseJson(decoded)
+      if (params) {
+        form.value.prompt = params.prompt || form.value.prompt
+        form.value.model = params.provider || params.model || form.value.model
+        form.value.resolution = params.resolution || form.value.resolution
+        form.value.style = params.style || form.value.style
+      }
+    } else if (q.preset) {
+      let presetObj: any = undefined
+      const decoded = safeDecode(q.preset)
+      presetObj = safeParseJson(decoded) || (typeof q.preset === 'object' ? q.preset : undefined)
+      if (presetObj) {
+        form.value.prompt = presetObj.prompt || form.value.prompt
+        form.value.model = presetObj.provider || presetObj.model || form.value.model
+        form.value.resolution = presetObj.params?.resolution || presetObj.resolution || form.value.resolution
+        form.value.style = presetObj.params?.style || presetObj.style || form.value.style
+      }
+    } else {
+      if (q.prompt) form.value.prompt = safeDecode(q.prompt) || form.value.prompt
+      if (q.model) form.value.model = safeDecode(q.model) || form.value.model
+      if (q.resolution) form.value.resolution = safeDecode(q.resolution) || form.value.resolution
+      if (q.style) form.value.style = safeDecode(q.style) || form.value.style
     }
   })
 </script>

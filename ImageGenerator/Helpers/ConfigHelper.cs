@@ -35,6 +35,7 @@ public static class ConfigHelper
         services.AddScoped<IFavoriteService, FavoriteService>();
         services.AddScoped<IWalletService, WalletService>();
         services.AddScoped<IGenerateService, GenerateService>();
+        services.AddScoped<IPresetService, PresetService>();
         
         // Register Providers as Singleton (stateless, can be reused)
         services.AddSingleton<StubProvider>();

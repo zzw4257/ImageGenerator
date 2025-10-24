@@ -24,10 +24,14 @@ declare module 'vue-router/auto-routes' {
     '/favorites': RouteRecordInfo<'/favorites', '/favorites', Record<never, never>, Record<never, never>>,
     '/generate': RouteRecordInfo<'/generate', '/generate', Record<never, never>, Record<never, never>>,
     '/help': RouteRecordInfo<'/help', '/help', Record<never, never>, Record<never, never>>,
+    '/history': RouteRecordInfo<'/history', '/history', Record<never, never>, Record<never, never>>,
     '/home': RouteRecordInfo<'/home', '/home', Record<never, never>, Record<never, never>>,
     '/invitation': RouteRecordInfo<'/invitation', '/invitation', Record<never, never>, Record<never, never>>,
+    '/landing': RouteRecordInfo<'/landing', '/landing', Record<never, never>, Record<never, never>>,
     '/login': RouteRecordInfo<'/login', '/login', Record<never, never>, Record<never, never>>,
+    '/presets': RouteRecordInfo<'/presets', '/presets', Record<never, never>, Record<never, never>>,
     '/profile': RouteRecordInfo<'/profile', '/profile', Record<never, never>, Record<never, never>>,
+    '/recharge': RouteRecordInfo<'/recharge', '/recharge', Record<never, never>, Record<never, never>>,
     '/register': RouteRecordInfo<'/register', '/register', Record<never, never>, Record<never, never>>,
     '/settings': RouteRecordInfo<'/settings', '/settings', Record<never, never>, Record<never, never>>,
   }
@@ -67,6 +71,10 @@ declare module 'vue-router/auto-routes' {
       routes: '/help'
       views: never
     }
+    'src/pages/history.vue': {
+      routes: '/history'
+      views: never
+    }
     'src/pages/home.vue': {
       routes: '/home'
       views: never
@@ -75,12 +83,24 @@ declare module 'vue-router/auto-routes' {
       routes: '/invitation'
       views: never
     }
+    'src/pages/landing.vue': {
+      routes: '/landing'
+      views: never
+    }
     'src/pages/login.vue': {
       routes: '/login'
       views: never
     }
+    'src/pages/presets.vue': {
+      routes: '/presets'
+      views: never
+    }
     'src/pages/profile.vue': {
       routes: '/profile'
+      views: never
+    }
+    'src/pages/recharge.vue': {
+      routes: '/recharge'
       views: never
     }
     'src/pages/register.vue': {
