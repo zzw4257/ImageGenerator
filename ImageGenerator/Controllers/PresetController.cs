@@ -46,6 +46,26 @@ public class PresetsController(IPresetService presetService) : ControllerBase
     }
 
     /// <summary>
+    /// 获取当前登录用户创建的所有预制菜
+    ///  GET /api/presets/mine
+    /// </summary>
+    /// <returns>200 OK + 列表, 或 401 Unauthorized</returns>
+    [HttpGet("mine")]
+    [Authorize] 
+    public async Task<IActionResult> GetMyPresets()
+    {
+        try
+        {
+            var presets = await _presetService.GetMyPresetsAsync();
+            return Ok(presets);
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            return Unauthorized(new { message = ex.Message }); 
+        }
+    }
+
+    /// <summary>
     /// 创建一个新的预制菜
     ///  POST /api/presets
     /// </summary>

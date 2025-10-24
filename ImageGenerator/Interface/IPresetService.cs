@@ -34,4 +34,10 @@ public interface IPresetService
     /// <param name="id">要删除的预制菜 ID</param>
     /// <returns>操作是否成功 (true: 找到并标记删除, false: 未找到)</returns>
     Task<bool> DeletePresetAsync(Guid id);
+
+    /// <summary>
+    /// 异步获取当前登录用户创建的所有预制菜。
+    /// </summary>
+    /// <returns>当前用户创建的 Preset 列表</returns>
+    Task<IEnumerable<Preset>> GetMyPresetsAsync();
 }

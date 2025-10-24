@@ -102,4 +102,19 @@ public class PresetService(IgDbContext context, IHttpContextAccessor httpContext
         return true;
     }
 
+    /// <summary>
+    /// 异步获取当前登录用户创建的所有预制菜。
+    /// </summary>
+    public async Task<IEnumerable<Preset>> GetMyPresetsAsync()
+    {
+        var currentUserId = GetCurrentUserId();
+
+        //    和 GetPresetsAsync() 几乎一样，但多了一个 WHERE 条件
+        return await _context.Presets!
+            .Where(p => !p.IsDeleted && p.CreatedByUserId == currentUserId) 
+            .OrderByDescending(p => p.CreatedAt) // 按最新创建的排序
+            .AsNoTracking()
+            .ToListAsync();
+    }
+
 }
