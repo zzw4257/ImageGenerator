@@ -89,13 +89,13 @@ public class PresetService(IgDbContext context, IHttpContextAccessor httpContext
         var currentUserId = GetCurrentUserId();
         var preset = await _context.Presets!
             .FirstOrDefaultAsync(p => p.Id == id && !p.IsDeleted);
-        if (preset.CreatedByUserId != currentUserId)
-        {
-            throw new UnauthorizedAccessException("您只能删除自己创建的预制菜。");
-        }
         if (preset == null)
         {
             return false;
+        }
+        if (preset.CreatedByUserId != currentUserId)
+        {
+            throw new UnauthorizedAccessException("您只能删除自己创建的预制菜。");
         }
         preset.IsDeleted = true;
         await _context.SaveChangesAsync();
