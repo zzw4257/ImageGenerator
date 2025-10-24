@@ -54,7 +54,15 @@ export const listTransactions = async (page = 0, pageSize = 12): Promise<{ items
  */
 export const grantCredits = async (amount: number): Promise<TransactionDto> => {
   try {
-    const { data } = await axios.post<TransactionDto>('/wallet/grant', amount)
+    const { data } = await axios.post<TransactionDto>(
+      '/wallet/grant',
+      JSON.stringify(amount),
+      {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }
+    )
     return data
   } catch (error) {
     ErrorHandler.handle(error, '发放Credits')

@@ -34,6 +34,15 @@
               <v-icon start>mdi-plus</v-icon>
               一键发放
             </v-btn>
+            <v-btn
+              color="white"
+              class="ml-2"
+              variant="outlined"
+              @click="$router.push('/recharge')"
+            >
+              <v-icon start>mdi-credit-card-plus</v-icon>
+              充值
+            </v-btn>
           </div>
         </v-card>
       </v-col>

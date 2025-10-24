@@ -30,6 +30,7 @@ declare module 'vue-router/auto-routes' {
     '/login': RouteRecordInfo<'/login', '/login', Record<never, never>, Record<never, never>>,
     '/presets': RouteRecordInfo<'/presets', '/presets', Record<never, never>, Record<never, never>>,
     '/profile': RouteRecordInfo<'/profile', '/profile', Record<never, never>, Record<never, never>>,
+    '/recharge': RouteRecordInfo<'/recharge', '/recharge', Record<never, never>, Record<never, never>>,
     '/register': RouteRecordInfo<'/register', '/register', Record<never, never>, Record<never, never>>,
     '/settings': RouteRecordInfo<'/settings', '/settings', Record<never, never>, Record<never, never>>,
   }
@@ -91,6 +92,10 @@ declare module 'vue-router/auto-routes' {
     }
     'src/pages/profile.vue': {
       routes: '/profile'
+      views: never
+    }
+    'src/pages/recharge.vue': {
+      routes: '/recharge'
       views: never
     }
     'src/pages/register.vue': {

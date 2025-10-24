@@ -220,6 +220,16 @@
                 <v-icon start>mdi-plus</v-icon>
                 获取 Credits
               </v-btn>
+              <v-btn
+                block
+                class="mt-2"
+                size="small"
+                variant="text"
+                @click="$router.push('/recharge')"
+              >
+                <v-icon start>mdi-credit-card-plus</v-icon>
+                充值
+              </v-btn>
             </v-card-text>
           </v-card>
 
