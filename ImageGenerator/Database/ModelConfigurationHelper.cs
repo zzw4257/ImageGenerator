@@ -67,6 +67,12 @@ public static class ModelConfigurationHelper
             .WithOne(gr => gr.Preset) // 每条 GenerationRecord 对应一个 Preset
             .HasForeignKey(gr => gr.PresetId) 
             .OnDelete(DeleteBehavior.SetNull); // 如果删除了一个 Preset，历史记录(Record)不应被删除，只是把 PresetId 设为 null
+
+        modelBuilder.Entity<User>()
+            .HasMany<Preset>() // 一个 User 可以创建多个 Presets
+            .WithOne(p => p.CreatedByUser) // 每个 Preset 对应一个 User
+            .HasForeignKey(p => p.CreatedByUserId) // 外键是 CreatedByUserId
+            .OnDelete(DeleteBehavior.Restrict); // 不允许删除 User，如果 TA 还有 Presets
     }
 
     /// <summary>
@@ -76,7 +82,7 @@ public static class ModelConfigurationHelper
     /// <param name="modelBuilder">The model builder.</param>
     public static void SeedData(this IgDbContext _, ModelBuilder modelBuilder)
     {
-        var adminUserId = Guid.Parse("00000000-0000-0000-0000-000000000001");
+        var adminUserId = Guid.Parse("10000000-0000-0000-0000-000000000001");
         var salt = "admin-salt-123";
 
         // Use the same encryption method as in AuthenticationService
@@ -98,11 +104,28 @@ public static class ModelConfigurationHelper
             LastCreditClaimedAt = seedDate
         });
 
+        var testerUserId = Guid.Parse("10000000-0000-0000-0000-000000000002"); 
+        var testerSalt = "tester-salt-456";
+        var testerPasswordBytes = Encoding.UTF8.GetBytes("tester123" + testerSalt);
+        var testerPasswordEncryption = Convert.ToHexString(SHA256.HashData(testerPasswordBytes));
+
+        modelBuilder.Entity<User>().HasData(new User
+        {
+            Id = testerUserId,
+            Username = "tester",
+            Password = testerPasswordEncryption,
+            Salt = testerSalt,
+            CreatedAt = seedDate,
+            IsDeleted = false,
+            Credits = 100, // 初始点数
+            LastCreditClaimedAt = seedDate
+        });
+
         // Create initial invitation codes
         modelBuilder.Entity<Invitation>().HasData(
             new Invitation
             {
-                Id = Guid.Parse("00000000-0000-0000-0000-000000000002"),
+                Id = Guid.Parse("20000000-0000-0000-0000-000000000001"),
                 Code = "WELCOME2024ABCDE",
                 IssuerId = adminUserId,
                 CreatedAt = seedDate,
@@ -111,7 +134,7 @@ public static class ModelConfigurationHelper
             },
             new Invitation
             {
-                Id = Guid.Parse("00000000-0000-0000-0000-000000000003"),
+                Id = Guid.Parse("20000000-0000-0000-0000-000000000002"),
                 Code = "INVITE2024FGHIJK",
                 IssuerId = adminUserId,
                 CreatedAt = seedDate,
@@ -123,7 +146,7 @@ public static class ModelConfigurationHelper
         modelBuilder.Entity<Conversation>().HasData(
             new Conversation
             {
-                Id = Guid.Parse("00000000-0000-0000-0000-000000000004"),
+                Id = Guid.Parse("30000000-0000-0000-0000-000000000001"),
                 UserId = adminUserId,
                 CreatedAt = seedDate,
                 UpdatedAt = seedDate,
@@ -134,7 +157,7 @@ public static class ModelConfigurationHelper
         modelBuilder.Entity<Preset>().HasData(
             new Preset
             {
-                Id = Guid.Parse("00000000-0000-0000-0000-00000000000A"),
+                Id = Guid.Parse("40000000-0000-0000-0000-00000000000A"),
                 Name = "产品商业摄影 (Qwen)",
                 Description = "适合电商/广告用途的专业产品照片，强调光线布置、角度与核心细节。",
                 CoverUrl = "/images/presets/product-shot.png",
@@ -143,12 +166,13 @@ public static class ModelConfigurationHelper
                 PriceCredits = 2, 
                 DefaultParams = "{\"style\": \"photorealistic\", \"width\": 1024, \"height\": 1024, \"aspectRatio\": \"1:1\"}", 
                 Tags = new List<string> { "product", "studio", "qwen" },
+                CreatedByUserId = adminUserId,
                 CreatedAt = seedDate, 
                 IsDeleted = false
             },
             new Preset
             {
-                Id = Guid.Parse("00000000-0000-0000-0000-00000000000B"),
+                Id = Guid.Parse("40000000-0000-0000-0000-00000000000B"),
                 Name = "文字图形标识 (Flux)",
                 Description = "用于生成包含特定文字的图形 / 标识，明确字体感受、风格与配色。",
                 CoverUrl = "/images/presets/text-graphic.png", 
@@ -157,12 +181,13 @@ public static class ModelConfigurationHelper
                 PriceCredits = 1, 
                 DefaultParams = "{\"style\": \"graphic\", \"width\": 768, \"height\": 768, \"aspectRatio\": \"1:1\"}", 
                 Tags = new List<string> { "text", "logo", "graphic", "flux" },
+                CreatedByUserId = adminUserId,
                 CreatedAt = seedDate,
                 IsDeleted = false
             },
             new Preset
             {
-                Id = Guid.Parse("00000000-0000-0000-0000-00000000000C"),
+                Id = Guid.Parse("40000000-0000-0000-0000-00000000000C"),
                 Name = "风格化贴纸 (Stub)",
                 Description = "用于创建带有指定风格的贴纸 / 图标素材，强调线条、配色与透明背景。",
                 CoverUrl = "/images/presets/sticker.png",
@@ -171,12 +196,13 @@ public static class ModelConfigurationHelper
                 PriceCredits = 0, 
                 DefaultParams = "{\"style\": \"sticker\", \"width\": 512, \"height\": 512, \"aspectRatio\": \"1:1\"}", 
                 Tags = new List<string> { "sticker", "chibi", "icon", "stub" },
+                CreatedByUserId = adminUserId,
                 CreatedAt = seedDate,
                 IsDeleted = false
             },
             new Preset
             {
-                Id = Guid.Parse("00000000-0000-0000-0000-00000000000D"),
+                Id = Guid.Parse("40000000-0000-0000-0000-00000000000D"),
                 Name = "逼真摄影场景 (Qwen)",
                 Description = "对于逼真的图片，请使用摄影术语。提及拍摄角度、镜头类型、光线和细节，引导模型生成逼真的效果。",
                 CoverUrl = "/images/presets/photorealistic.png",
@@ -185,12 +211,13 @@ public static class ModelConfigurationHelper
                 PriceCredits = 2,
                 DefaultParams = "{\"style\": \"photorealistic\", \"width\": 1024, \"height\": 576, \"aspectRatio\": \"16:9\"}",
                 Tags = new List<string> { "photo", "realistic", "camera", "qwen" },
+                CreatedByUserId = adminUserId,
                 CreatedAt = seedDate,
                 IsDeleted = false
             },
             new Preset
             {
-                Id = Guid.Parse("00000000-0000-0000-0000-00000000000E"),
+                Id = Guid.Parse("40000000-0000-0000-0000-00000000000E"),
                 Name = "极简负空间 (Flux)",
                 Description = "生成带大量留白与单主体的极简风图像，适合做背景或叠加文案。",
                 CoverUrl = "/images/presets/minimal.png",
@@ -199,12 +226,13 @@ public static class ModelConfigurationHelper
                 PriceCredits = 1,
                 DefaultParams = "{\"style\": \"minimalist\", \"width\": 768, \"height\": 512, \"aspectRatio\": \"3:2\"}", 
                 Tags = new List<string> { "minimalist", "art", "negative space", "flux" },
+                CreatedByUserId = adminUserId,
                 CreatedAt = seedDate,
                 IsDeleted = false
             },
             new Preset
             {
-                Id = Guid.Parse("00000000-0000-0000-0000-00000000000F"),
+                Id = Guid.Parse("40000000-0000-0000-0000-00000000000F"),
                 Name = "漫画单格 (Stub)",
                 Description = "生成漫画风单格场景，分离前景角色动作与背景设定，可含对白框。",
                 CoverUrl = "/images/presets/comic.png",
@@ -213,6 +241,7 @@ public static class ModelConfigurationHelper
                 PriceCredits = 0,
                 DefaultParams = "{\"style\": \"comic\", \"width\": 512, \"height\": 910, \"aspectRatio\": \"9:16\"}", 
                 Tags = new List<string> { "comic", "noir", "storyboard", "stub" },
+                CreatedByUserId = adminUserId,
                 CreatedAt = seedDate,
                 IsDeleted = false
             }
