@@ -54,6 +54,17 @@ public class Preset : ModelBase
     public List<string> Tags { get; set; } = [];
 
     /// <summary>
+    /// 创建此预制菜的用户 ID。
+    /// </summary>
+    [Required]
+    public Guid CreatedByUserId { get; set; }
+
+    /// <summary>
+    /// 导航属性，指向创建此预制菜的用户。
+    /// </summary>
+    public User CreatedByUser { get; set; } = null!;
+
+    /// <summary>
     /// 关联到使用此预制菜的所有生成记录。
     /// (对应Spec B 节的 GenerationTask.PresetId)
     /// </summary>

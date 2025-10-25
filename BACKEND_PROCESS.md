@@ -8,3 +8,8 @@
 - + Generate
     - GET /generate
     - POST /generate
+- + Presets
+    - GET /
+    - POST /
+    - GET /{id}
+    - DELETE /{id}
