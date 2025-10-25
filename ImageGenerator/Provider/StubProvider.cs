@@ -67,25 +67,26 @@ namespace ImageGenerator.Provider
 
         public Task<BinaryData> GenerateImageAsync(string prompt, object options)
         {
-            // 如果没有可用图片，返回占位图
-            if (_availableImages.Count == 0)
-            {
-                Console.WriteLine($"[StubProvider] No images available, using placeholder for prompt: {prompt}");
-                return Task.FromResult(new BinaryData(_placeholderImage));
-            }
-
-            // 从预加载的图片列表中随机选择一张
-            var randomImage = _availableImages[_random.Next(_availableImages.Count)];
-            var imagePath = Path.Combine(Directory.GetCurrentDirectory(), _staticImagesRoot, randomImage);
+            // 固定返回 demo.png
+            var demoImagePath = Path.Combine(Directory.GetCurrentDirectory(), _staticImagesRoot, "demo.png");
 
             try
             {
-                var imageBytes = File.ReadAllBytes(imagePath);
-                return Task.FromResult(new BinaryData(imageBytes));
+                if (File.Exists(demoImagePath))
+                {
+                    var imageBytes = File.ReadAllBytes(demoImagePath);
+                    Console.WriteLine($"[StubProvider] Returning demo.png for prompt: {prompt}");
+                    return Task.FromResult(new BinaryData(imageBytes));
+                }
+                else
+                {
+                    Console.WriteLine($"[StubProvider] demo.png not found at {demoImagePath}, using placeholder");
+                    return Task.FromResult(new BinaryData(_placeholderImage));
+                }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"[StubProvider] Error reading image {randomImage}: {ex.Message}, using placeholder");
+                Console.WriteLine($"[StubProvider] Error reading demo.png: {ex.Message}, using placeholder");
                 return Task.FromResult(new BinaryData(_placeholderImage));
             }
         }

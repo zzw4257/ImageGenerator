@@ -1,7 +1,7 @@
 <template>
   <v-container fluid class="pa-8">
     <div class="d-flex justify-space-between align-center mb-6">
-      <h1 class="text-h4 font-weight-bold">Presets</h1>
+      <h1 class="text-h4 font-weight-bold">Muse</h1>
     </div>
 
     <v-row>

@@ -20,7 +20,10 @@ declare module 'vue-router/auto-routes' {
   export interface RouteNamedMap {
     '/': RouteRecordInfo<'/', '/', Record<never, never>, Record<never, never>>,
     '/account': RouteRecordInfo<'/account', '/account', Record<never, never>, Record<never, never>>,
+    '/analytics': RouteRecordInfo<'/analytics', '/analytics', Record<never, never>, Record<never, never>>,
+    '/community': RouteRecordInfo<'/community', '/community', Record<never, never>, Record<never, never>>,
     '/conversation/[id]': RouteRecordInfo<'/conversation/[id]', '/conversation/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,
+    '/enterprise': RouteRecordInfo<'/enterprise', '/enterprise', Record<never, never>, Record<never, never>>,
     '/favorites': RouteRecordInfo<'/favorites', '/favorites', Record<never, never>, Record<never, never>>,
     '/generate': RouteRecordInfo<'/generate', '/generate', Record<never, never>, Record<never, never>>,
     '/help': RouteRecordInfo<'/help', '/help', Record<never, never>, Record<never, never>>,
@@ -29,11 +32,15 @@ declare module 'vue-router/auto-routes' {
     '/invitation': RouteRecordInfo<'/invitation', '/invitation', Record<never, never>, Record<never, never>>,
     '/landing': RouteRecordInfo<'/landing', '/landing', Record<never, never>, Record<never, never>>,
     '/login': RouteRecordInfo<'/login', '/login', Record<never, never>, Record<never, never>>,
+    '/market': RouteRecordInfo<'/market', '/market', Record<never, never>, Record<never, never>>,
     '/presets': RouteRecordInfo<'/presets', '/presets', Record<never, never>, Record<never, never>>,
+    '/pricing': RouteRecordInfo<'/pricing', '/pricing', Record<never, never>, Record<never, never>>,
     '/profile': RouteRecordInfo<'/profile', '/profile', Record<never, never>, Record<never, never>>,
     '/recharge': RouteRecordInfo<'/recharge', '/recharge', Record<never, never>, Record<never, never>>,
     '/register': RouteRecordInfo<'/register', '/register', Record<never, never>, Record<never, never>>,
     '/settings': RouteRecordInfo<'/settings', '/settings', Record<never, never>, Record<never, never>>,
+    '/templates': RouteRecordInfo<'/templates', '/templates', Record<never, never>, Record<never, never>>,
+    '/workflow-editor': RouteRecordInfo<'/workflow-editor', '/workflow-editor', Record<never, never>, Record<never, never>>,
   }
 
   /**
@@ -55,8 +62,20 @@ declare module 'vue-router/auto-routes' {
       routes: '/account'
       views: never
     }
+    'src/pages/analytics.vue': {
+      routes: '/analytics'
+      views: never
+    }
+    'src/pages/community.vue': {
+      routes: '/community'
+      views: never
+    }
     'src/pages/conversation/[id].vue': {
       routes: '/conversation/[id]'
+      views: never
+    }
+    'src/pages/enterprise.vue': {
+      routes: '/enterprise'
       views: never
     }
     'src/pages/favorites.vue': {
@@ -91,8 +110,16 @@ declare module 'vue-router/auto-routes' {
       routes: '/login'
       views: never
     }
+    'src/pages/market.vue': {
+      routes: '/market'
+      views: never
+    }
     'src/pages/presets.vue': {
       routes: '/presets'
+      views: never
+    }
+    'src/pages/pricing.vue': {
+      routes: '/pricing'
       views: never
     }
     'src/pages/profile.vue': {
@@ -109,6 +136,14 @@ declare module 'vue-router/auto-routes' {
     }
     'src/pages/settings.vue': {
       routes: '/settings'
+      views: never
+    }
+    'src/pages/templates.vue': {
+      routes: '/templates'
+      views: never
+    }
+    'src/pages/workflow-editor.vue': {
+      routes: '/workflow-editor'
       views: never
     }
   }

@@ -33,7 +33,7 @@ export interface GenerateTaskStatusDto {
  */
 export const generateImage = async (request: GenerateRequestDto): Promise<GenerateResponseDto> => {
   try {
-    const { data } = await axios.post<GenerateResponseDto>('/generate', request)
+    const { data } = await axios.post<GenerateResponseDto>('/api/generate', request)
     return data
   } catch (error) {
     ErrorHandler.handle(error, '图像生成')
@@ -46,7 +46,7 @@ export const generateImage = async (request: GenerateRequestDto): Promise<Genera
  */
 export const getTaskStatus = async (taskId: string): Promise<GenerateTaskStatusDto> => {
   try {
-    const { data } = await axios.get<GenerateTaskStatusDto>(`/generate/${taskId}`)
+    const { data } = await axios.get<GenerateTaskStatusDto>(`/api/generate/${taskId}`)
     return data
   } catch (error) {
     ErrorHandler.handle(error, '获取任务状态')

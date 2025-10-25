@@ -208,10 +208,48 @@
       }
     },
     {
-      title: 'Presets',
+      title: 'Muse',
       subtitle: 'Use ready-made prompts',
       icon: 'mdi-format-paint',
       to: '/presets'
+    },
+    {
+      title: 'Market',
+      subtitle: 'AIGC assets marketplace',
+      icon: 'mdi-store',
+      to: '/market',
+      badge: {
+        text: 'New',
+        color: 'success'
+      }
+    },
+    {
+      title: 'Analytics',
+      subtitle: 'Data insights',
+      icon: 'mdi-chart-line',
+      to: '/analytics'
+    },
+    {
+      title: 'Community',
+      subtitle: 'Creator community',
+      icon: 'mdi-account-group',
+      to: '/community'
+    },
+    {
+      title: 'Workflow Editor',
+      subtitle: 'Visual workflow builder',
+      icon: 'mdi-graph',
+      to: '/workflow-editor',
+      badge: {
+        text: 'Beta',
+        color: 'info'
+      }
+    },
+    {
+      title: 'Enterprise',
+      subtitle: 'Business solutions',
+      icon: 'mdi-office-building',
+      to: '/enterprise'
     },
     {
       title: 'Favorites',
