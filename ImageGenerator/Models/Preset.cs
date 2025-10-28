@@ -65,8 +65,33 @@ public class Preset : ModelBase
     public User CreatedByUser { get; set; } = null!;
 
     /// <summary>
+    /// (冗余字段) 此预制菜的总点赞数。
+    /// </summary>
+    public int LikeCount { get; set; } = 0;
+
+    /// <summary>
+    /// (冗余字段) 此预制菜的总收藏数。
+    /// </summary>
+    public int FavoriteCount { get; set; } = 0;
+
+    /// <summary>
+    /// 关联到所有“点赞”这个预制菜的记录。
+    /// </summary>
+    public ICollection<PresetLike> PresetLikes { get; set; } = [];
+
+    /// <summary>
+    /// 关联到所有“收藏”这个预制菜的记录。
+    /// </summary>
+    public ICollection<PresetFavorite> PresetFavorites { get; set; } = [];
+
+    /// <summary>
+    /// 关联到所有“举报”这个预制菜的记录。
+    /// </summary>
+    public ICollection<PresetReport> PresetReports { get; set; } = [];
+
+
+    /// <summary>
     /// 关联到使用此预制菜的所有生成记录。
-    /// (对应Spec B 节的 GenerationTask.PresetId)
     /// </summary>
     public ICollection<GenerationRecord> GenerationRecords { get; set; } = [];
 }

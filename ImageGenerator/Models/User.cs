@@ -44,4 +44,25 @@ public class User: ModelBase
     /// The timestamp when the user last claimed their credits.
     /// </summary>
     public DateTime? LastCreditClaimedAt { get; set; }
+
+
+    /// <summary>
+    /// (导航属性) 该用户创建的所有预制菜。
+    /// </summary>
+    public ICollection<Preset> PresetsCreated { get; set; } = [];
+
+    /// <summary>
+    /// (导航属性) 该用户的“点赞”记录
+    /// </summary>
+    public ICollection<PresetLike> PresetLikes { get; set; } = [];
+
+    /// <summary>
+    /// (导航属性) 该用户的“收藏”记录。
+    /// </summary>
+    public ICollection<PresetFavorite> PresetFavorites { get; set; } = [];
+
+    /// <summary>
+    /// (导航属性) 该用户提交的所有“举报”记录。
+    /// </summary>
+    public ICollection<PresetReport> PresetReportsMade { get; set; } = [];
 }

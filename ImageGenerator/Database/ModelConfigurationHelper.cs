@@ -69,10 +69,59 @@ public static class ModelConfigurationHelper
             .OnDelete(DeleteBehavior.SetNull); // 如果删除了一个 Preset，历史记录(Record)不应被删除，只是把 PresetId 设为 null
 
         modelBuilder.Entity<User>()
-            .HasMany<Preset>() // 一个 User 可以创建多个 Presets
+            .HasMany<Preset>(u => u.PresetsCreated) // 一个 User 可以创建多个 Presets
             .WithOne(p => p.CreatedByUser) // 每个 Preset 对应一个 User
             .HasForeignKey(p => p.CreatedByUserId) // 外键是 CreatedByUserId
             .OnDelete(DeleteBehavior.Restrict); // 不允许删除 User，如果 TA 还有 Presets
+
+        // PresetLike (点赞表)
+        modelBuilder.Entity<PresetLike>()
+            .HasKey(pl => new { pl.UserId, pl.PresetId }); // 复合主键
+
+        modelBuilder.Entity<PresetLike>()
+            .HasOne(pl => pl.User)
+            .WithMany(u => u.PresetLikes) 
+            .HasForeignKey(pl => pl.UserId)
+            .OnDelete(DeleteBehavior.Cascade); 
+
+        modelBuilder.Entity<PresetLike>()
+            .HasOne(pl => pl.Preset)
+            .WithMany(p => p.PresetLikes) 
+            .HasForeignKey(pl => pl.PresetId)
+            .OnDelete(DeleteBehavior.Cascade); 
+
+        // PresetFavorite (收藏表)
+        modelBuilder.Entity<PresetFavorite>()
+            .HasQueryFilter(e => !e.IsDeleted); 
+
+        modelBuilder.Entity<PresetFavorite>()
+            .HasOne(pf => pf.User)
+            .WithMany(u => u.PresetFavorites) 
+            .HasForeignKey(pf => pf.UserId)
+            .OnDelete(DeleteBehavior.Cascade); 
+
+        modelBuilder.Entity<PresetFavorite>()
+            .HasOne(pf => pf.Preset)
+            .WithMany(p => p.PresetFavorites) 
+            .HasForeignKey(pf => pf.PresetId)
+            .OnDelete(DeleteBehavior.Cascade); 
+
+        // PresetReport (举报表)
+        modelBuilder.Entity<PresetReport>()
+            .HasQueryFilter(e => !e.IsDeleted); 
+        
+        modelBuilder.Entity<PresetReport>()
+            .HasOne(pr => pr.ReporterUser)
+            .WithMany(u => u.PresetReportsMade) 
+            .HasForeignKey(pr => pr.ReporterUserId)
+            .OnDelete(DeleteBehavior.Restrict); 
+
+        modelBuilder.Entity<PresetReport>()
+            .HasOne(pr => pr.Preset)
+            .WithMany(p => p.PresetReports) 
+            .HasForeignKey(pr => pr.PresetId)
+            .OnDelete(DeleteBehavior.Cascade);
+
     }
 
     /// <summary>

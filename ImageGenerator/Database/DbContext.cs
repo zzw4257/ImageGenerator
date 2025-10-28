@@ -37,11 +37,30 @@ public class IgDbContext(DbContextOptions<IgDbContext> options) : DbContext(opti
     /// The Transactions table.
     /// </summary>
     public DbSet<Transaction> Transactions { get; set; }
+    
 
+    /// ------------------------------------------------------------
     /// <summary>
     /// The Presets table.
     /// </summary>
     public DbSet<Preset> Presets { get; set; }
+
+    /// <summary>
+    /// 点赞关系表 (轻量级，无 Id)
+    /// </summary>
+    public DbSet<PresetLike> PresetLikes { get; set; }
+
+    /// <summary>
+    /// 收藏事件表 (继承 ModelBase)
+    /// </summary>
+    public DbSet<PresetFavorite> PresetFavorites { get; set; }
+
+    /// <summary>
+    /// 举报事件表 (继承 ModelBase)
+    /// </summary>
+    public DbSet<PresetReport> PresetReports { get; set; }
+    /// ------------------------------------------------------------
+
 
     /// <summary>
     /// Configures the model for the database context.
