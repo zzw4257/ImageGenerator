@@ -14,12 +14,10 @@ namespace ImageGenerator.Services;
 /// </summary>
 public class AuthorizationService(
     IgDbContext context,
-    IHttpContextAccessor httpContextAccessor,
-    JwtHelper jwtHelper) : IAuthorizationService
+    IHttpContextAccessor httpContextAccessor) : IAuthorizationService
 {
     private readonly IgDbContext _context = context;
     private readonly IHttpContextAccessor _http = httpContextAccessor;
-    private readonly JwtHelper _jwtHelper = jwtHelper;
 
     /// <summary>
     /// 提权操作
@@ -68,14 +66,6 @@ public class AuthorizationService(
 
         await _context.SaveChangesAsync();
 
-        // 生成新的 JWT Token，包含更新后的角色
-        var claims = new List<Claim>
-        {
-            new(ClaimTypes.Name, targetUser.Id.ToString()),
-            new(ClaimTypes.Role, targetUser.Role.ToString())
-        };
-        var newToken = _jwtHelper.GetJwtToken(claims);
-
         return new ChangeRoleResponseDto
         {
             UserId = targetUser.Id,
@@ -83,7 +73,6 @@ public class AuthorizationService(
             OldRole = oldRole,
             NewRole = targetUser.Role,
             ChangedAt = DateTime.UtcNow,
-            NewToken = newToken // 返回新的 Token
         };
     }
 
@@ -134,7 +123,6 @@ public class AuthorizationService(
             new(ClaimTypes.Name, targetUser.Id.ToString()),
             new(ClaimTypes.Role, targetUser.Role.ToString())
         };
-        var newToken = _jwtHelper.GetJwtToken(claims);
         var expirationTime = DateTime.Now.AddMinutes(30);
 
         return new ChangeRoleResponseDto
@@ -144,7 +132,6 @@ public class AuthorizationService(
             OldRole = oldRole,
             NewRole = targetUser.Role,
             ChangedAt = DateTime.UtcNow,
-            NewToken = newToken,
             TokenExpirationTime = expirationTime
         };
     }

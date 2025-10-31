@@ -49,6 +49,7 @@ public class AuthenticationService(IgDbContext context, JwtHelper jwtHelper) : I
         return new LoginDto
         {
             UserId = user.Id,
+            Role = user.Role,
             Token = _jwtHelper.GetJwtToken(claims),
             ExpirationTime = DateTime.Now.AddMinutes(30)
         };
