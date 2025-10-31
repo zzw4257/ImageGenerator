@@ -78,6 +78,7 @@ public class WalletController(IWalletService walletService) : ControllerBase
     /// <param name="amount">The amount of credits to grant.</param>
     /// <returns>The transaction details.</returns>
     [HttpPost("grant")]
+    [RoleAuthorize(UserRole.Admin)]  // 仅 Admin 角色可访问
     public async Task<ActionResult<TransactionDto>> Grant([FromBody] decimal amount)
     {
         try

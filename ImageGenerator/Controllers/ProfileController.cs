@@ -21,17 +21,17 @@ public class ProfileController(IProfileService profileService) : ControllerBase
         return Ok(profile);
     }
 
-    [HttpPost("credits/claim")]
-    public async Task<ActionResult<ProfileDto>> ClaimDailyCredits()
-    {
-        try
-        {
-            var updated = await _profileService.ClaimDailyCreditsAsync();
-            return Ok(updated);
-        }
-        catch (InvalidOperationException ex)
-        {
-            return BadRequest(new { message = ex.Message });
-        }
-    }
+    // [HttpPost("credits/claim")]
+    // public async Task<ActionResult<ProfileDto>> ClaimDailyCredits()
+    // {
+    //     try
+    //     {
+    //         var updated = await _profileService.ClaimDailyCreditsAsync();
+    //         return Ok(updated);
+    //     }
+    //     catch (InvalidOperationException ex)
+    //     {
+    //         return BadRequest(new { message = ex.Message });
+    //     }
+    // }
 }
