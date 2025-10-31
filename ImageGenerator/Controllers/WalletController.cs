@@ -1,15 +1,15 @@
 using ImageGenerator.Dtos;
 using ImageGenerator.Enums;
 using ImageGenerator.Interface;
+using ImageGenerator.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ImageGenerator.Helpers;
 
 namespace ImageGenerator.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize]
+[RoleAuthorize(UserRole.User)]  // User 及以上角色可访问
 /// <summary>
 /// Manages the user's wallet.
 /// </summary>

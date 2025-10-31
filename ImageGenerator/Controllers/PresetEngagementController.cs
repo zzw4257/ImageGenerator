@@ -1,6 +1,7 @@
 // D:\...\ImageGenerator\ImageGenerator\Controllers\PresetEngagementController.cs
 
 using ImageGenerator.Enums;
+using ImageGenerator.Helpers;
 using ImageGenerator.Interface;
 using ImageGenerator.Dtos;
 using Microsoft.AspNetCore.Authorization; 
@@ -13,7 +14,7 @@ namespace ImageGenerator.Controllers;
 /// </summary>
 [ApiController]
 [Route("api/presets/{presetId}")] // <-- 基础路由设为 /api/presets/{presetId}
-[Authorize] // 所有互动操作都需要登录
+[RoleAuthorize(UserRole.User)] // User 及以上角色可访问
 public class PresetEngagementController(IPresetEngagementService engagementService) : ControllerBase
 {
     private readonly IPresetEngagementService _engagementService = engagementService;

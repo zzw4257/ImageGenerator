@@ -3,6 +3,7 @@ using System;
 using ImageGenerator.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ImageGenerator.Migrations
 {
     [DbContext(typeof(IgDbContext))]
-    partial class IgDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251031075355_RestoreNavigationProperties")]
+    partial class RestoreNavigationProperties
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.8");
@@ -29,7 +32,7 @@ namespace ImageGenerator.Migrations
 
                     b.HasIndex("InputImagesId");
 
-                    b.ToTable("GenerationRecordImage", (string)null);
+                    b.ToTable("GenerationRecordImage");
                 });
 
             modelBuilder.Entity("ImageGenerator.Models.Conversation", b =>
@@ -54,7 +57,7 @@ namespace ImageGenerator.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Conversations", (string)null);
+                    b.ToTable("Conversations");
 
                     b.HasData(
                         new
@@ -113,7 +116,7 @@ namespace ImageGenerator.Migrations
 
                     b.HasIndex("PresetId");
 
-                    b.ToTable("GenerationRecords", (string)null);
+                    b.ToTable("GenerationRecords");
                 });
 
             modelBuilder.Entity("ImageGenerator.Models.Image", b =>
@@ -148,7 +151,7 @@ namespace ImageGenerator.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Images", (string)null);
+                    b.ToTable("Images");
                 });
 
             modelBuilder.Entity("ImageGenerator.Models.Invitation", b =>
@@ -180,7 +183,7 @@ namespace ImageGenerator.Migrations
 
                     b.HasIndex("IssuerId");
 
-                    b.ToTable("Invitations", (string)null);
+                    b.ToTable("Invitations");
 
                     b.HasData(
                         new
@@ -259,7 +262,7 @@ namespace ImageGenerator.Migrations
 
                     b.HasIndex("CreatedByUserId");
 
-                    b.ToTable("Presets", (string)null);
+                    b.ToTable("Presets");
 
                     b.HasData(
                         new
@@ -390,7 +393,7 @@ namespace ImageGenerator.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("PresetFavorites", (string)null);
+                    b.ToTable("PresetFavorites");
                 });
 
             modelBuilder.Entity("ImageGenerator.Models.PresetLike", b =>
@@ -414,7 +417,7 @@ namespace ImageGenerator.Migrations
 
                     b.HasIndex("PresetId");
 
-                    b.ToTable("PresetLikes", (string)null);
+                    b.ToTable("PresetLikes");
                 });
 
             modelBuilder.Entity("ImageGenerator.Models.PresetReport", b =>
@@ -460,7 +463,7 @@ namespace ImageGenerator.Migrations
 
                     b.HasIndex("ReporterUserId");
 
-                    b.ToTable("PresetReports", (string)null);
+                    b.ToTable("PresetReports");
                 });
 
             modelBuilder.Entity("ImageGenerator.Models.RoleLog", b =>
@@ -500,7 +503,7 @@ namespace ImageGenerator.Migrations
 
                     b.HasIndex("TargetUserId");
 
-                    b.ToTable("RoleLogs", (string)null);
+                    b.ToTable("RoleLogs");
                 });
 
             modelBuilder.Entity("ImageGenerator.Models.Transaction", b =>
@@ -535,7 +538,7 @@ namespace ImageGenerator.Migrations
 
                     b.HasIndex("CreatorId");
 
-                    b.ToTable("Transactions", (string)null);
+                    b.ToTable("Transactions");
                 });
 
             modelBuilder.Entity("ImageGenerator.Models.User", b =>
@@ -577,7 +580,7 @@ namespace ImageGenerator.Migrations
 
                     b.HasIndex("InvitedById");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
 
                     b.HasData(
                         new

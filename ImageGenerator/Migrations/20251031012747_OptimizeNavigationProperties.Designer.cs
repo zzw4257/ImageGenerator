@@ -3,6 +3,7 @@ using System;
 using ImageGenerator.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ImageGenerator.Migrations
 {
     [DbContext(typeof(IgDbContext))]
-    partial class IgDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251031012747_OptimizeNavigationProperties")]
+    partial class OptimizeNavigationProperties
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.8");
@@ -29,7 +32,7 @@ namespace ImageGenerator.Migrations
 
                     b.HasIndex("InputImagesId");
 
-                    b.ToTable("GenerationRecordImage", (string)null);
+                    b.ToTable("GenerationRecordImage");
                 });
 
             modelBuilder.Entity("ImageGenerator.Models.Conversation", b =>
@@ -54,7 +57,7 @@ namespace ImageGenerator.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Conversations", (string)null);
+                    b.ToTable("Conversations");
 
                     b.HasData(
                         new
@@ -113,7 +116,7 @@ namespace ImageGenerator.Migrations
 
                     b.HasIndex("PresetId");
 
-                    b.ToTable("GenerationRecords", (string)null);
+                    b.ToTable("GenerationRecords");
                 });
 
             modelBuilder.Entity("ImageGenerator.Models.Image", b =>
@@ -148,7 +151,7 @@ namespace ImageGenerator.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Images", (string)null);
+                    b.ToTable("Images");
                 });
 
             modelBuilder.Entity("ImageGenerator.Models.Invitation", b =>
@@ -180,7 +183,7 @@ namespace ImageGenerator.Migrations
 
                     b.HasIndex("IssuerId");
 
-                    b.ToTable("Invitations", (string)null);
+                    b.ToTable("Invitations");
 
                     b.HasData(
                         new
@@ -259,7 +262,7 @@ namespace ImageGenerator.Migrations
 
                     b.HasIndex("CreatedByUserId");
 
-                    b.ToTable("Presets", (string)null);
+                    b.ToTable("Presets");
 
                     b.HasData(
                         new
@@ -390,7 +393,7 @@ namespace ImageGenerator.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("PresetFavorites", (string)null);
+                    b.ToTable("PresetFavorites");
                 });
 
             modelBuilder.Entity("ImageGenerator.Models.PresetLike", b =>
@@ -401,20 +404,11 @@ namespace ImageGenerator.Migrations
                     b.Property<Guid>("PresetId")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("Id")
-                        .HasColumnType("TEXT");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("INTEGER");
-
                     b.HasKey("UserId", "PresetId");
 
                     b.HasIndex("PresetId");
 
-                    b.ToTable("PresetLikes", (string)null);
+                    b.ToTable("PresetLikes");
                 });
 
             modelBuilder.Entity("ImageGenerator.Models.PresetReport", b =>
@@ -460,47 +454,7 @@ namespace ImageGenerator.Migrations
 
                     b.HasIndex("ReporterUserId");
 
-                    b.ToTable("PresetReports", (string)null);
-                });
-
-            modelBuilder.Entity("ImageGenerator.Models.RoleLog", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("TEXT");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("NewRole")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("OldRole")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("OperationType")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("OperatorUserId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Reason")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("TargetUserId")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("OperatorUserId");
-
-                    b.HasIndex("TargetUserId");
-
-                    b.ToTable("RoleLogs", (string)null);
+                    b.ToTable("PresetReports");
                 });
 
             modelBuilder.Entity("ImageGenerator.Models.Transaction", b =>
@@ -535,7 +489,7 @@ namespace ImageGenerator.Migrations
 
                     b.HasIndex("CreatorId");
 
-                    b.ToTable("Transactions", (string)null);
+                    b.ToTable("Transactions");
                 });
 
             modelBuilder.Entity("ImageGenerator.Models.User", b =>
@@ -577,7 +531,7 @@ namespace ImageGenerator.Migrations
 
                     b.HasIndex("InvitedById");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
 
                     b.HasData(
                         new
@@ -624,9 +578,9 @@ namespace ImageGenerator.Migrations
             modelBuilder.Entity("ImageGenerator.Models.Conversation", b =>
                 {
                     b.HasOne("ImageGenerator.Models.User", "User")
-                        .WithMany("Conversations")
+                        .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("User");
@@ -646,9 +600,8 @@ namespace ImageGenerator.Migrations
                         .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("ImageGenerator.Models.Preset", "Preset")
-                        .WithMany("GenerationRecords")
-                        .HasForeignKey("PresetId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .WithMany()
+                        .HasForeignKey("PresetId");
 
                     b.Navigation("Conversation");
 
@@ -682,9 +635,9 @@ namespace ImageGenerator.Migrations
             modelBuilder.Entity("ImageGenerator.Models.Preset", b =>
                 {
                     b.HasOne("ImageGenerator.Models.User", "CreatedByUser")
-                        .WithMany("PresetsCreated")
+                        .WithMany()
                         .HasForeignKey("CreatedByUserId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("CreatedByUser");
@@ -693,12 +646,12 @@ namespace ImageGenerator.Migrations
             modelBuilder.Entity("ImageGenerator.Models.PresetFavorite", b =>
                 {
                     b.HasOne("ImageGenerator.Models.Preset", "Preset")
-                        .WithMany("PresetFavorites")
+                        .WithMany()
                         .HasForeignKey("PresetId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("ImageGenerator.Models.User", "User")
-                        .WithMany("PresetFavorites")
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
 
@@ -710,12 +663,12 @@ namespace ImageGenerator.Migrations
             modelBuilder.Entity("ImageGenerator.Models.PresetLike", b =>
                 {
                     b.HasOne("ImageGenerator.Models.Preset", "Preset")
-                        .WithMany("PresetLikes")
+                        .WithMany()
                         .HasForeignKey("PresetId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("ImageGenerator.Models.User", "User")
-                        .WithMany("PresetLikes")
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
 
@@ -727,35 +680,18 @@ namespace ImageGenerator.Migrations
             modelBuilder.Entity("ImageGenerator.Models.PresetReport", b =>
                 {
                     b.HasOne("ImageGenerator.Models.Preset", "Preset")
-                        .WithMany("PresetReports")
+                        .WithMany()
                         .HasForeignKey("PresetId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("ImageGenerator.Models.User", "ReporterUser")
-                        .WithMany("PresetReportsMade")
+                        .WithMany()
                         .HasForeignKey("ReporterUserId")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Preset");
 
                     b.Navigation("ReporterUser");
-                });
-
-            modelBuilder.Entity("ImageGenerator.Models.RoleLog", b =>
-                {
-                    b.HasOne("ImageGenerator.Models.User", "OperatorUser")
-                        .WithMany()
-                        .HasForeignKey("OperatorUserId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("ImageGenerator.Models.User", "TargetUser")
-                        .WithMany()
-                        .HasForeignKey("TargetUserId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("OperatorUser");
-
-                    b.Navigation("TargetUser");
                 });
 
             modelBuilder.Entity("ImageGenerator.Models.Transaction", b =>
@@ -782,30 +718,6 @@ namespace ImageGenerator.Migrations
             modelBuilder.Entity("ImageGenerator.Models.Conversation", b =>
                 {
                     b.Navigation("GenerationRecords");
-                });
-
-            modelBuilder.Entity("ImageGenerator.Models.Preset", b =>
-                {
-                    b.Navigation("GenerationRecords");
-
-                    b.Navigation("PresetFavorites");
-
-                    b.Navigation("PresetLikes");
-
-                    b.Navigation("PresetReports");
-                });
-
-            modelBuilder.Entity("ImageGenerator.Models.User", b =>
-                {
-                    b.Navigation("Conversations");
-
-                    b.Navigation("PresetFavorites");
-
-                    b.Navigation("PresetLikes");
-
-                    b.Navigation("PresetReportsMade");
-
-                    b.Navigation("PresetsCreated");
                 });
 #pragma warning restore 612, 618
         }

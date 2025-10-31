@@ -59,6 +59,11 @@ public class IgDbContext(DbContextOptions<IgDbContext> options) : DbContext(opti
     /// 举报事件表 (继承 ModelBase)
     /// </summary>
     public DbSet<PresetReport> PresetReports { get; set; }
+
+    /// <summary>
+    /// 角色变更审计日志表
+    /// </summary>
+    public DbSet<RoleLog> RoleLogs { get; set; }
     /// ------------------------------------------------------------
 
 

@@ -2,6 +2,7 @@
 
 using ImageGenerator.Dtos;
 using ImageGenerator.Enums;
+using ImageGenerator.Helpers;
 using ImageGenerator.Interface;
 using ImageGenerator.Models; 
 using Microsoft.AspNetCore.Authorization; 
@@ -14,7 +15,7 @@ namespace ImageGenerator.Controllers;
 /// </summary>
 [ApiController]
 [Route("api/reports")] 
-//[Authorize(Roles = "Admin")]  TODO: 在管理员角色区分做好之后，只对管理员开放
+[RoleAuthorize(UserRole.Admin)]  // 只允许 Admin 和 Owner 访问
 public class ReportController(IPresetReportService reportService) : ControllerBase
 {
     private readonly IPresetReportService _reportService = reportService;

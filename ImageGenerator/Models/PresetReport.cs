@@ -13,13 +13,20 @@ public class PresetReport : ModelBase
     /// 被举报的预制菜 ID
     /// </summary>
     public Guid PresetId { get; set; }
-    public Preset? Preset { get; set; } //举报成功可能被删除
-
+    
+    /// <summary>
+    /// 导航属性：被举报的预制菜（可为空，Preset 被删除后举报记录仍需保留用于审计）
+    /// </summary>
+    public Preset? Preset { get; set; } 
     /// <summary>
     /// 提交举报的用户 ID
     /// </summary>
     public Guid ReporterUserId { get; set; }
-    public User ReporterUser { get; set; } = null!;
+    
+    /// <summary>
+    /// 导航属性：提交举报的用户（可为空，即便用户被删除了，举报记录也应该存在用于审计）
+    /// </summary>
+    public User? ReporterUser { get; set; }
 
     /// <summary>
     /// 举报原因 

@@ -20,9 +20,7 @@ public class PresetReportService(IgDbContext context) : IPresetReportService
     /// </summary>
     public async Task<IEnumerable<PresetReportDto>> GetAllReportsAsync(ReportStatus? statusFilter = null)
     {
-        var query = _context.PresetReports
-            .Include(r => r.ReporterUser) // 仍然需要 Include 来获取 ReporterUsername
-            .OrderByDescending(r => r.CreatedAt)
+        IQueryable<PresetReport> query = _context.PresetReports
             .AsNoTracking();
 
         if (statusFilter.HasValue)
@@ -30,7 +28,9 @@ public class PresetReportService(IgDbContext context) : IPresetReportService
             query = query.Where(r => r.Status == statusFilter.Value);
         }
 
-        // 使用 .Select() 进行映射
+        query = query.OrderByDescending(r => r.CreatedAt);
+
+        // 使用 .Select() 进行映射，EF Core 会自动进行 JOIN
         return await query.Select(r => new PresetReportDto
         {
             ReportId = r.Id,
@@ -38,7 +38,7 @@ public class PresetReportService(IgDbContext context) : IPresetReportService
             PresetNameSnapshot = r.PresetNameSnapshot,
             PresetCoverUrlSnapshot = r.PresetCoverUrlSnapshot,
             ReporterUserId = r.ReporterUserId,
-            ReporterUsername = r.ReporterUser.Username, 
+            ReporterUsername = r.ReporterUser != null ? r.ReporterUser.Username : "[已删除]", // 处理 User 可能被删除的情况
             Reason = r.Reason,
             Notes = r.Notes,
             Status = r.Status,

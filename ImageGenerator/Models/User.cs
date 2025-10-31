@@ -1,3 +1,5 @@
+using ImageGenerator.Enums;
+
 namespace ImageGenerator.Models;
 
 /// <summary>
@@ -21,6 +23,11 @@ public class User: ModelBase
     public string? Salt { get; set; }
 
     /// <summary>
+    /// The user's role in the system.
+    /// </summary>
+    public UserRole Role { get; set; } = UserRole.User;
+
+    /// <summary>
     /// The invitation that was used to register this user.
     /// </summary>
     public Invitation? InvitedBy { get; set; }
@@ -29,11 +36,6 @@ public class User: ModelBase
     /// The ID of the invitation that was used to register this user.
     /// </summary>
     public Guid? InvitedById { get; set; }
-
-    /// <summary>
-    /// The collection of conversations owned by this user.
-    /// </summary>
-    public ICollection<Conversation> Conversations { get; set; } = [];
 
     /// <summary>
     /// The number of credits the user has for image generation.
@@ -45,24 +47,28 @@ public class User: ModelBase
     /// </summary>
     public DateTime? LastCreditClaimedAt { get; set; }
 
-
     /// <summary>
-    /// (导航属性) 该用户创建的所有预制菜。
+    /// 该用户创建的所有预制菜。
     /// </summary>
     public ICollection<Preset> PresetsCreated { get; set; } = [];
 
     /// <summary>
-    /// (导航属性) 该用户的“点赞”记录
+    /// 该用户的"点赞"记录。
     /// </summary>
     public ICollection<PresetLike> PresetLikes { get; set; } = [];
 
     /// <summary>
-    /// (导航属性) 该用户的“收藏”记录。
+    /// 该用户的"收藏"记录。
     /// </summary>
     public ICollection<PresetFavorite> PresetFavorites { get; set; } = [];
 
     /// <summary>
-    /// (导航属性) 该用户提交的所有“举报”记录。
+    /// 该用户提交的所有"举报"记录。
     /// </summary>
     public ICollection<PresetReport> PresetReportsMade { get; set; } = [];
+
+    /// <summary>
+    /// 该用户的所有对话。
+    /// </summary>
+    public ICollection<Conversation> Conversations { get; set; } = [];
 }
