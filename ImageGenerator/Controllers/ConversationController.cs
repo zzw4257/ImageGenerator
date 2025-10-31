@@ -4,12 +4,13 @@ using ImageGenerator.Interface;
 using ImageGenerator.Dtos;
 using ImageGenerator.Models;
 using ImageGenerator.Helpers;
+using ImageGenerator.Enums;
 
 namespace ImageGenerator.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize]
+[RoleAuthorize(UserRole.User)]  // User 及以上角色可访问
 /// <summary>
 /// Manages conversations and image generation within them.
 /// </summary>

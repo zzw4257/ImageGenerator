@@ -1,14 +1,15 @@
 using ImageGenerator.Dtos;
+using ImageGenerator.Enums;
+using ImageGenerator.Helpers;
 using ImageGenerator.Interface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ImageGenerator.Helpers;
 
 namespace ImageGenerator.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize]
+[RoleAuthorize(UserRole.User)]  // User 及以上角色可访问
 public class UploadController(IImageStorageService storageService) : ControllerBase
 {
     private readonly IImageStorageService _storage = storageService;

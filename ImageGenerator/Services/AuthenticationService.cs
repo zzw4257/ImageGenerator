@@ -38,16 +38,18 @@ public class AuthenticationService(IgDbContext context, JwtHelper jwtHelper) : I
         var passwordEncryption = Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(password + user.Salt)));
 
         if (user.Password != passwordEncryption)
-            return null!;
+            throw new UnauthorizedAccessException("Invalid password.");
 
         var claims = new List<Claim>
         {
             new(ClaimTypes.Name, user.Id.ToString()),
+            new(ClaimTypes.Role, user.Role.ToString())
         };
 
         return new LoginDto
         {
             UserId = user.Id,
+            Role = user.Role,
             Token = _jwtHelper.GetJwtToken(claims),
             ExpirationTime = DateTime.Now.AddMinutes(30)
         };
@@ -99,6 +101,7 @@ public class AuthenticationService(IgDbContext context, JwtHelper jwtHelper) : I
         var claims = new List<Claim>
         {
             new(ClaimTypes.Name, user.Id.ToString()),
+            new(ClaimTypes.Role, user.Role.ToString())
         };
 
         return new LoginDto

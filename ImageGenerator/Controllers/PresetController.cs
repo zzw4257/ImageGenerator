@@ -1,4 +1,6 @@
 using ImageGenerator.Dtos;
+using ImageGenerator.Enums;
+using ImageGenerator.Helpers;
 using ImageGenerator.Interface;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
@@ -10,6 +12,7 @@ namespace ImageGenerator.Controllers;
 /// </summary>
 [ApiController]
 [Route("api/[controller]")]
+[RoleAuthorize(UserRole.User)]  // User 及以上角色可访问
 public class PresetsController(IPresetService presetService) : ControllerBase
 {
     private readonly IPresetService _presetService = presetService;

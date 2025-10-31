@@ -1,4 +1,6 @@
 using ImageGenerator.Dtos;
+using ImageGenerator.Enums;
+using ImageGenerator.Helpers;
 using ImageGenerator.Interface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -7,7 +9,7 @@ namespace ImageGenerator.Controllers;
 
 [ApiController]
 [Route("api")]
-[Authorize]
+[RoleAuthorize(UserRole.User)]  // User 及以上角色可访问
 /// <summary>
 /// Manages image generation requests.
 /// </summary>
