@@ -258,6 +258,18 @@
       to: '/favorites'
     },
     {
+      title: 'Community',
+      subtitle: 'Creator Network',
+      icon: 'mdi-account-group-outline',
+      to: '/community',
+    },
+    {
+      title: 'Enterprise',
+      subtitle: 'Enterprise Solutions',
+      icon: 'mdi-office-building-cog-outline',
+      to: '/enterprise',
+    },
+    {
       title: 'Account',
       subtitle: 'Balance & History',
       icon: 'mdi-account-circle',

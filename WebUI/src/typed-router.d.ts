@@ -21,7 +21,8 @@ declare module 'vue-router/auto-routes' {
     '/': RouteRecordInfo<'/', '/', Record<never, never>, Record<never, never>>,
     '/account': RouteRecordInfo<'/account', '/account', Record<never, never>, Record<never, never>>,
     '/analytics': RouteRecordInfo<'/analytics', '/analytics', Record<never, never>, Record<never, never>>,
-    '/community': RouteRecordInfo<'/community', '/community', Record<never, never>, Record<never, never>>,
+    '/community/': RouteRecordInfo<'/community/', '/community', Record<never, never>, Record<never, never>>,
+    '/community/[creatorId]': RouteRecordInfo<'/community/[creatorId]', '/community/:creatorId', { creatorId: ParamValue<true> }, { creatorId: ParamValue<false> }>,
     '/conversation/[id]': RouteRecordInfo<'/conversation/[id]', '/conversation/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,
     '/enterprise': RouteRecordInfo<'/enterprise', '/enterprise', Record<never, never>, Record<never, never>>,
     '/favorites': RouteRecordInfo<'/favorites', '/favorites', Record<never, never>, Record<never, never>>,
@@ -66,8 +67,12 @@ declare module 'vue-router/auto-routes' {
       routes: '/analytics'
       views: never
     }
-    'src/pages/community.vue': {
-      routes: '/community'
+    'src/pages/community/index.vue': {
+      routes: '/community/'
+      views: never
+    }
+    'src/pages/community/[creatorId].vue': {
+      routes: '/community/[creatorId]'
       views: never
     }
     'src/pages/conversation/[id].vue': {
