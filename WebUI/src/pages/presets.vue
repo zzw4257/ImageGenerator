@@ -1,44 +1,53 @@
 <template>
-  <v-container fluid class="pa-8">
+  <v-container class="pa-8" fluid>
     <div class="d-flex justify-space-between align-center mb-6">
       <h1 class="text-h4 font-weight-bold">Muse</h1>
     </div>
 
     <v-row>
-      <v-col v-for="p in presets" :key="p.id" cols="12" sm="6" md="4" lg="3">
+      <v-col
+        v-for="p in presets"
+        :key="p.id"
+        cols="12"
+        lg="3"
+        md="4"
+        sm="6"
+      >
         <PresetCard :preset="p" />
       </v-col>
     </v-row>
 
     <div class="d-flex justify-center mt-6">
-      <v-pagination v-model="pageNumberUI" :length="pagination.TotalPages || 1" total-visible="7" @update:modelValue="onPageChange" />
+      <v-pagination v-model="pageNumberUI" :length="pagination.TotalPages || 1" total-visible="7" @update:model-value="onPageChange" />
     </div>
   </v-container>
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted } from 'vue'
-import PresetCard from '@/components/PresetCard.vue'
-import { listPresets, type PresetDto } from '@/services/presets'
+  import { onMounted, ref } from 'vue'
+  import PresetCard from '@/components/PresetCard.vue'
+  import { listPresets, type PresetDto } from '@/services/presets'
 
-const presets = ref<PresetDto[]>([])
-const pagination = ref({ TotalPages: 1, PageNumber: 0, PageSize: 12, TotalCount: 0 })
-const pageNumberUI = ref(1)
-const pageSize = 12
+  const presets = ref<PresetDto[]>([])
+  const pagination = ref({ TotalPages: 1, PageNumber: 0, PageSize: 12, TotalCount: 0 })
+  const pageNumberUI = ref(1)
+  const pageSize = 12
 
-async function load() {
-  try {
-    const { items, pagination: meta } = await listPresets(pageNumberUI.value - 1, pageSize)
-    presets.value = items
-    pagination.value = meta
-  } catch (e) {
-    console.error('Failed to load presets', e)
+  async function load () {
+    try {
+      const { items, pagination: meta } = await listPresets(pageNumberUI.value - 1, pageSize)
+      presets.value = items
+      pagination.value = meta
+    } catch (error) {
+      console.error('Failed to load presets', error)
+    }
   }
-}
 
-function onPageChange() { load() }
+  function onPageChange () {
+    load()
+  }
 
-onMounted(load)
+  onMounted(load)
 </script>
 
 <route lang="yaml">

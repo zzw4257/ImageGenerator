@@ -58,7 +58,8 @@ export const useAppStore = defineStore('app', () => {
   const authInfo = ref<AuthInfo>({
     userId: localStorage.getItem('userId') || '',
     token: localStorage.getItem('token') || '',
-    expirationTime: localStorage.getItem('expirationTime') || ''
+    expirationTime: localStorage.getItem('expirationTime') || '',
+    role: localStorage.getItem('role') || ''
   });
 
   const deleteDialogInfo = ref<DeleteDialogInfo>({
@@ -91,6 +92,7 @@ export const useAppStore = defineStore('app', () => {
     localStorage.setItem('userId', data.userId);
     localStorage.setItem('token', data.token);
     localStorage.setItem('expirationTime', data.expirationTime);
+    localStorage.setItem('role', data.role.toString());
   }
 
   /**

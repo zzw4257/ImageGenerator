@@ -35,8 +35,8 @@
               一键发放
             </v-btn>
             <v-btn
-              color="white"
               class="ml-2"
+              color="white"
               variant="outlined"
               @click="$router.push('/recharge')"
             >
@@ -102,10 +102,10 @@
                     <span
                       :class="[
                         'text-h6 font-weight-bold',
-                        transaction.type === 'Recharge' || transaction.type === 'Earn' ? 'text-success' : 'text-error'
+                        transaction.type === TransactionType.Recharge || transaction.type === TransactionType.Earn ? 'text-success' : 'text-error'
                       ]"
                     >
-                      {{ transaction.type === 'Recharge' || transaction.type === 'Earn' ? '+' : '-' }}{{ transaction.amount }}
+                      {{ transaction.type === TransactionType.Recharge || transaction.type === TransactionType.Earn ? '+' : '-' }}{{ transaction.amount }}
                     </span>
                     <span class="text-caption text-grey-darken-1">
                       Credits
@@ -122,7 +122,7 @@
               :length="transactionTotalPages"
               rounded="circle"
               total-visible="5"
-              @update:modelValue="handleTransactionPageChange"
+              @update:model-value="handleTransactionPageChange"
             />
           </v-card-actions>
         </v-card>
@@ -137,9 +137,9 @@
               生成历史
               <v-chip
                 v-if="hasActiveFilters"
+                class="ml-2"
                 color="primary"
                 size="small"
-                class="ml-2"
               >
                 已筛选
               </v-chip>
@@ -147,11 +147,11 @@
             <div class="d-flex align-center">
               <v-btn
                 v-if="hasActiveFilters"
+                class="mr-1"
                 icon
                 size="small"
                 variant="text"
                 @click="resetFilters"
-                class="mr-1"
               >
                 <v-icon>mdi-close</v-icon>
               </v-btn>
@@ -238,31 +238,31 @@
             <!-- 状态筛选 -->
             <v-select
               v-model="filterOptions.status"
+              class="mb-4"
+              clearable
               :items="statusOptions"
               label="生成状态"
               variant="outlined"
-              clearable
-              class="mb-4"
             />
 
             <!-- Provider筛选 -->
             <v-select
               v-model="filterOptions.provider"
+              class="mb-4"
+              clearable
               :items="providerOptions"
               label="生成模型"
               variant="outlined"
-              clearable
-              class="mb-4"
             />
 
             <!-- 关键词搜索 -->
             <v-text-field
               v-model="filterOptions.keyword"
-              label="搜索提示词"
-              variant="outlined"
-              clearable
-              prepend-inner-icon="mdi-magnify"
               class="mb-4"
+              clearable
+              label="搜索提示词"
+              prepend-inner-icon="mdi-magnify"
+              variant="outlined"
             />
 
             <!-- 时间范围 -->
@@ -270,19 +270,19 @@
               <v-col cols="6">
                 <v-text-field
                   v-model="filterOptions.dateFrom"
+                  clearable
                   label="开始日期"
                   type="date"
                   variant="outlined"
-                  clearable
                 />
               </v-col>
               <v-col cols="6">
                 <v-text-field
                   v-model="filterOptions.dateTo"
+                  clearable
                   label="结束日期"
                   type="date"
                   variant="outlined"
-                  clearable
                 />
               </v-col>
             </v-row>
@@ -310,11 +310,12 @@
 </template>
 
 <script lang="ts" setup>
-  import { onMounted, ref, computed } from 'vue'
-  import { getBalance, listTransactions, grantCredits as grantCreditsApi } from '@/services/wallet'
+  import type { TransactionDto } from '@/services/wallet'
+  import { computed, onMounted, ref } from 'vue'
+  import { TransactionType } from '@/enums'
+  import { getBalance, grantCredits as grantCreditsApi, listTransactions } from '@/services/wallet'
   import { useHistoryStore } from '@/stores/history'
   import { useNotificationStore } from '@/stores/notification'
-  import type { TransactionDto } from '@/services/wallet'
 
   const walletBalance = ref(0)
   const granting = ref(false)
@@ -343,7 +344,7 @@
     provider: null as string | null,
     keyword: '',
     dateFrom: '',
-    dateTo: ''
+    dateTo: '',
   })
 
   // 筛选选项
@@ -353,7 +354,7 @@
     { title: '失败', value: 3 }, // Failed
     { title: '处理中', value: 1 }, // Processing
     { title: '等待中', value: 0 }, // Pending
-    { title: '已取消', value: 4 } // Cancelled
+    { title: '已取消', value: 4 }, // Cancelled
   ]
 
   const providerOptions = [
@@ -362,7 +363,7 @@
     { title: 'Qwen', value: 'Qwen' },
     { title: 'Flux', value: 'Flux' },
     { title: 'OpenAI', value: 'OpenAI' },
-    { title: 'Gemini', value: 'Gemini' }
+    { title: 'Gemini', value: 'Gemini' },
   ]
 
   // 筛选后的历史记录
@@ -370,11 +371,11 @@
 
   // 计算属性：是否有活跃的筛选条件
   const hasActiveFilters = computed(() => {
-    return filterOptions.value.status !== null ||
-           filterOptions.value.provider !== null ||
-           filterOptions.value.keyword !== '' ||
-           filterOptions.value.dateFrom !== '' ||
-           filterOptions.value.dateTo !== ''
+    return filterOptions.value.status !== null
+      || filterOptions.value.provider !== null
+      || filterOptions.value.keyword !== ''
+      || filterOptions.value.dateFrom !== ''
+      || filterOptions.value.dateTo !== ''
   })
 
   // 计算属性：当前显示的历史记录（筛选后或原始）
@@ -405,25 +406,21 @@
 
   // 计算属性：当前分页页码
   const currentHistoryPage = computed({
-    get() {
-      if (hasActiveFilters.value && filteredHistory.value.length > 0) {
-        return filteredHistoryPage.value
-      } else {
-        return historyPage.value
-      }
+    get () {
+      return hasActiveFilters.value && filteredHistory.value.length > 0 ? filteredHistoryPage.value : historyPage.value
     },
-    set(value: number) {
+    set (value: number) {
       if (hasActiveFilters.value && filteredHistory.value.length > 0) {
         filteredHistoryPage.value = value
       } else {
         historyPage.value = value
         loadGenerationHistory()
       }
-    }
+    },
   })
 
   // 筛选函数
-  async function applyFilters() {
+  async function applyFilters () {
     // 如果没有加载所有历史记录，先加载
     if (allGenerationHistory.value.length === 0) {
       try {
@@ -450,8 +447,8 @@
     // 关键词搜索
     if (filterOptions.value.keyword) {
       const keyword = filterOptions.value.keyword.toLowerCase()
-      filtered = filtered.filter(task => 
-        task.prompt.toLowerCase().includes(keyword)
+      filtered = filtered.filter(task =>
+        task.prompt.toLowerCase().includes(keyword),
       )
     }
 
@@ -470,20 +467,20 @@
     filteredHistory.value = filtered
     filteredHistoryPage.value = 1 // 重置筛选分页到第一页
     showFilterDialog.value = false
-    
+
     // 计算筛选结果的总页数
     const totalPages = Math.ceil(filtered.length / 10)
     notificationStore.success(`筛选完成，找到 ${filtered.length} 条记录，共 ${totalPages} 页`)
   }
 
   // 重置筛选
-  function resetFilters() {
+  function resetFilters () {
     filterOptions.value = {
       status: null,
       provider: null,
       keyword: '',
       dateFrom: '',
-      dateTo: ''
+      dateTo: '',
     }
     filteredHistory.value = []
     allGenerationHistory.value = [] // 清空所有历史记录缓存
@@ -492,55 +489,55 @@
     notificationStore.info('筛选条件已重置')
   }
 
-  function getTransactionColor (type: string) {
-    return type === 'Recharge' || type === 'Earn' ? 'green-lighten-5' : 'red-lighten-5'
+  function getTransactionColor (type: TransactionType) {
+    return type === TransactionType.Recharge || type === TransactionType.Earn ? 'green-lighten-5' : 'red-lighten-5'
   }
 
-  function getTransactionIconColor (type: string) {
-    return type === 'Recharge' || type === 'Earn' ? 'green' : 'red'
+  function getTransactionIconColor (type: TransactionType) {
+    return type === TransactionType.Recharge || type === TransactionType.Earn ? 'green' : 'red'
   }
 
-  function getTransactionIcon (type: string) {
+  function getTransactionIcon (type: TransactionType) {
     const icons = {
-      Recharge: 'mdi-credit-card-plus',
-      Consume: 'mdi-image-edit',
-      Earn: 'mdi-gift',
-      Refund: 'mdi-cash-refund'
+      [TransactionType.Recharge]: 'mdi-credit-card-plus',
+      [TransactionType.Consume]: 'mdi-image-edit',
+      [TransactionType.Earn]: 'mdi-gift',
+      [TransactionType.Refund]: 'mdi-cash-refund',
     }
     return icons[type as keyof typeof icons] || 'mdi-circle'
   }
 
-  function getTransactionDescription(type: string, description?: string) {
+  function getTransactionDescription (type: TransactionType, description?: string) {
     // 如果后端提供了描述，优先使用
     if (description && description.trim()) {
       return description
     }
     // 否则使用默认描述
     const descriptions = {
-      Recharge: '账户充值',
-      Consume: '图像生成',
-      Earn: '获得奖励',
-      Refund: '退款'
+      [TransactionType.Recharge]: '账户充值',
+      [TransactionType.Consume]: '图像生成',
+      [TransactionType.Earn]: '获得奖励',
+      [TransactionType.Refund]: '退款',
     }
     return descriptions[type as keyof typeof descriptions] || type
   }
 
-  function getTransactionTypeLabel(type: string) {
+  function getTransactionTypeLabel (type: TransactionType) {
     const labels = {
-      Recharge: '充值',
-      Consume: '消费',
-      Earn: '奖励',
-      Refund: '退款'
+      [TransactionType.Recharge]: '充值',
+      [TransactionType.Consume]: '消费',
+      [TransactionType.Earn]: '奖励',
+      [TransactionType.Refund]: '退款',
     }
     return labels[type as keyof typeof labels] || type
   }
 
-  function getTransactionTypeColor(type: string) {
+  function getTransactionTypeColor (type: TransactionType) {
     const colors = {
-      Recharge: 'success',
-      Consume: 'primary',
-      Earn: 'warning',
-      Refund: 'info'
+      [TransactionType.Recharge]: 'success',
+      [TransactionType.Consume]: 'primary',
+      [TransactionType.Earn]: 'warning',
+      [TransactionType.Refund]: 'info',
     }
     return colors[type as keyof typeof colors] || 'grey'
   }
@@ -548,9 +545,9 @@
   function getStatusColor (status: number) {
     const colors = {
       0: 'orange', // Pending
-      1: 'blue',   // Processing
-      2: 'green',  // Completed
-      3: 'red',    // Failed
+      1: 'blue', // Processing
+      2: 'green', // Completed
+      3: 'red', // Failed
     }
     return colors[status as keyof typeof colors] || 'grey'
   }
@@ -558,9 +555,9 @@
   function getStatusText (status: number) {
     const texts = {
       0: '等待中',
-      1: '处理中', 
+      1: '处理中',
       2: '成功',
-      3: '失败'
+      3: '失败',
     }
     return texts[status as keyof typeof texts] || '未知'
   }
@@ -573,7 +570,7 @@
   function formatDate (date: string) {
     return new Date(date).toLocaleDateString('zh-CN')
   }
-  
+
   // formatDateTime 已经在下面定义了，不需要重复
 
   function formatDateTime (date: string) {
@@ -587,7 +584,7 @@
     })
   }
 
-  async function loadWalletBalance() {
+  async function loadWalletBalance () {
     loadingBalance.value = true
     try {
       const balance = await getBalance()
@@ -600,7 +597,7 @@
     }
   }
 
-  async function loadTransactions() {
+  async function loadTransactions () {
     loadingTransactions.value = true
     try {
       const result = await listTransactions(transactionPage.value - 1, 10)
@@ -614,7 +611,7 @@
     }
   }
 
-  async function loadGenerationHistory() {
+  async function loadGenerationHistory () {
     loadingHistory.value = true
     try {
       await historyStore.fetchGenerations(historyPage.value - 1, 10)
@@ -650,7 +647,7 @@
     console.log('查看任务:', task.id)
   }
 
-  function handleTransactionPageChange(page: number) {
+  function handleTransactionPageChange (page: number) {
     transactionPage.value = page
     loadTransactions()
   }
@@ -659,7 +656,7 @@
     await Promise.all([
       loadWalletBalance(),
       loadTransactions(),
-      loadGenerationHistory()
+      loadGenerationHistory(),
     ])
   })
 </script>

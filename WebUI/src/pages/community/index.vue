@@ -111,10 +111,10 @@
         <v-sheet class="pa-6 fill-height" color="surface" elevation="2" rounded="xl">
           <div class="d-flex align-center justify-space-between mb-4">
             <h2 class="text-h6 font-weight-medium">趋势话题</h2>
-            <v-btn color="primary" size="small" variant="text" @click="refreshTopics">
+            <!-- <v-btn color="primary" size="small" variant="text" @click="refreshTopics">
               <v-icon size="16" start>mdi-refresh</v-icon>
               更新
-            </v-btn>
+            </v-btn> -->
           </div>
 
           <v-skeleton-loader
@@ -239,7 +239,7 @@
                       </div>
                     </div>
 
-                    <v-btn
+                    <!-- <v-btn
                       class="text-caption"
                       :color="isFollowing(item.creatorId) ? 'primary' : 'primary'"
                       size="small"
@@ -247,7 +247,7 @@
                       @click="toggleCreatorFollow(item.creatorId)"
                     >
                       {{ isFollowing(item.creatorId) ? '已关注' : '关注' }}
-                    </v-btn>
+                    </v-btn> -->
                   </div>
 
                   <div class="mb-2 text-body-1 font-weight-medium">

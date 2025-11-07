@@ -150,6 +150,7 @@
   import { computed, ref, watch } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
   import { useDisplay } from 'vuetify'
+  import { useAuth } from '@/composables/useAuth'
   import { useAppStore } from '@/stores/app'
   import { useNotificationStore } from '@/stores/notification'
 
@@ -178,6 +179,7 @@
 
   const route = useRoute()
   const router = useRouter()
+  const role = useAuth()
   const appStore = useAppStore()
   const notificationStore = useNotificationStore()
 
@@ -196,92 +198,88 @@
     { immediate: true },
   )
 
-  const navigationItems: NavigationItem[] = [
-    {
-      title: 'Home',
-      subtitle: 'All conversations',
-      icon: 'mdi-home',
-      to: '/',
-      badge: {
-        text: '5',
-        color: 'primary'
-      }
-    },
-    {
-      title: 'Muse',
-      subtitle: 'Use ready-made prompts',
-      icon: 'mdi-format-paint',
-      to: '/presets'
-    },
-    {
-      title: 'Market',
-      subtitle: 'AIGC assets marketplace',
-      icon: 'mdi-store',
-      to: '/market',
-      badge: {
-        text: 'New',
-        color: 'success'
-      }
-    },
-    {
-      title: 'Analytics',
-      subtitle: 'Data insights',
-      icon: 'mdi-chart-line',
-      to: '/analytics'
-    },
-    {
-      title: 'Community',
-      subtitle: 'Creator community',
-      icon: 'mdi-account-group',
-      to: '/community'
-    },
-    {
-      title: 'Workflow Editor',
-      subtitle: 'Visual workflow builder',
-      icon: 'mdi-graph',
-      to: '/workflow-editor',
-      badge: {
-        text: 'Beta',
-        color: 'info'
-      }
-    },
-    {
-      title: 'Enterprise',
-      subtitle: 'Business solutions',
-      icon: 'mdi-office-building',
-      to: '/enterprise'
-    },
-    {
-      title: 'Favorites',
-      subtitle: 'Starred images',
-      icon: 'mdi-heart',
-      to: '/favorites'
-    },
-    {
-      title: 'Community',
-      subtitle: 'Creator Network',
-      icon: 'mdi-account-group-outline',
-      to: '/community',
-    },
-    {
-      title: 'Enterprise',
-      subtitle: 'Enterprise Solutions',
-      icon: 'mdi-office-building-cog-outline',
-      to: '/enterprise',
-    },
-    {
-      title: 'Account',
-      subtitle: 'Balance & History',
-      icon: 'mdi-account-circle',
-      to: '/account'
-    },
-    {
-      title: 'Invitations',
-      subtitle: 'Manage codes',
-      icon: 'mdi-ticket',
-      to: '/invitation'
+  const navigationItems = computed((): NavigationItem[] => {
+    const items: NavigationItem[] = [
+      {
+        title: 'Home',
+        subtitle: 'All conversations',
+        icon: 'mdi-home',
+        to: '/',
+        badge: {
+          text: '5',
+          color: 'primary',
+        },
+      },
+      {
+        title: 'Muse',
+        subtitle: 'Use ready-made prompts',
+        icon: 'mdi-format-paint',
+        to: '/presets',
+      },
+      {
+        title: 'Market',
+        subtitle: 'AIGC assets marketplace',
+        icon: 'mdi-store',
+        to: '/market',
+        badge: {
+          text: 'New',
+          color: 'success',
+        },
+      },
+      {
+        title: 'Community',
+        subtitle: 'Creator community',
+        icon: 'mdi-account-group',
+        to: '/community',
+      },
+      {
+        title: 'Workflow Editor',
+        subtitle: 'Visual workflow builder',
+        icon: 'mdi-graph',
+        to: '/workflow-editor',
+        badge: {
+          text: 'Beta',
+          color: 'info',
+        },
+      },
+      {
+        title: 'Favorites',
+        subtitle: 'Starred images',
+        icon: 'mdi-heart',
+        to: '/favorites',
+      },
+      {
+        title: 'Account',
+        subtitle: 'Balance & History',
+        icon: 'mdi-account-circle',
+        to: '/account',
+      },
+      {
+        title: 'Analytics',
+        subtitle: 'Data insights',
+        icon: 'mdi-chart-line',
+        to: '/analytics',
+      },
+      {
+        title: 'Enterprise',
+        subtitle: 'Business solutions',
+        icon: 'mdi-office-building',
+        to: '/enterprise',
+      },
+    ]
+
+    // 只有角色权限 >= 3 的用户才能看到 Invitations
+    if (role.value >= 3) {
+      items.push({
+        title: 'Invitations',
+        subtitle: 'Manage codes',
+        icon: 'mdi-ticket',
+        to: '/invitation',
+      })
     }
-  ]
+
+    return items
+  })
 
   const userMenuItems: UserMenuItem[] = [
     {
