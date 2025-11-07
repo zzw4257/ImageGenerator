@@ -1,13 +1,30 @@
 export enum GenerationType {
-    TextToImage,
-    ImageToImage,
+  TextToImage,
+  ImageToImage,
 }
 
 export enum GenerationStatus
 {
-    Pending,
-    Processing, 
-    Completed, 
-    Failed, 
-    Cancelled 
+  Pending,
+  Processing,
+  Completed,
+  Failed,
+  Cancelled,
+}
+
+export enum UserRole
+{
+  User,
+  PowerUser,
+  Admin,
+  Owner,
+}
+
+export enum TransactionType
+{
+  Recharge,
+  Consume,
+  Earn,
+  Refund,
+  Transfer,
 }
