@@ -26,6 +26,10 @@ public class AuthenticationController(IAuthenticationService authenticationServi
             var result = await _authenticationService.LoginAsync(loginFormDto.Username, loginFormDto.Password);
             return Ok(result);
         }
+        catch (UnauthorizedAccessException)
+        {
+            return Unauthorized();
+        }
         catch (ArgumentException)
         {
             return BadRequest();

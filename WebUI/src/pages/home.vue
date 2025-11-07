@@ -7,7 +7,32 @@
       </v-col>
     </v-row>
 
-    <v-row>
+    <!-- Loading state -->
+    <div v-if="loading" class="text-center py-12">
+      <v-progress-circular color="primary" indeterminate size="64" />
+      <p class="text-body-2 mt-4">加载预设模板中...</p>
+    </div>
+
+    <!-- Error state -->
+    <div v-else-if="error" class="text-center py-12">
+      <v-icon size="80" color="error" class="mb-4">mdi-alert-circle</v-icon>
+      <h3 class="text-h6 mb-2">加载失败</h3>
+      <p class="text-body-2 text-grey-darken-1 mb-4">{{ error }}</p>
+      <v-btn color="primary" variant="outlined" @click="loadPresets">
+        <v-icon start>mdi-refresh</v-icon>
+        重试
+      </v-btn>
+    </div>
+
+    <!-- Empty state -->
+    <div v-else-if="presets.length === 0" class="text-center py-12">
+      <v-icon size="80" color="grey-lighten-2" class="mb-4">mdi-image-outline</v-icon>
+      <h3 class="text-h6 mb-2">暂无预设模板</h3>
+      <p class="text-body-2 text-grey-darken-1">请联系管理员添加预设模板</p>
+    </div>
+
+    <!-- Presets grid -->
+    <v-row v-else>
       <v-col
         v-for="preset in presets"
         :key="preset.id"
@@ -16,155 +41,58 @@
         md="4"
         sm="6"
       >
-        <v-card
-          class="h-100 preset-card"
-          elevation="2"
-          rounded="xl"
-          @click="usePreset(preset)"
-        >
-          <v-img
-            :alt="preset.title"
-            class="rounded-t-xl"
-            cover
-            height="200"
-            :src="preset.cover"
-          />
+        <PresetCard :preset="preset" />
+      </v-col>
+    </v-row>
 
-          <v-card-text class="pa-4">
-            <div class="d-flex align-center justify-space-between mb-2">
-              <h3 class="text-h6 font-weight-medium">{{ preset.title }}</h3>
-              <v-chip
-                :color="getModelColor(preset.model)"
-                size="small"
-                variant="flat"
-              >
-                {{ preset.model }}
-              </v-chip>
-            </div>
-
-            <p class="text-body-2 text-grey-darken-2 mb-3">
-              {{ preset.description }}
-            </p>
-
-            <div class="d-flex align-center justify-space-between">
-              <div class="d-flex align-center">
-                <v-icon
-                  class="mr-1"
-                  color="primary"
-                  size="16"
-                >mdi-flash</v-icon>
-                <span class="text-caption font-weight-medium">
-                  {{ preset.credits }} Credits
-                </span>
-              </div>
-              <v-icon
-                color="primary"
-                size="20"
-              >mdi-arrow-right</v-icon>
-            </div>
-          </v-card-text>
-        </v-card>
+    <!-- Pagination -->
+    <v-row v-if="presets.length > 0 && totalPages > 1" class="mt-6">
+      <v-col cols="12" class="d-flex justify-center">
+        <v-pagination
+          v-model="currentPage"
+          :length="totalPages"
+          :total-visible="5"
+          rounded="circle"
+          @update:model-value="loadPresets"
+        />
       </v-col>
     </v-row>
   </v-container>
 </template>
 
 <script lang="ts" setup>
-  import { ref } from 'vue'
-  import { useRouter } from 'vue-router'
+  import { computed, onMounted, ref } from 'vue'
+  import { usePresetStore } from '@/stores/presets'
+  import PresetCard from '@/components/PresetCard.vue'
+  import { useNotificationStore } from '@/stores/notification'
 
-  interface Preset {
-    id: string
-    title: string
-    description: string
-    cover: string
-    model: string
-    credits: number
-    prompt: string
-    params: {
-      resolution: string
-      style?: string
+  const presetStore = usePresetStore()
+  const notificationStore = useNotificationStore()
+
+  const loading = ref(false)
+  const error = ref<string | null>(null)
+  const currentPage = ref(1)
+  const totalPages = ref(1)
+
+  const presets = computed(() => presetStore.items)
+
+  async function loadPresets() {
+    loading.value = true
+    error.value = null
+    try {
+      await presetStore.fetchPresets(currentPage.value - 1, 12)
+      totalPages.value = presetStore.pagination.TotalPages
+    } catch (err: any) {
+      error.value = err?.message || '加载预设模板失败'
+      notificationStore.error('加载预设模板失败')
+    } finally {
+      loading.value = false
     }
   }
 
-  const router = useRouter()
-
-  const presets = ref<Preset[]>([
-    {
-      id: '1',
-      title: '梦幻风景',
-      description: '生成梦幻般的自然风景图像',
-      cover: '/images/presets/landscape.jpg',
-      model: 'Flux',
-      credits: 2,
-      prompt: 'A dreamy landscape with mountains, lakes, and mist, fantasy style, highly detailed',
-      params: {
-        resolution: '1024x1024',
-        style: 'fantasy',
-      },
-    },
-    {
-      id: '2',
-      title: '肖像艺术',
-      description: '艺术风格的人物肖像生成',
-      cover: '/images/presets/portrait.jpg',
-      model: 'Qwen',
-      credits: 3,
-      prompt: 'Professional portrait photography, cinematic lighting, detailed facial features',
-      params: {
-        resolution: '768x1024',
-        style: 'cinematic',
-      },
-    },
-    {
-      id: '3',
-      title: '抽象艺术',
-      description: '创造独特的抽象艺术作品',
-      cover: '/images/presets/abstract.jpg',
-      model: 'Stub',
-      credits: 1,
-      prompt: 'Abstract geometric patterns, vibrant colors, modern art style',
-      params: {
-        resolution: '1024x1024',
-        style: 'abstract',
-      },
-    },
-    {
-      id: '4',
-      title: '产品设计',
-      description: '产品概念设计和展示',
-      cover: '/images/presets/product.jpg',
-      model: 'Flux',
-      credits: 2,
-      prompt: 'Product design visualization, clean background, professional lighting',
-      params: {
-        resolution: '1024x1024',
-        style: 'professional',
-      },
-    },
-  ])
-
-  function getModelColor (model: string) {
-    const colors = {
-      Flux: 'purple-lighten-4',
-      Qwen: 'blue-lighten-4',
-      Stub: 'green-lighten-4',
-    }
-    return colors[model as keyof typeof colors] || 'grey-lighten-3'
-  }
-
-  function usePreset (preset: Preset) {
-    router.push({
-      path: '/generate',
-      query: {
-        preset: preset.id,
-        prompt: preset.prompt,
-        model: preset.model,
-        resolution: preset.params.resolution,
-        style: preset.params.style,
-      },
-    })
-  }
+  onMounted(() => {
+    loadPresets()
+  })
 </script>
 
 <style scoped>

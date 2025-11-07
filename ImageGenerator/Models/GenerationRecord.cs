@@ -31,6 +31,16 @@ public class GenerationRecord: ModelBase
     public Guid ConversationId { get; set; } = Guid.Empty;
 
     /// <summary>
+    /// The ID of the Preset used for this generation, if any.
+    /// </summary>
+    public Guid? PresetId { get; set; } // '?' 表示它是可空的 (nullable)
+
+    /// <summary>
+    /// Navigation property to the Preset.
+    /// </summary>
+    public Preset? Preset { get; set; }
+
+    /// <summary>
     /// The type of image generation.
     /// </summary>
     public GenerationType GenerationType { get; set; }

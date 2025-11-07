@@ -43,17 +43,17 @@ export const useNotificationStore = defineStore('notification', () => {
     success: 'mdi-check-circle',
     error: 'mdi-alert-circle',
     warning: 'mdi-alert',
-    info: 'mdi-information'
+    info: 'mdi-information',
   }
 
   const defaultTimeouts: Record<NotificationType, number> = {
     success: 4000,
     info: 5000,
     warning: 6000,
-    error: 8000
+    error: 8000,
   }
 
-  const generateId = () => `notification_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+  const generateId = () => `notification_${Date.now()}_${Math.random().toString(36).slice(2, 11)}`
 
   /**
    * Adds a new notification message to the queue.
@@ -77,7 +77,7 @@ export const useNotificationStore = defineStore('notification', () => {
       icon: options.icon || defaultIcons[options.type],
       timeout: options.persistent ? 0 : (options.timeout || defaultTimeouts[options.type]),
       persistent: options.persistent || false,
-      action: options.action
+      action: options.action,
     }
 
     messages.value.push(notification)
@@ -90,10 +90,10 @@ export const useNotificationStore = defineStore('notification', () => {
    */
   const removeMessage = (id: string) => {
     const index = messages.value.findIndex(msg => msg.id === id)
-    if (index > -1) {
+    if (index !== -1) {
       messages.value.splice(index, 1)
     }
-    
+
     if (currentMessage.value?.id === id) {
       currentMessage.value = null
       isShowing.value = false
@@ -106,11 +106,15 @@ export const useNotificationStore = defineStore('notification', () => {
    * Processes the notification queue and displays the next message.
    */
   const processQueue = () => {
-    if (isShowing.value || messages.value.length === 0) return
+    if (isShowing.value || messages.value.length === 0) {
+      return
+    }
 
     const nextMessage = messages.value[0]
-    if (!nextMessage) return
-    
+    if (!nextMessage) {
+      return
+    }
+
     currentMessage.value = nextMessage
     isShowing.value = true
 
@@ -181,17 +185,17 @@ export const useNotificationStore = defineStore('notification', () => {
     messages: readonly(messages),
     currentMessage: readonly(currentMessage),
     isShowing: readonly(isShowing),
-    
+
     // Actions
     addMessage,
     removeMessage,
     clearAll,
     dismiss,
-    
+
     // Convenience methods
     success,
     error,
     warning,
-    info
+    info,
   }
 })

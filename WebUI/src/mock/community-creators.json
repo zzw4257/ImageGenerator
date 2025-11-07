@@ -1,0 +1,199 @@
+{
+  "creators": [
+    {
+      "id": "aetherlab",
+      "name": "林岚",
+      "avatar": "https://avatar.vercel.sh/aetherlab?size=96",
+      "title": "生成式视觉设计师",
+      "followers": 18240,
+      "artworks": 312,
+      "bio": "擅长将东方审美与未来科技相结合，服务品牌包括岚行、星辉传媒与晨枫设计。",
+      "topics": ["品牌视觉", "国潮文化", "动态海报"],
+      "city": "上海",
+      "highlightImage": "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=800&q=80",
+      "highlightDescription": "与星辉传媒合作完成的《星霜之旅》系列视觉重塑，覆盖线下展陈与线上活动主视觉。",
+      "recentProjects": [
+        {
+          "id": "p-aetherlab-1",
+          "title": "星霜之旅动态海报",
+          "thumbnail": "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=800&q=80",
+          "likes": 1280
+        },
+        {
+          "id": "p-aetherlab-2",
+          "title": "岚行品牌视觉升级",
+          "thumbnail": "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=800&q=80",
+          "likes": 944
+        },
+        {
+          "id": "p-aetherlab-3",
+          "title": "晨枫XR舞台视觉",
+          "thumbnail": "https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=800&q=80",
+          "likes": 615
+        }
+      ],
+      "achievements": [
+        "2024 生成式视觉设计大赛金奖",
+        "AETHER VFX Meetup 主讲嘉宾",
+        "Behance 每周精选 Top 10"
+      ],
+      "metrics": {
+        "engagementRate": 0.36,
+        "avgDelivery": "48 小时",
+        "clientSatisfaction": 0.94
+      }
+    },
+    {
+      "id": "aurora",
+      "name": "顾奕",
+      "avatar": "https://avatar.vercel.sh/aurora?size=96",
+      "title": "数据可视化创意人",
+      "followers": 12980,
+      "artworks": 204,
+      "bio": "专注将金融、能源等复杂数据转化为可交互的沉浸式叙事体验。",
+      "topics": ["实时可视化", "能源科技", "交互叙事"],
+      "city": "深圳",
+      "highlightImage": "https://images.unsplash.com/photo-1526498460520-4c246339dccb?auto=format&fit=crop&w=800&q=80",
+      "highlightDescription": "《兆瓦脉动》能源可视化项目，通过生成式动画呈现新能源全链路运行。",
+      "recentProjects": [
+        {
+          "id": "p-aurora-1",
+          "title": "兆瓦脉动沉浸体验",
+          "thumbnail": "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=800&q=80",
+          "likes": 752
+        },
+        {
+          "id": "p-aurora-2",
+          "title": "金融风险雷达",
+          "thumbnail": "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=800&q=80",
+          "likes": 588
+        },
+        {
+          "id": "p-aurora-3",
+          "title": "城市呼吸指数",
+          "thumbnail": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=800&q=80",
+          "likes": 432
+        }
+      ],
+      "achievements": [
+        "2023 ChinaVis 最佳创意可视化",
+        "腾讯互娱创新孵化项目设计顾问"
+      ],
+      "metrics": {
+        "engagementRate": 0.28,
+        "avgDelivery": "72 小时",
+        "clientSatisfaction": 0.9
+      }
+    },
+    {
+      "id": "atelier-mori",
+      "name": "墨里工作室",
+      "avatar": "https://avatar.vercel.sh/atelier-mori?size=96",
+      "title": "文化品牌叙事团队",
+      "followers": 16890,
+      "artworks": 451,
+      "bio": "以生成式视觉重写城市与文化品牌故事，打造沉浸式体验空间。",
+      "topics": ["文旅叙事", "空间导视", "品牌故事"],
+      "city": "成都",
+      "highlightImage": "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=800&q=80",
+      "highlightDescription": "为山川博物馆打造《声纹山海》沉浸式展览，融合声音、光影与生成式叙事。",
+      "recentProjects": [
+        {
+          "id": "p-atelier-mori-1",
+          "title": "声纹山海沉浸展",
+          "thumbnail": "https://images.unsplash.com/photo-1489515217757-5fd1be406fef?auto=format&fit=crop&w=800&q=80",
+          "likes": 1034
+        },
+        {
+          "id": "p-atelier-mori-2",
+          "title": "山城记忆夜游线",
+          "thumbnail": "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=800&q=80",
+          "likes": 812
+        },
+        {
+          "id": "p-atelier-mori-3",
+          "title": "溪语茶馆品牌故事",
+          "thumbnail": "https://images.unsplash.com/photo-1489515217757-5fd1be406fef?auto=format&fit=crop&w=800&q=80",
+          "likes": 654
+        }
+      ],
+      "achievements": [
+        "2024 文旅 IP 金梧奖最佳体验设计",
+        "成都城市更新设计咨询伙伴"
+      ],
+      "metrics": {
+        "engagementRate": 0.32,
+        "avgDelivery": "5 天",
+        "clientSatisfaction": 0.92
+      }
+    },
+    {
+      "id": "pixelwave",
+      "name": "PixelWave",
+      "avatar": "https://avatar.vercel.sh/pixelwave?size=96",
+      "title": "沉浸舞台视觉团队",
+      "followers": 21450,
+      "artworks": 389,
+      "bio": "结合音乐与生成式多媒体，打造巡演级舞台视觉体验。",
+      "topics": ["沉浸舞台", "音乐现场", "粒子系统"],
+      "city": "北京",
+      "highlightImage": "https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=800&q=80",
+      "highlightDescription": "《光潮》巡演视觉方案，配合实时音频驱动的粒子系统，实现声音与光影同步。",
+      "recentProjects": [
+        {
+          "id": "p-pixelwave-1",
+          "title": "光潮巡演视觉",
+          "thumbnail": "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=800&q=80",
+          "likes": 1450
+        },
+        {
+          "id": "p-pixelwave-2",
+          "title": "跨年舞台灯光",
+          "thumbnail": "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80",
+          "likes": 998
+        },
+        {
+          "id": "p-pixelwave-3",
+          "title": "交互音乐展演",
+          "thumbnail": "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=800&q=80",
+          "likes": 834
+        }
+      ],
+      "achievements": [
+        "2024 沉浸式舞台视觉大奖",
+        "网易云音乐年度最佳合作伙伴"
+      ],
+      "metrics": {
+        "engagementRate": 0.41,
+        "avgDelivery": "10 天",
+        "clientSatisfaction": 0.96
+      }
+    }
+  ],
+  "trendingTopics": [
+    {
+      "id": "t1",
+      "name": "企业宣传片灵感",
+      "posts": 128,
+      "momentum": "rising"
+    },
+    {
+      "id": "t2",
+      "name": "XR 沉浸式舞台",
+      "posts": 96,
+      "momentum": "steady"
+    },
+    {
+      "id": "t3",
+      "name": "国潮品牌焕新",
+      "posts": 142,
+      "momentum": "rising"
+    },
+    {
+      "id": "t4",
+      "name": "数据叙事可视化",
+      "posts": 84,
+      "momentum": "new"
+    }
+  ]
+}

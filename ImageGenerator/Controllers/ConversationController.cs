@@ -4,12 +4,13 @@ using ImageGenerator.Interface;
 using ImageGenerator.Dtos;
 using ImageGenerator.Models;
 using ImageGenerator.Helpers;
+using ImageGenerator.Enums;
 
 namespace ImageGenerator.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize]
+[RoleAuthorize(UserRole.User)]  // User 及以上角色可访问
 /// <summary>
 /// Manages conversations and image generation within them.
 /// </summary>
@@ -63,34 +64,6 @@ public class ConversationController(IConversationService conversationService) : 
         catch (Exception ex)
         {
             return BadRequest($"获取对话失败: {ex.Message}");
-        }
-    }
-
-    /// <summary>
-    /// Generates an image within a specific conversation.
-    /// </summary>
-    /// <param name="chatId">The ID of the conversation.</param>
-    /// <param name="generateDto">The data for generating the image.</param>
-    /// <returns>An <see cref="ActionResult"/> containing the <see cref="GenerationRecordDto"/>.</returns>
-    [HttpPost("generate/{chatId}")]
-    public async Task<ActionResult<GenerationRecordDto>> GenerateImage(Guid chatId, [FromBody] GenerateImageDto generateDto)
-    {
-        try
-        {
-            var result = await _chatService.GenerateImageAsync(chatId, generateDto);
-            return Ok(result);
-        }
-        catch (UnauthorizedAccessException)
-        {
-            return Unauthorized();
-        }
-        catch (ArgumentException ex)
-        {
-            return BadRequest(ex.Message);
-        }
-        catch (Exception ex)
-        {
-            return BadRequest($"生成图片失败: {ex.Message}");
         }
     }
 

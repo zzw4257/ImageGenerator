@@ -1,0 +1,18 @@
+Using launch settings from /Users/zzw4257/Documents/ZJU_archieve/05.课程与学术资料/ITP-新产品开发/Aetherflow/ImageGenerator/ImageGenerator/Properties/launchSettings.json...
+Building...
+warn: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware[16]
+      The WebRootPath was not found: /Users/zzw4257/Documents/ZJU_archieve/05.课程与学术资料/ITP-新产品开发/Aetherflow/ImageGenerator/ImageGenerator/wwwroot. Static files may be unavailable.
+warn: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware[16]
+      The WebRootPath was not found: /Users/zzw4257/Documents/ZJU_archieve/05.课程与学术资料/ITP-新产品开发/Aetherflow/ImageGenerator/ImageGenerator/wwwroot. Static files may be unavailable.
+info: Microsoft.Hosting.Lifetime[14]
+      Now listening on: http://localhost:5192
+info: Microsoft.Hosting.Lifetime[0]
+      Application started. Press Ctrl+C to shut down.
+info: Microsoft.Hosting.Lifetime[0]
+      Hosting environment: Development
+info: Microsoft.Hosting.Lifetime[0]
+      Content root path: /Users/zzw4257/Documents/ZJU_archieve/05.课程与学术资料/ITP-新产品开发/Aetherflow/ImageGenerator/ImageGenerator
+warn: Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionMiddleware[3]
+      Failed to determine the https port for redirect.
+info: Microsoft.Hosting.Lifetime[0]
+      Application is shutting down...

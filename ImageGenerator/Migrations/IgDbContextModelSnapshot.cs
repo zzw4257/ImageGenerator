@@ -29,7 +29,7 @@ namespace ImageGenerator.Migrations
 
                     b.HasIndex("InputImagesId");
 
-                    b.ToTable("GenerationRecordImage");
+                    b.ToTable("GenerationRecordImage", (string)null);
                 });
 
             modelBuilder.Entity("ImageGenerator.Models.Conversation", b =>
@@ -54,12 +54,12 @@ namespace ImageGenerator.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Conversations");
+                    b.ToTable("Conversations", (string)null);
 
                     b.HasData(
                         new
                         {
-                            Id = new Guid("00000000-0000-0000-0000-000000000004"),
+                            Id = new Guid("00000000-0000-0000-0000-000000000005"),
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
                             UpdatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
@@ -95,6 +95,9 @@ namespace ImageGenerator.Migrations
                     b.Property<Guid?>("OutputImagesId")
                         .HasColumnType("TEXT");
 
+                    b.Property<Guid?>("PresetId")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Prompt")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -108,7 +111,9 @@ namespace ImageGenerator.Migrations
 
                     b.HasIndex("OutputImagesId");
 
-                    b.ToTable("GenerationRecords");
+                    b.HasIndex("PresetId");
+
+                    b.ToTable("GenerationRecords", (string)null);
                 });
 
             modelBuilder.Entity("ImageGenerator.Models.Image", b =>
@@ -143,7 +148,7 @@ namespace ImageGenerator.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Images");
+                    b.ToTable("Images", (string)null);
                 });
 
             modelBuilder.Entity("ImageGenerator.Models.Invitation", b =>
@@ -175,12 +180,12 @@ namespace ImageGenerator.Migrations
 
                     b.HasIndex("IssuerId");
 
-                    b.ToTable("Invitations");
+                    b.ToTable("Invitations", (string)null);
 
                     b.HasData(
                         new
                         {
-                            Id = new Guid("00000000-0000-0000-0000-000000000002"),
+                            Id = new Guid("00000000-0000-0000-0000-000000000003"),
                             Code = "WELCOME2024ABCDE",
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
@@ -189,13 +194,348 @@ namespace ImageGenerator.Migrations
                         },
                         new
                         {
-                            Id = new Guid("00000000-0000-0000-0000-000000000003"),
+                            Id = new Guid("00000000-0000-0000-0000-000000000004"),
                             Code = "INVITE2024FGHIJK",
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
                             IssuerId = new Guid("00000000-0000-0000-0000-000000000001"),
                             RemainingUses = 5
                         });
+                });
+
+            modelBuilder.Entity("ImageGenerator.Models.Preset", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CoverUrl")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("CreatedByUserId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("DefaultParams")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("FavoriteCount")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("LikeCount")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("PriceCredits")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Prompt")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Provider")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.PrimitiveCollection<string>("Tags")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedByUserId");
+
+                    b.ToTable("Presets", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("00000000-0000-0000-0000-00000000000a"),
+                            CoverUrl = "/images/presets/product-shot.png",
+                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedByUserId = new Guid("00000000-0000-0000-0000-000000000001"),
+                            DefaultParams = "{\"style\": \"photorealistic\", \"width\": 1024, \"height\": 1024, \"aspectRatio\": \"1:1\"}",
+                            Description = "适合电商/广告用途的专业产品照片，强调光线布置、角度与核心细节。",
+                            FavoriteCount = 0,
+                            IsDeleted = false,
+                            LikeCount = 0,
+                            Name = "产品商业摄影 (Qwen)",
+                            PriceCredits = 2,
+                            Prompt = "A high-resolution, studio-lit product photograph of a [product description:matte black wireless earbud case] on a [background surface/description:brushed aluminum surface with soft vignette]. The lighting is a [lighting setup:three-point softbox] to [lighting purpose:emphasize subtle curves]. The camera angle is a [angle type:slight low angle] to showcase [specific feature:charging indicator + hinge]. Ultra-realistic, with sharp focus on [key detail:texture + logo etching]. [Aspect ratio:1:1].",
+                            Provider = "Qwen",
+                            Tags = "[\"product\",\"studio\",\"qwen\"]"
+                        },
+                        new
+                        {
+                            Id = new Guid("00000000-0000-0000-0000-00000000000b"),
+                            CoverUrl = "/images/presets/text-graphic.png",
+                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedByUserId = new Guid("00000000-0000-0000-0000-000000000001"),
+                            DefaultParams = "{\"style\": \"graphic\", \"width\": 768, \"height\": 768, \"aspectRatio\": \"1:1\"}",
+                            Description = "用于生成包含特定文字的图形 / 标识，明确字体感受、风格与配色。",
+                            FavoriteCount = 0,
+                            IsDeleted = false,
+                            LikeCount = 0,
+                            Name = "文字图形标识 (Flux)",
+                            PriceCredits = 1,
+                            Prompt = "Create a [image type:logo badge] for [brand/concept:Arctic Labs] with the text \"[text to render:POLAR AI]\" in a [font style:geometric sans-serif]. The design should be [style description:minimal, futuristic] with a [color scheme:icy blue + white gradient].",
+                            Provider = "Flux",
+                            Tags = "[\"text\",\"logo\",\"graphic\",\"flux\"]"
+                        },
+                        new
+                        {
+                            Id = new Guid("00000000-0000-0000-0000-00000000000c"),
+                            CoverUrl = "/images/presets/sticker.png",
+                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedByUserId = new Guid("00000000-0000-0000-0000-000000000001"),
+                            DefaultParams = "{\"style\": \"sticker\", \"width\": 512, \"height\": 512, \"aspectRatio\": \"1:1\"}",
+                            Description = "用于创建带有指定风格的贴纸 / 图标素材，强调线条、配色与透明背景。",
+                            FavoriteCount = 0,
+                            IsDeleted = false,
+                            LikeCount = 0,
+                            Name = "风格化贴纸 (Stub)",
+                            PriceCredits = 0,
+                            Prompt = "A [style:kawaii chibi] sticker of a [subject:cat astronaut], featuring [key characteristics:round helmet, floating fish] and a [color palette:pastel neon mix]. The design should have [line style:clean bold outline] and [shading style:soft cell shading]. The background must be transparent.",
+                            Provider = "Stub",
+                            Tags = "[\"sticker\",\"chibi\",\"icon\",\"stub\"]"
+                        },
+                        new
+                        {
+                            Id = new Guid("00000000-0000-0000-0000-00000000000d"),
+                            CoverUrl = "/images/presets/photorealistic.png",
+                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedByUserId = new Guid("00000000-0000-0000-0000-000000000001"),
+                            DefaultParams = "{\"style\": \"photorealistic\", \"width\": 1024, \"height\": 576, \"aspectRatio\": \"16:9\"}",
+                            Description = "对于逼真的图片，请使用摄影术语。提及拍摄角度、镜头类型、光线和细节，引导模型生成逼真的效果。",
+                            FavoriteCount = 0,
+                            IsDeleted = false,
+                            LikeCount = 0,
+                            Name = "逼真摄影场景 (Qwen)",
+                            PriceCredits = 2,
+                            Prompt = "A photorealistic [shot type:close-up] of [subject:a mystical fox], [action or expression:looking into the distance], set in [environment:ancient forest]. The scene is illuminated by [lighting description:soft golden hour rim light], creating a [mood:serene] atmosphere. Captured with a [camera/lens details:Canon EOS R5 + 85mm f1.2], emphasizing [key textures and details:detailed fur, shimmering particles]. The image should be in a [aspect ratio:16:9] format.",
+                            Provider = "Qwen",
+                            Tags = "[\"photo\",\"realistic\",\"camera\",\"qwen\"]"
+                        },
+                        new
+                        {
+                            Id = new Guid("00000000-0000-0000-0000-00000000000e"),
+                            CoverUrl = "/images/presets/minimal.png",
+                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedByUserId = new Guid("00000000-0000-0000-0000-000000000001"),
+                            DefaultParams = "{\"style\": \"minimalist\", \"width\": 768, \"height\": 512, \"aspectRatio\": \"3:2\"}",
+                            Description = "生成带大量留白与单主体的极简风图像，适合做背景或叠加文案。",
+                            FavoriteCount = 0,
+                            IsDeleted = false,
+                            LikeCount = 0,
+                            Name = "极简负空间 (Flux)",
+                            PriceCredits = 1,
+                            Prompt = "A minimalist composition featuring a single [subject:solitary bonsai] positioned in the [position in frame:lower right] of the frame. The background is a vast, empty [color:off-white] canvas, creating significant negative space. Soft, subtle lighting. [Aspect ratio:3:2].",
+                            Provider = "Flux",
+                            Tags = "[\"minimalist\",\"art\",\"negative space\",\"flux\"]"
+                        },
+                        new
+                        {
+                            Id = new Guid("00000000-0000-0000-0000-00000000000f"),
+                            CoverUrl = "/images/presets/comic.png",
+                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedByUserId = new Guid("00000000-0000-0000-0000-000000000001"),
+                            DefaultParams = "{\"style\": \"comic\", \"width\": 512, \"height\": 910, \"aspectRatio\": \"9:16\"}",
+                            Description = "生成漫画风单格场景，分离前景角色动作与背景设定，可含对白框。",
+                            FavoriteCount = 0,
+                            IsDeleted = false,
+                            LikeCount = 0,
+                            Name = "漫画单格 (Stub)",
+                            PriceCredits = 0,
+                            Prompt = "A single comic book panel in a [art style:neo-noir ink wash] style. In the foreground, [character description and action:detective leaning over a glowing map]. In the background, [setting details:rain streaked window + neon signs]. The panel has a [dialogue/caption box:caption] with the text \"[Text:We were already too late]\". The lighting creates a [mood:brooding] mood. [Aspect ratio:9:16].",
+                            Provider = "Stub",
+                            Tags = "[\"comic\",\"noir\",\"storyboard\",\"stub\"]"
+                        });
+                });
+
+            modelBuilder.Entity("ImageGenerator.Models.PresetFavorite", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<Guid>("PresetId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PresetId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("PresetFavorites", (string)null);
+                });
+
+            modelBuilder.Entity("ImageGenerator.Models.PresetLike", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("PresetId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("Id")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("UserId", "PresetId");
+
+                    b.HasIndex("PresetId");
+
+                    b.ToTable("PresetLikes", (string)null);
+                });
+
+            modelBuilder.Entity("ImageGenerator.Models.PresetReport", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Notes")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PresetCoverUrlSnapshot")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PresetDescriptionSnapshot")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("PresetId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PresetNameSnapshot")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Reason")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<Guid>("ReporterUserId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PresetId");
+
+                    b.HasIndex("ReporterUserId");
+
+                    b.ToTable("PresetReports", (string)null);
+                });
+
+            modelBuilder.Entity("ImageGenerator.Models.RoleLog", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("NewRole")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("OldRole")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("OperationType")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("OperatorUserId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Reason")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("TargetUserId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OperatorUserId");
+
+                    b.HasIndex("TargetUserId");
+
+                    b.ToTable("RoleLogs", (string)null);
+                });
+
+            modelBuilder.Entity("ImageGenerator.Models.Transaction", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("BalanceAfter")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("CreatorId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatorId");
+
+                    b.ToTable("Transactions", (string)null);
                 });
 
             modelBuilder.Entity("ImageGenerator.Models.User", b =>
@@ -207,8 +547,8 @@ namespace ImageGenerator.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("Credits")
-                        .HasColumnType("INTEGER");
+                    b.Property<decimal>("Credits")
+                        .HasColumnType("TEXT");
 
                     b.Property<Guid?>("InvitedById")
                         .HasColumnType("TEXT");
@@ -223,6 +563,9 @@ namespace ImageGenerator.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("Role")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Salt")
                         .HasColumnType("TEXT");
 
@@ -234,19 +577,32 @@ namespace ImageGenerator.Migrations
 
                     b.HasIndex("InvitedById");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
 
                     b.HasData(
                         new
                         {
                             Id = new Guid("00000000-0000-0000-0000-000000000001"),
                             CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            Credits = 100,
+                            Credits = 100m,
                             IsDeleted = false,
                             LastCreditClaimedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             Password = "C0FC41A30BEB7C221BB9CB69DF665943ED9F425211FFB8EFA9B5091F7C0BC7F1",
+                            Role = 3,
                             Salt = "admin-salt-123",
                             Username = "admin"
+                        },
+                        new
+                        {
+                            Id = new Guid("00000000-0000-0000-0000-000000000002"),
+                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Credits = 100m,
+                            IsDeleted = false,
+                            LastCreditClaimedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Password = "F64FFCA00480CB9155C0D068E8B11077291CAABF38DF01E130A8941F8E591C1A",
+                            Role = 0,
+                            Salt = "tester-salt-456",
+                            Username = "tester"
                         });
                 });
 
@@ -270,7 +626,7 @@ namespace ImageGenerator.Migrations
                     b.HasOne("ImageGenerator.Models.User", "User")
                         .WithMany("Conversations")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("User");
@@ -289,9 +645,16 @@ namespace ImageGenerator.Migrations
                         .HasForeignKey("OutputImagesId")
                         .OnDelete(DeleteBehavior.SetNull);
 
+                    b.HasOne("ImageGenerator.Models.Preset", "Preset")
+                        .WithMany("GenerationRecords")
+                        .HasForeignKey("PresetId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
                     b.Navigation("Conversation");
 
                     b.Navigation("OutputImages");
+
+                    b.Navigation("Preset");
                 });
 
             modelBuilder.Entity("ImageGenerator.Models.Image", b =>
@@ -316,6 +679,96 @@ namespace ImageGenerator.Migrations
                     b.Navigation("Issuer");
                 });
 
+            modelBuilder.Entity("ImageGenerator.Models.Preset", b =>
+                {
+                    b.HasOne("ImageGenerator.Models.User", "CreatedByUser")
+                        .WithMany("PresetsCreated")
+                        .HasForeignKey("CreatedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("CreatedByUser");
+                });
+
+            modelBuilder.Entity("ImageGenerator.Models.PresetFavorite", b =>
+                {
+                    b.HasOne("ImageGenerator.Models.Preset", "Preset")
+                        .WithMany("PresetFavorites")
+                        .HasForeignKey("PresetId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("ImageGenerator.Models.User", "User")
+                        .WithMany("PresetFavorites")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("Preset");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ImageGenerator.Models.PresetLike", b =>
+                {
+                    b.HasOne("ImageGenerator.Models.Preset", "Preset")
+                        .WithMany("PresetLikes")
+                        .HasForeignKey("PresetId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("ImageGenerator.Models.User", "User")
+                        .WithMany("PresetLikes")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("Preset");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ImageGenerator.Models.PresetReport", b =>
+                {
+                    b.HasOne("ImageGenerator.Models.Preset", "Preset")
+                        .WithMany("PresetReports")
+                        .HasForeignKey("PresetId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("ImageGenerator.Models.User", "ReporterUser")
+                        .WithMany("PresetReportsMade")
+                        .HasForeignKey("ReporterUserId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Preset");
+
+                    b.Navigation("ReporterUser");
+                });
+
+            modelBuilder.Entity("ImageGenerator.Models.RoleLog", b =>
+                {
+                    b.HasOne("ImageGenerator.Models.User", "OperatorUser")
+                        .WithMany()
+                        .HasForeignKey("OperatorUserId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("ImageGenerator.Models.User", "TargetUser")
+                        .WithMany()
+                        .HasForeignKey("TargetUserId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("OperatorUser");
+
+                    b.Navigation("TargetUser");
+                });
+
+            modelBuilder.Entity("ImageGenerator.Models.Transaction", b =>
+                {
+                    b.HasOne("ImageGenerator.Models.User", "Creator")
+                        .WithMany()
+                        .HasForeignKey("CreatorId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Creator");
+                });
+
             modelBuilder.Entity("ImageGenerator.Models.User", b =>
                 {
                     b.HasOne("ImageGenerator.Models.Invitation", "InvitedBy")
@@ -331,9 +784,28 @@ namespace ImageGenerator.Migrations
                     b.Navigation("GenerationRecords");
                 });
 
+            modelBuilder.Entity("ImageGenerator.Models.Preset", b =>
+                {
+                    b.Navigation("GenerationRecords");
+
+                    b.Navigation("PresetFavorites");
+
+                    b.Navigation("PresetLikes");
+
+                    b.Navigation("PresetReports");
+                });
+
             modelBuilder.Entity("ImageGenerator.Models.User", b =>
                 {
                     b.Navigation("Conversations");
+
+                    b.Navigation("PresetFavorites");
+
+                    b.Navigation("PresetLikes");
+
+                    b.Navigation("PresetReportsMade");
+
+                    b.Navigation("PresetsCreated");
                 });
 #pragma warning restore 612, 618
         }

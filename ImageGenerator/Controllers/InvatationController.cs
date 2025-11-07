@@ -1,12 +1,15 @@
 using Microsoft.AspNetCore.Mvc;
-using ImageGenerator.Interface;
 using ImageGenerator.Dtos;
+using ImageGenerator.Enums;
+using ImageGenerator.Helpers;
+using ImageGenerator.Interface;
 using AutoMapper;
 
 namespace ImageGenerator.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[RoleAuthorize(UserRole.User)]  // User 及以上角色可访问
 public class InvitationController(IInvitationService invitationService, IMapper mapper) : ControllerBase
 {
     private readonly IInvitationService _invitationService = invitationService;

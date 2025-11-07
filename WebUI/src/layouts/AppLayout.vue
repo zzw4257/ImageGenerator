@@ -197,41 +197,90 @@
   )
 
   const navigationItems: NavigationItem[] = [
-    // 之前的页面
-    // {
-    //   title: 'Home',
-    //   subtitle: 'All conversations',
-    //   icon: 'mdi-home',
-    //   to: '/',
-    //   badge: {
-    //     text: '5',
-    //     color: 'primary',
-    //   },
-    // },
-    // {
-    //   title: 'Favorites',
-    //   subtitle: 'Starred images',
-    //   icon: 'mdi-heart',
-    //   to: '/favorites',
-    // },
-    // {
-    //   title: 'Invitations',
-    //   subtitle: 'Manage codes',
-    //   icon: 'mdi-ticket',
-    //   to: '/invitation',
-    // },
     {
       title: 'Home',
-      subtitle: 'AI Applications',
+      subtitle: 'All conversations',
       icon: 'mdi-home',
-      to: '/home',
+      to: '/',
+      badge: {
+        text: '5',
+        color: 'primary'
+      }
+    },
+    {
+      title: 'Muse',
+      subtitle: 'Use ready-made prompts',
+      icon: 'mdi-format-paint',
+      to: '/presets'
+    },
+    {
+      title: 'Market',
+      subtitle: 'AIGC assets marketplace',
+      icon: 'mdi-store',
+      to: '/market',
+      badge: {
+        text: 'New',
+        color: 'success'
+      }
+    },
+    {
+      title: 'Analytics',
+      subtitle: 'Data insights',
+      icon: 'mdi-chart-line',
+      to: '/analytics'
+    },
+    {
+      title: 'Community',
+      subtitle: 'Creator community',
+      icon: 'mdi-account-group',
+      to: '/community'
+    },
+    {
+      title: 'Workflow Editor',
+      subtitle: 'Visual workflow builder',
+      icon: 'mdi-graph',
+      to: '/workflow-editor',
+      badge: {
+        text: 'Beta',
+        color: 'info'
+      }
+    },
+    {
+      title: 'Enterprise',
+      subtitle: 'Business solutions',
+      icon: 'mdi-office-building',
+      to: '/enterprise'
+    },
+    {
+      title: 'Favorites',
+      subtitle: 'Starred images',
+      icon: 'mdi-heart',
+      to: '/favorites'
+    },
+    {
+      title: 'Community',
+      subtitle: 'Creator Network',
+      icon: 'mdi-account-group-outline',
+      to: '/community',
+    },
+    {
+      title: 'Enterprise',
+      subtitle: 'Enterprise Solutions',
+      icon: 'mdi-office-building-cog-outline',
+      to: '/enterprise',
     },
     {
       title: 'Account',
-      subtitle: 'User Profile',
-      icon: 'mdi-account',
-      to: '/account',
+      subtitle: 'Balance & History',
+      icon: 'mdi-account-circle',
+      to: '/account'
     },
+    {
+      title: 'Invitations',
+      subtitle: 'Manage codes',
+      icon: 'mdi-ticket',
+      to: '/invitation'
+    }
   ]
 
   const userMenuItems: UserMenuItem[] = [
@@ -271,6 +320,9 @@
       }
       case '/favorites': {
         return 'Favorites'
+      }
+      case '/account': {
+        return 'Account & History'
       }
       case '/collections': {
         return 'Collections'
