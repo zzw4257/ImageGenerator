@@ -105,12 +105,109 @@ public class WalletService(IgDbContext context, IHttpContextAccessor httpContext
 
         return new TransactionDto
         {
+            Id = transaction.Id,
             Type = transaction.Type,
             Amount = transaction.Amount,
             BalanceAfter = transaction.BalanceAfter,
             Description = transaction.Description,
+            CreatedAt = transaction.CreatedAt,
             CreatorId = transaction.CreatorId
         };
+    }
+
+    /// <summary>
+    /// 转账给指定用户
+    /// </summary>
+    public async Task<PayResponseDto> PayAsync(PayRequestDto request)
+    {
+        var senderId = GetCurrentUserId() ?? throw new UnauthorizedAccessException("未认证");
+
+        if (request.Amount <= 0)
+        {
+            throw new ArgumentException("转账金额必须大于 0", nameof(request.Amount));
+        }
+
+        if (senderId == request.RecipientUserId)
+        {
+            throw new InvalidOperationException("不能向自己转账");
+        }
+
+        // 使用事务确保转账的原子性
+        using var transaction = await _context.Database.BeginTransactionAsync();
+
+        try
+        {
+            // 获取付款方
+            var sender = await _context.Users!.FirstOrDefaultAsync(u => u.Id == senderId)
+                ?? throw new InvalidOperationException("付款用户不存在");
+
+            // 获取收款方
+            var recipient = await _context.Users!.FirstOrDefaultAsync(u => u.Id == request.RecipientUserId)
+                ?? throw new InvalidOperationException("收款用户不存在");
+
+            // 检查余额
+            if (sender.Credits < request.Amount)
+            {
+                throw new InvalidOperationException($"余额不足，当前余额: {sender.Credits} credits");
+            }
+
+            // 扣除付款方余额
+            sender.Credits -= request.Amount;
+
+            // 增加收款方余额
+            recipient.Credits += request.Amount;
+
+            // 创建付款交易记录
+            var paymentTransaction = new Transaction
+            {
+                Id = Guid.NewGuid(),
+                Type = TransactionType.Transfer,
+                Amount = -request.Amount, // 负数表示支出
+                BalanceAfter = sender.Credits,
+                Description = $"转账给 {recipient.Username}{(string.IsNullOrEmpty(request.Note) ? "" : $": {request.Note}")}",
+                CreatorId = senderId,
+                CreatedAt = DateTime.UtcNow,
+                IsDeleted = false
+            };
+
+            // 创建收款交易记录
+            var receiptTransaction = new Transaction
+            {
+                Id = Guid.NewGuid(),
+                Type = TransactionType.Transfer,
+                Amount = request.Amount, // 正数表示收入
+                BalanceAfter = recipient.Credits,
+                Description = $"收到来自 {sender.Username} 的转账{(string.IsNullOrEmpty(request.Note) ? "" : $": {request.Note}")}",
+                CreatorId = request.RecipientUserId,
+                CreatedAt = DateTime.UtcNow,
+                IsDeleted = false
+            };
+
+            _context.Transactions.Add(paymentTransaction);
+            _context.Transactions.Add(receiptTransaction);
+
+            await _context.SaveChangesAsync();
+            await transaction.CommitAsync();
+
+            return new PayResponseDto
+            {
+                PaymentTransaction = _mapper.Map<TransactionDto>(paymentTransaction),
+                SenderBalance = sender.Credits,
+            };
+        }
+        catch (Exception)
+        {
+            // 回滚事务（如果异常发生在 Commit 之后，Rollback 会抛出异常但可以安全忽略）
+            try
+            {
+                await transaction.RollbackAsync();
+            }
+            catch (InvalidOperationException)
+            {
+                // 事务已经完成，忽略 rollback 错误
+            }
+            throw;
+        }
     }
 
     /// <summary>

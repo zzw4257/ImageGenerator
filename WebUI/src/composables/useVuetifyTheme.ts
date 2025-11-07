@@ -1,7 +1,7 @@
-import { watchEffect } from 'vue';
-import { useTheme } from 'vuetify';
-import { useAppStore } from '@/stores/app';
-import type { ThemePreference } from '@/types/index';
+import type { ThemePreference } from "@/types/index";
+import { watchEffect } from "vue";
+import { useTheme } from "vuetify";
+import { useAppStore } from "@/stores/app";
 
 /**
  * A composable for managing the Vuetify theme.
@@ -10,18 +10,24 @@ export function useVuetifyTheme() {
   const theme = useTheme();
   const store = useAppStore();
 
-  const setVuetifyTheme = (themePreference: ThemePreference, colorPreference: string) => {
-    let preferTheme =  themePreference;
-    if (preferTheme === 'system') {
-      preferTheme = store.isDarkMode ? 'dark' : 'light';
+  const setVuetifyTheme = (
+    themePreference: ThemePreference,
+    colorPreference: string
+  ) => {
+    let preferTheme = themePreference;
+    if (preferTheme === "system") {
+      preferTheme = store.isDarkMode ? "dark" : "light";
     }
-    let themeName = colorPreference !== 'default' ? `${preferTheme}-${colorPreference}` : preferTheme;
-    theme.change(themeName)
+    const themeName =
+      colorPreference === "default"
+        ? preferTheme
+        : `${preferTheme}-${colorPreference}`;
+    theme.change(themeName);
   };
 
   setVuetifyTheme(store.ThemePreference, store.ColorPreference);
 
-  watchEffect(()=>{
+  watchEffect(() => {
     setVuetifyTheme(store.ThemePreference, store.ColorPreference);
-  })
+  });
 }
