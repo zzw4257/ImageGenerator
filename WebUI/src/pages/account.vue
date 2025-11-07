@@ -62,40 +62,55 @@
               <v-list-item
                 v-for="transaction in transactions"
                 :key="transaction.id"
-                class="px-4 py-3"
+                class="px-4 py-3 transaction-item"
               >
                 <template #prepend>
                   <v-avatar
                     :color="getTransactionColor(transaction.type)"
                     rounded
-                    size="40"
+                    size="48"
                     variant="flat"
                   >
-                    <v-icon :color="getTransactionIconColor(transaction.type)">
+                    <v-icon :color="getTransactionIconColor(transaction.type)" size="24">
                       {{ getTransactionIcon(transaction.type) }}
                     </v-icon>
                   </v-avatar>
                 </template>
 
-                <v-list-item-title class="text-body-1 font-weight-medium">
+                <v-list-item-title class="text-body-1 font-weight-medium mb-1">
                   {{ getTransactionDescription(transaction.type, transaction.description) }}
                 </v-list-item-title>
 
-                <v-list-item-subtitle class="d-flex align-center mt-1">
-                  <span class="text-caption text-grey">
-                    {{ formatDate(transaction.createdAt) }}
+                <v-list-item-subtitle class="d-flex align-center flex-wrap gap-2">
+                  <v-chip
+                    :color="getTransactionTypeColor(transaction.type)"
+                    size="x-small"
+                    variant="flat"
+                  >
+                    {{ getTransactionTypeLabel(transaction.type) }}
+                  </v-chip>
+                  <span class="text-caption text-grey-darken-1">
+                    {{ formatDateTime(transaction.createdAt) }}
+                  </span>
+                  <span class="text-caption text-grey-darken-1">
+                    • 余额: {{ transaction.balanceAfter }} Credits
                   </span>
                 </v-list-item-subtitle>
 
                 <template #append>
-                  <span
-                    :class="[
-                      'text-body-1 font-weight-bold',
-                      transaction.type === 'Recharge' || transaction.type === 'Earn' ? 'text-success' : 'text-error'
-                    ]"
-                  >
-                    {{ transaction.type === 'Recharge' || transaction.type === 'Earn' ? '+' : '-' }}{{ transaction.amount }}
-                  </span>
+                  <div class="d-flex flex-column align-end">
+                    <span
+                      :class="[
+                        'text-h6 font-weight-bold',
+                        transaction.type === 'Recharge' || transaction.type === 'Earn' ? 'text-success' : 'text-error'
+                      ]"
+                    >
+                      {{ transaction.type === 'Recharge' || transaction.type === 'Earn' ? '+' : '-' }}{{ transaction.amount }}
+                    </span>
+                    <span class="text-caption text-grey-darken-1">
+                      Credits
+                    </span>
+                  </div>
                 </template>
               </v-list-item>
             </v-list>
@@ -487,22 +502,47 @@
 
   function getTransactionIcon (type: string) {
     const icons = {
-      Recharge: 'mdi-plus-circle',
-      Consume: 'mdi-minus-circle',
-      Earn: 'mdi-plus-circle',
-      Refund: 'mdi-refresh'
+      Recharge: 'mdi-credit-card-plus',
+      Consume: 'mdi-image-edit',
+      Earn: 'mdi-gift',
+      Refund: 'mdi-cash-refund'
     }
     return icons[type as keyof typeof icons] || 'mdi-circle'
   }
 
   function getTransactionDescription(type: string, description?: string) {
+    // 如果后端提供了描述，优先使用
+    if (description && description.trim()) {
+      return description
+    }
+    // 否则使用默认描述
     const descriptions = {
-      Recharge: 'Credits 充值',
-      Consume: '图像生成消费',
-      Earn: '获得 Credits',
+      Recharge: '账户充值',
+      Consume: '图像生成',
+      Earn: '获得奖励',
       Refund: '退款'
     }
-    return description || descriptions[type as keyof typeof descriptions] || type
+    return descriptions[type as keyof typeof descriptions] || type
+  }
+
+  function getTransactionTypeLabel(type: string) {
+    const labels = {
+      Recharge: '充值',
+      Consume: '消费',
+      Earn: '奖励',
+      Refund: '退款'
+    }
+    return labels[type as keyof typeof labels] || type
+  }
+
+  function getTransactionTypeColor(type: string) {
+    const colors = {
+      Recharge: 'success',
+      Consume: 'primary',
+      Earn: 'warning',
+      Refund: 'info'
+    }
+    return colors[type as keyof typeof colors] || 'grey'
   }
 
   function getStatusColor (status: number) {
@@ -533,6 +573,8 @@
   function formatDate (date: string) {
     return new Date(date).toLocaleDateString('zh-CN')
   }
+  
+  // formatDateTime 已经在下面定义了，不需要重复
 
   function formatDateTime (date: string) {
     // 统一处理时间格式，不添加'Z'后缀

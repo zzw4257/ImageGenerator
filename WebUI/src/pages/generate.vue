@@ -61,17 +61,30 @@
               <!-- 费用显示 -->
               <v-card
                 class="pa-4 rounded-lg mb-4"
-                color="primary-lighten-5"
+                :color="hasEnoughBalance ? 'primary-lighten-5' : 'error-lighten-5'"
                 variant="flat"
               >
-                <div class="d-flex align-center justify-space-between">
-                  <span class="text-body-1 font-weight-medium">预计消耗</span>
+                <div class="d-flex align-center justify-space-between mb-2">
+                  <span class="text-body-1 font-weight-medium">本次操作预计消耗</span>
                   <div class="d-flex align-center">
-                    <v-icon class="mr-1" color="primary">mdi-flash</v-icon>
-                    <span class="text-h6 font-weight-bold text-primary">
+                    <v-icon class="mr-1" :color="hasEnoughBalance ? 'primary' : 'error'">mdi-flash</v-icon>
+                    <span 
+                      :class="[
+                        'text-h6 font-weight-bold',
+                        hasEnoughBalance ? 'text-primary' : 'text-error'
+                      ]"
+                    >
                       {{ calculatedCredits }} Credits
                     </span>
                   </div>
+                </div>
+                <div v-if="!hasEnoughBalance" class="d-flex align-center mt-2">
+                  <v-icon size="16" color="error" class="mr-1">mdi-alert-circle</v-icon>
+                  <span class="text-caption text-error">余额不足，请先充值</span>
+                </div>
+                <div v-else class="d-flex align-center mt-2">
+                  <v-icon size="16" color="success" class="mr-1">mdi-check-circle</v-icon>
+                  <span class="text-caption text-grey-darken-1">当前余额: {{ walletBalance }} Credits</span>
                 </div>
               </v-card>
 
@@ -80,7 +93,7 @@
                 block
                 class="font-weight-bold"
                 :color="generateBtnColor"
-                :disabled="!form.prompt"
+                :disabled="!form.prompt || !hasEnoughBalance"
                 :loading="generating"
                 size="large"
                 @click="generateImage"
@@ -88,8 +101,19 @@
                 <template #prepend>
                   <v-icon>mdi-auto-fix</v-icon>
                 </template>
-                生成图像
+                {{ hasEnoughBalance ? '生成图像' : '余额不足' }}
               </v-btn>
+              <div v-if="!hasEnoughBalance && form.prompt" class="text-center mt-2">
+                <v-btn
+                  size="small"
+                  variant="text"
+                  color="primary"
+                  @click="$router.push('/recharge')"
+                >
+                  <v-icon start size="16">mdi-credit-card-plus</v-icon>
+                  立即充值
+                </v-btn>
+              </div>
             </v-card-text>
           </v-card>
         </v-container>
@@ -382,8 +406,14 @@ import { useNotificationStore } from '@/stores/notification'
     return baseCredits * form.value.quantity
   })
 
+  const hasEnoughBalance = computed(() => {
+    return walletBalance.value >= calculatedCredits.value
+  })
+
   const generateBtnColor = computed(() => {
-    return form.value.prompt ? '#22c55e' : 'grey'
+    if (!form.value.prompt) return 'grey'
+    if (!hasEnoughBalance.value) return 'error'
+    return '#22c55e'
   })
 
   function truncatePrompt (prompt: string, length = 30) {
