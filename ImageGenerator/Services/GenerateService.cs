@@ -174,6 +174,43 @@ public class GenerateService(
     }
 
     /// <summary>
+    /// 估算生成图片的费用
+    /// </summary>
+    public async Task<EstimateResponseDto> EstimateAsync(EstimateRequestDto request)
+    {
+        var userId = GetCurrentUserId() ?? throw new UnauthorizedAccessException("未认证");
+
+        string? presetName = null;
+        decimal estimatedCost;
+
+        // 如果提供了 PresetId，使用预制菜的费用
+        if (request.PresetId.HasValue)
+        {
+            var preset = await _context.Presets!
+                .FirstOrDefaultAsync(p => p.Id == request.PresetId.Value && !p.IsDeleted)
+                ?? throw new InvalidOperationException("预制菜不存在");
+
+            presetName = preset.Name;
+            estimatedCost = preset.PriceCredits;
+        }
+        else
+        {
+            // 否则根据 Provider 估算
+            estimatedCost = EstimateCost(request.Provider);
+        }
+
+        return new EstimateResponseDto
+        {
+            EstimatedCost = estimatedCost,
+            Provider = request.Provider,
+            PresetName = presetName,
+            Description = presetName != null
+                ? $"使用预制菜 \"{presetName}\" 的固定费用"
+                : $"使用 {request.Provider} 供应商的估算费用"
+        };
+    }
+
+    /// <summary>
     /// 估算生成费用
     /// </summary>
     private decimal EstimateCost(string provider)

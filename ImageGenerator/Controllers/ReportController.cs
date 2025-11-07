@@ -32,5 +32,31 @@ public class ReportController(IPresetReportService reportService) : ControllerBa
         return Ok(reports);
     }
 
-    // (未来可以添加 PUT /api/reports/{reportId}/status 来处理举报)
+    /// <summary>
+    /// 处理举报记录
+    /// </summary>
+    /// <param name="reportId">举报记录 ID</param>
+    /// <param name="action">操作类型："delete_preset" 或 "dismiss_report"</param>
+    /// <returns>处理结果</returns>
+    [HttpPost("{reportId}/handle")]
+    public async Task<ActionResult> HandleReport(Guid reportId, [FromQuery] ReportHandle action)
+    {
+        try
+        {
+            await _reportService.HandleReportAsync(reportId, action);
+            return Ok(new { message = "举报处理成功" });
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { message = $"处理失败: {ex.Message}" });
+        }
+    }
 }

@@ -31,4 +31,11 @@ public interface IWalletService
     /// <param name="amount">The amount of credits to grant.</param>
     /// <returns>The transaction DTO.</returns>
     Task<TransactionDto> GrantAsync(decimal amount);
+
+    /// <summary>
+    /// 转账给指定用户
+    /// </summary>
+    /// <param name="request">转账请求</param>
+    /// <returns>转账响应</returns>
+    Task<PayResponseDto> PayAsync(PayRequestDto request);
 }
