@@ -13,6 +13,10 @@ import App from './App.vue'
 // Composables
 import { createApp } from 'vue'
 
+import { createPinia } from 'pinia'
+
+import router from './router'
+
 // Styles
 // import 'unfonts.css'
 import '@mdi/font/css/materialdesignicons.css'

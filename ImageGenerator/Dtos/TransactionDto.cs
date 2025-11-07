@@ -4,6 +4,7 @@ namespace ImageGenerator.Dtos;
 
 public class TransactionDto: ActionBaseDto
 {
+    public Guid Id { get; set; }
     public TransactionType Type { get; set; }
     public decimal Amount { get; set; }
     public decimal BalanceAfter { get; set; }
