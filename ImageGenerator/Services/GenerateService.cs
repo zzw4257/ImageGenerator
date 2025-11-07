@@ -16,13 +16,13 @@ namespace ImageGenerator.Services;
 public class GenerateService(
     IgDbContext context,
     IHttpContextAccessor httpContextAccessor,
-    IConfiguration configuration,
+    ICostEstimationService costEstimationService,
     ImageProvider provider,
     IServiceScopeFactory scopeFactory) : IGenerateService
 {
     private readonly IgDbContext _context = context;
     private readonly IHttpContextAccessor _http = httpContextAccessor;
-    private readonly IConfiguration _configuration = configuration;
+    private readonly ICostEstimationService _costEstimationService = costEstimationService; 
     private readonly ImageProvider _provider = provider;
     private readonly IServiceScopeFactory _scopeFactory = scopeFactory;
 
@@ -41,19 +41,39 @@ public class GenerateService(
         var user = await _context.Users!.FirstOrDefaultAsync(u => u.Id == userId)
             ?? throw new InvalidOperationException("用户不存在");
 
+        // 确定生成类型
+        var generationType = (request.InputImageIds != null && request.InputImageIds.Count > 0)
+            ? GenerationType.ImageToImage
+            : GenerationType.TextToImage;
+
+        //转字符串
+        var capability = (generationType == GenerationType.ImageToImage)
+            ? "ImageToImage"
+            : "TextToImage";
+
+        // 构建预估请求 DTO
+        var estimateRequest = new EstimateRequestDto
+        {
+            Provider = request.Provider,
+            Capability = capability
+            // Width 和 Height 为 null //TODO: 如果未来传入了其他参数，可以添加
+        };
+
         // 估算费用
-        var estCost = EstimateCost(request.Provider);
+        var estResult = await _costEstimationService.EstimateCostAsync(estimateRequest);
+        var estCost = estResult.EstimatedCost;
+
+        if (estResult.PricingKey == "Error")
+        {
+            // 如果连默认价格都找不到，这是一个严重的配置问题，阻止生成
+            throw new InvalidOperationException($"无法获取定价信息: {estResult.Warning}");
+        }
 
         // 余额校验
         if (user.Credits < estCost)
         {
             throw new InvalidOperationException($"余额不足。需要 {estCost} credits，当前余额 {user.Credits} credits");
         }
-
-        // 确定生成类型
-        var generationType = (request.InputImageIds != null && request.InputImageIds.Count > 0)
-            ? GenerationType.ImageToImage
-            : GenerationType.TextToImage;
 
         // 创建生成任务
         var taskId = Guid.NewGuid();
@@ -173,29 +193,6 @@ public class GenerateService(
         };
     }
 
-    /// <summary>
-    /// 估算生成费用
-    /// </summary>
-    private decimal EstimateCost(string provider)
-    {
-        var costs = _configuration.GetSection("CreditCosts").Get<Dictionary<string, decimal>>()
-            ?? new Dictionary<string, decimal>();
-
-        var key = $"{provider}.TextToImage";
-        if (costs.TryGetValue(key, out var cost))
-        {
-            return cost;
-        }
-
-        // 默认费用
-        return provider.ToLower() switch
-        {
-            "stub" => 0,
-            "qwen" => 2,
-            "flux" => 1,
-            _ => 1
-        };
-    }
 
     /// <summary>
     /// 处理图片生成（真实的 Provider 调用）—— 在独立的 DI scope 中运行
