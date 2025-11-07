@@ -45,4 +45,47 @@ public class PresetReportService(IgDbContext context) : IPresetReportService
             CreatedAt = r.CreatedAt
         }).ToListAsync();
     }
+
+    /// <summary>
+    /// 处理举报记录：删除被举报的预制菜或驳回举报
+    /// </summary>
+    public async Task<bool> HandleReportAsync(Guid reportId, ReportHandle action)
+    {
+        var report = await _context.PresetReports
+            .Include(r => r.Preset)
+            .FirstOrDefaultAsync(r => r.Id == reportId && !r.IsDeleted)
+            ?? throw new InvalidOperationException("举报记录不存在");
+
+        if (report.Status != ReportStatus.Pending)
+        {
+            throw new InvalidOperationException("只能处理待处理状态的举报");
+        }
+
+        switch (action)
+        {
+            case ReportHandle.Delete:
+                // 删除被举报的预制菜
+                if (report.Preset != null)
+                {
+                    report.Preset.IsDeleted = true;
+                    report.Status = ReportStatus.Resolved;
+                }
+                else
+                {
+                    throw new InvalidOperationException("被举报的预制菜已不存在");
+                }
+                break;
+
+            case ReportHandle.Dismiss:
+                // 驳回举报
+                report.Status = ReportStatus.Dismissed;
+                break;
+
+            default:
+                throw new ArgumentException($"无效的操作类型");
+        }
+
+        await _context.SaveChangesAsync();
+        return true;
+    }
 }

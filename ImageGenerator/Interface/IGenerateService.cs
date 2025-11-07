@@ -20,4 +20,11 @@ public interface IGenerateService
     /// <param name="taskId">The task ID.</param>
     /// <returns>The task status.</returns>
     Task<GenerateTaskStatusDto> GetTaskStatusAsync(Guid taskId);
+
+    /// <summary>
+    /// 估算生成图片的费用
+    /// </summary>
+    /// <param name="request">估算请求</param>
+    /// <returns>估算结果</returns>
+    Task<EstimateResponseDto> EstimateAsync(EstimateRequestDto request);
 }

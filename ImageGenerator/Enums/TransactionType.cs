@@ -6,4 +6,5 @@ public enum TransactionType
     Consume,
     Earn,
     Refund,
+    Transfer
 }

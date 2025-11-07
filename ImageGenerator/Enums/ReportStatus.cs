@@ -7,6 +7,6 @@ public enum ReportStatus
 {
     Pending,   // 待处理
     Reviewed,  // 审核中
-    Resolved,  // 已处理 (例如，已删除或驳回)
+    Resolved,  // 已处理
     Dismissed  // 已驳回
 }
