@@ -23,9 +23,9 @@ public class PresetsController(IPresetService presetService) : ControllerBase
     /// </summary>
     /// <returns>200 OK + 预制菜列表</returns>
     [HttpGet]
-    public async Task<IActionResult> GetPresets()
+    public async Task<IActionResult> GetPresets([FromQuery] PaginationBaseDto param)
     {
-        var presets = await _presetService.GetPresetsAsync();
+        var presets = await _presetService.GetPresetsAsync(param);
         return Ok(presets);
     }
 
@@ -75,7 +75,7 @@ public class PresetsController(IPresetService presetService) : ControllerBase
     /// <param name="dto">来自请求体(Body)的预制菜数据</param>
     /// <returns>201 Created + 新创建的 Preset 对象</returns>
     [HttpPost]
-    [Authorize]
+    [RoleAuthorize(UserRole.PowerUser)]  // 需要 PowerUser 及以上权限
     public async Task<IActionResult> CreatePreset([FromBody] CreatePresetDto dto)
     {   
         try

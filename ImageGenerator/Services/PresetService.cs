@@ -1,7 +1,9 @@
+using AutoMapper;
 using ImageGenerator.Database; 
 using ImageGenerator.Dtos;
 using ImageGenerator.Interface;
 using ImageGenerator.Models;
+using ImageGenerator.Helpers;
 using Microsoft.EntityFrameworkCore; 
 using System.Security.Claims;
 
@@ -10,10 +12,11 @@ namespace ImageGenerator.Services;
 /// <summary>
 /// 预制菜(Preset)相关操作的实现
 /// </summary>
-public class PresetService(IgDbContext context, IHttpContextAccessor httpContextAccessor) : IPresetService
+public class PresetService(IgDbContext context, IHttpContextAccessor httpContextAccessor, IMapper mapper) : IPresetService
 {
     private readonly IgDbContext _context = context;
     private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
+    private readonly IMapper _mapper = mapper;
 
     /// <summary>
     /// 从 HttpContext 中安全地获取当前登录用户的 ID。
@@ -35,29 +38,31 @@ public class PresetService(IgDbContext context, IHttpContextAccessor httpContext
     /// 异步获取所有可用的预制菜列表。
     /// </summary>
     /// <returns>预制菜模型列表</returns>
-    public async Task<IEnumerable<Preset>> GetPresetsAsync()
+    public async Task<PagedList<Preset, PresetDto>> GetPresetsAsync(PaginationBaseDto param)
     {
-        return await _context.Presets!
-            .Where(p => !p.IsDeleted)
-            .OrderBy(p => p.CreatedAt)
-            .AsNoTracking()
-            .ToListAsync();
+        var presents =  _context.Presets!
+            .Include(p => p.CreatedByUser)
+            .OrderBy(p => p.CreatedAt);
+        return await PagedList<Preset, PresetDto>.CreateAsync(presents.AsQueryable(), param, _mapper);
     }
 
     /// <summary>
     /// 异步根据 ID 获取单个预制菜。
     /// </summary>
-    public async Task<Preset?> GetPresetByIdAsync(Guid id)
+    public async Task<PresetDetailedDto?> GetPresetByIdAsync(Guid id)
     {
-        return await _context.Presets!
-            .AsNoTracking()
-            .FirstOrDefaultAsync(p => p.Id == id && !p.IsDeleted);
+        var present = await _context.Presets!
+            .Include(p => p.CreatedByUser)
+            .Include(p => p.PresetFavorites)
+            .Include(p => p.PresetLikes)
+            .FirstOrDefaultAsync(p => p.Id == id);
+        return _mapper.Map<PresetDetailedDto>(present);
     }
 
     /// <summary>
     /// 异步创建一个新的预制菜。
     /// </summary>
-    public async Task<Preset> CreatePresetAsync(CreatePresetDto dto)
+    public async Task<PresetDetailedDto> CreatePresetAsync(CreatePresetDto dto)
     {
         var currentUserId = GetCurrentUserId();
         var newPreset = new Preset
@@ -78,7 +83,7 @@ public class PresetService(IgDbContext context, IHttpContextAccessor httpContext
         await _context.Presets!.AddAsync(newPreset);
         await _context.SaveChangesAsync();
 
-        return newPreset;
+        return _mapper.Map<PresetDetailedDto>(newPreset);
     }
 
     /// <summary>
@@ -88,7 +93,7 @@ public class PresetService(IgDbContext context, IHttpContextAccessor httpContext
     {
         var currentUserId = GetCurrentUserId();
         var preset = await _context.Presets!
-            .FirstOrDefaultAsync(p => p.Id == id && !p.IsDeleted);
+            .FirstOrDefaultAsync(p => p.Id == id);
         if (preset == null)
         {
             return false;
@@ -105,16 +110,18 @@ public class PresetService(IgDbContext context, IHttpContextAccessor httpContext
     /// <summary>
     /// 异步获取当前登录用户创建的所有预制菜。
     /// </summary>
-    public async Task<IEnumerable<Preset>> GetMyPresetsAsync()
+    public async Task<IEnumerable<PresetDto>> GetMyPresetsAsync()
     {
         var currentUserId = GetCurrentUserId();
 
         //    和 GetPresetsAsync() 几乎一样，但多了一个 WHERE 条件
-        return await _context.Presets!
-            .Where(p => !p.IsDeleted && p.CreatedByUserId == currentUserId) 
+        var presets = await _context.Presets!
+            .Where(p => !p.IsDeleted && p.CreatedByUserId == currentUserId)
             .OrderByDescending(p => p.CreatedAt) // 按最新创建的排序
             .AsNoTracking()
             .ToListAsync();
+            
+        return _mapper.Map<IEnumerable<PresetDto>>(presets);
     }
 
 }
