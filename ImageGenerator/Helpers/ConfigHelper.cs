@@ -27,6 +27,12 @@ public static class ConfigHelper
             JwtConfig = jwtConfig
         };
 
+        CreditCostSettings creditSettings = new();
+        // 将 "CreditCosts" 整个部分绑定到 'Costs' 字典属性中
+        configuration.GetSection("CreditCosts").Bind(creditSettings.Costs);
+        
+        
+
         services.AddScoped<IAuthenticationService, AuthenticationService>();
         services.AddScoped<IInvitationService, InvitationService>();
         services.AddScoped<IConversationService, ConversationService>();
@@ -40,6 +46,7 @@ public static class ConfigHelper
         services.AddScoped<IPresetReportService, PresetReportService>();
         services.AddScoped<IRankingService, RankingService>();
         services.AddScoped<IAuthorizationService, AuthorizationService>();
+        services.AddScoped<ICostEstimationService, CostEstimationService>();
         
         // Register Providers as Singleton (stateless, can be reused)
         services.AddSingleton<StubProvider>();
@@ -48,6 +55,9 @@ public static class ConfigHelper
         services.AddSingleton<ImageProvider>();
 
         services.AddSingleton(jwtHelper);
+
+        // 将价目表注册为单例，以便所有服务都能读取
+        services.AddSingleton(creditSettings);
 
         services.AddHttpContextAccessor();
         services.AddHttpClient();
