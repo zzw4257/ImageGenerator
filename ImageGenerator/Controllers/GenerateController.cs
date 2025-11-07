@@ -72,4 +72,32 @@ public class GenerateController(IGenerateService generateService) : ControllerBa
             return StatusCode(500, new { message = $"查询失败: {ex.Message}" });
         }
     }
+
+    /// <summary>
+    /// 估算生成图片的费用
+    /// POST /api/generate/estimate
+    /// </summary>
+    /// <param name="request">估算请求</param>
+    /// <returns>估算结果</returns>
+    [HttpPost("generate/estimate")]
+    public async Task<ActionResult<EstimateResponseDto>> Estimate([FromBody] EstimateRequestDto request)
+    {
+        try
+        {
+            var estimate = await _generateService.EstimateAsync(request);
+            return Ok(estimate);
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            return Unauthorized(new { message = ex.Message });
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { message = $"估算失败: {ex.Message}" });
+        }
+    }
 }

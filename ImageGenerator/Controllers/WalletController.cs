@@ -99,4 +99,31 @@ public class WalletController(IWalletService walletService) : ControllerBase
             return NotFound(new { message = ex.Message });
         }
     }
+
+    /// <summary>
+    /// 向指定用户转账
+    /// </summary>
+    /// <param name="request">转账请求</param>
+    /// <returns>转账结果</returns>
+    [HttpPost("pay")]
+    public async Task<ActionResult<PayResponseDto>> Pay([FromBody] PayRequestDto request)
+    {
+        try
+        {
+            var result = await _walletService.PayAsync(request);
+            return Ok(result);
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            return Unauthorized(new { message = ex.Message });
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+    }
 }
