@@ -14,11 +14,53 @@
           </v-menu>
           <v-btn class="upload-btn" icon="mdi-creation" size="small" variant="tonal" @click="openTemplateDialog" />
         </div>
-        <v-btn class="upload-btn" variant="tonal" icon="mdi-send" size="small" :loading="isGenerating"
-          @click="emit('generate')" />
+        <v-btn 
+          class="upload-btn" 
+          variant="tonal" 
+          icon="mdi-send" 
+          size="small" 
+          :loading="isGenerating"
+          :disabled="!canGenerate"
+          @click="emit('generate')" 
+        />
       </div>
       <v-textarea v-model="modelValue" placeholder="请输入内容" variant="solo" flat rows="5" class="pa-0"
         bg-color="rgba(0,0,0,0)" hide-details hide-spin-buttons auto-grow />
+      <!-- 费用提示 -->
+      <div v-if="modelValue.trim()" class="px-4 pb-2">
+        <v-alert
+          :color="hasEnoughBalance ? 'primary-lighten-5' : 'error-lighten-5'"
+          density="compact"
+          variant="flat"
+          rounded="lg"
+        >
+          <div class="d-flex align-center justify-space-between">
+            <div class="d-flex align-center">
+              <v-icon 
+                size="16" 
+                :color="hasEnoughBalance ? 'primary' : 'error'" 
+                class="mr-2"
+              >
+                {{ hasEnoughBalance ? 'mdi-flash' : 'mdi-alert-circle' }}
+              </v-icon>
+              <span 
+                :class="[
+                  'text-caption font-weight-medium',
+                  hasEnoughBalance ? 'text-primary' : 'text-error'
+                ]"
+              >
+                本次操作预计消耗 {{ estimatedCredits }} Credits
+              </span>
+            </div>
+            <span v-if="!hasEnoughBalance" class="text-caption text-error">
+              余额不足
+            </span>
+            <span v-else class="text-caption text-grey-darken-1">
+              余额: {{ walletBalance }} Credits
+            </span>
+          </div>
+        </v-alert>
+      </div>
     </div>
     <v-divider />
     <PromptTemplateDialog v-model="showTemplateDialog" @apply="onTemplateApplied" @close="showTemplateDialog = false" />
@@ -50,13 +92,15 @@
 </template>
 
 <script lang="ts" setup>
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 import type { ImageDto } from '@/types/api';
 import SmoothPicture from '../SmoothPicture.vue';
 import { useNotificationStore } from '@/stores/notification';
 import PromptTemplateDialog from '@/components/conversation/PromptTemplateDialog.vue'
 import LibraryDialog from './LibraryDialog.vue';
+import { getBalance } from '@/services/wallet';
 
-defineProps<{ images: ImageDto[]; isGenerating: boolean }>()
+const props = defineProps<{ images: ImageDto[]; isGenerating: boolean }>()
 
 const noticationStore = useNotificationStore();
 const model = defineModel<string>({ default: '' })
@@ -67,6 +111,31 @@ const emit = defineEmits<{
   (e: 'generate'): void
   (e: 'remove-image', index: number): void
 }>();
+
+const walletBalance = ref(0)
+const estimatedCredits = computed(() => {
+  // 默认消耗 1 credit，如果有上传图片则可能是 image-to-image，消耗可能更多
+  // 这里简化处理，统一显示 1 credit
+  return 1
+})
+
+const hasEnoughBalance = computed(() => {
+  return walletBalance.value >= estimatedCredits.value
+})
+
+const canGenerate = computed(() => {
+  return modelValue.value.trim() && hasEnoughBalance.value && !props.isGenerating
+})
+
+async function loadWalletBalance() {
+  try {
+    const balance = await getBalance()
+    walletBalance.value = balance.balance
+  } catch (error) {
+    console.error('加载余额失败:', error)
+  }
+}
+
 let keydownHandler: ((e: KeyboardEvent) => void) | null = null
 
 function triggerUploadImage() {
@@ -99,10 +168,13 @@ function onTemplateApplied(payload: { finalPrompt: string }) {
   noticationStore.success('模板已应用', { icon: 'mdi-check-circle-outline' })
 }
 
-onMounted(() => {
+onMounted(async () => {
+  await loadWalletBalance()
   keydownHandler = (e: KeyboardEvent) => {
     if (e.shiftKey && e.key === 'Enter') {
-      emit('generate')
+      if (canGenerate.value) {
+        emit('generate')
+      }
     }
   }
   document.addEventListener('keydown', keydownHandler)

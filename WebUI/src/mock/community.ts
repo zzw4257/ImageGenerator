@@ -69,7 +69,7 @@ export function findCommunityCreatorById (
 export function getCommunityFeed (
   tab: CommunityFeedTab,
 ): CommunityFeedItem[] {
-  return feedPayload.feed
+  const items = feedPayload.feed
     .map(item => cloneFeedItem(item))
     .toSorted((a, b) => {
       if (tab === 'latest') {
@@ -77,6 +77,8 @@ export function getCommunityFeed (
       }
       return b.popularityScore - a.popularityScore
     })
+  console.log(`[Community] Loaded ${items.length} feed items for tab: ${tab}`)
+  return items
 }
 
 export function getCreatorFeed (creatorId: string): CommunityFeedItem[] {
